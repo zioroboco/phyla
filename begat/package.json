@@ -24,7 +24,6 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "prepublish": "yarn -s clean && yarn -s build",
     "test": "jest"
   },
   "dependencies": {}
