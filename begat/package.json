@@ -32,6 +32,7 @@
     "isomorphic-git": "^1.10.1",
     "memfs": "^3.3.0",
     "ramda": "^0.27.1",
-    "ramda-adjunct": "^2.33.0"
+    "ramda-adjunct": "^2.33.0",
+    "ts-toolbelt": "^9.6.0"
   }
 }
