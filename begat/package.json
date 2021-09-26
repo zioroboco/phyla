@@ -1,0 +1,31 @@
+{
+  "name": "begat",
+  "version": "0.0.0",
+  "author": "Louis Quinnell <_@ziorobo.co>",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zioroboco/begat.git",
+    "directory": "begat"
+  },
+  "files": [
+    "!**/*.map",
+    "!**/*.ts",
+    "**/*.d.ts",
+    "**/*.js",
+    "core"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "type": "module",
+  "main": "./core/index.js",
+  "types": "./core/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "prepublish": "yarn -s clean && yarn -s build",
+    "test": "jest"
+  },
+  "dependencies": {}
+}

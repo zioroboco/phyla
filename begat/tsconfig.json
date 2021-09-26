@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "lib": ["es2021"],
+    "module": "es2020",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "target": "es2021"
+  },
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
