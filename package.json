@@ -3,6 +3,11 @@
   "workspaces": [
     "begat"
   ],
+  "jest": {
+    "projects": [
+      "begat"
+    ]
+  },
   "scripts": {
     "build": "yarn -s workspaces run build",
     "clean": "yarn -s workspaces run clean",
