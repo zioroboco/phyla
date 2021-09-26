@@ -9,6 +9,7 @@
     ]
   },
   "scripts": {
+    "core": "yarn -s workspace begat",
     "build": "yarn -s workspaces run build",
     "clean": "yarn -s workspaces run clean",
     "format": "npx prettier --write '**/*.{json,mjs,ts,yaml}'",
