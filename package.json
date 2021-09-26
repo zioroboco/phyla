@@ -8,11 +8,15 @@
       "begat"
     ]
   },
+  "prettier": {
+    "arrowParens": "avoid",
+    "semi": false
+  },
   "scripts": {
     "core": "yarn -s workspace begat",
     "build": "yarn -s workspaces run build",
     "clean": "yarn -s workspaces run clean",
-    "format": "npx prettier --write '**/*.{json,mjs,ts,yaml}'",
+    "format": "npx prettier --write '**/*[!.d].{json,mjs,ts,yaml}'",
     "test": "jest"
   },
   "devDependencies": {
