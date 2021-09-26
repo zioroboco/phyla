@@ -1,0 +1,11 @@
+*/*/**/*.d.ts
+*/*/**/*.d.ts.map
+*/*/**/*.js
+*/*/**/*.js.map
+
+.vscode/
+dist/
+docs/
+node_modules/
+tsconfig.tsbuildinfo
+yarn-*.log
