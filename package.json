@@ -15,6 +15,7 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@tsconfig/node16": "^1.0.2",
     "@types/jest": "*",
     "@types/node": "*",
     "jest": "^27.2.2",
