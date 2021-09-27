@@ -1,13 +1,11 @@
 {
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "module": "es2020",
-    "moduleResolution": "node",
-    "esModuleInterop": false,
+    "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-    "composite": true
+    "sourceMap": true
   },
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

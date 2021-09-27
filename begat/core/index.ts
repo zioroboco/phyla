@@ -8,9 +8,7 @@ type Dependencies = {
 export type Generator<C = {}> = (config: C, deps: Dependencies) => Promise<void>
 
 /** Union of config properties from a list of generator functions. */
-type ConfigUnion<Gs extends Generator<any>[]> = Union.IntersectOf<
-  Parameters<Gs[number]>[0]
->
+type ConfigUnion<Gs extends Generator<any>[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
 
 export const withDependencies = (dependencies: Dependencies) => ({
   withGenerators: <Gs extends Generator<any>[]>(generators: Gs) => ({

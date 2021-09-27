@@ -1,0 +1,10 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "esModuleInterop": false,
+    "module": "es2020",
+    "moduleResolution": "node"
+  },
+  "references": [{ "path": "begat" }],
+  "include": ["**/*.spec.ts"]
+}

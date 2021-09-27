@@ -1,6 +1,6 @@
 import { Generator, withDependencies, withGenerators } from "."
+import { Volume, fsFromVolume } from "./volume"
 import { expectType } from "ts-expect"
-import { fsFromVolume, Volume } from "./volume"
 
 const fnOne = async (_: { one: 1 }) => {}
 const fnTwo = async (_: { one: 1; two: 2; three?: 3 }) => {}

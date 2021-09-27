@@ -1,4 +1,4 @@
-import { fsFromVolume, globFromVolume, hashVolume, Volume } from "./volume"
+import { Volume, fsFromVolume, globFromVolume, hashVolume } from "./volume"
 
 describe(fsFromVolume.name, () => {
   const volume = Volume.fromJSON({ thing: "data" })

@@ -1,0 +1,41 @@
+// prettier-ignore
+{
+  "$schema": "https://json.schemastore.org/eslintrc",
+
+  "env": { "es6": true, "jest": true, "node": true },
+
+  "extends": ["plugin:import/typescript"],
+  "plugins": ["@typescript-eslint", "import", "sort-imports-es6-autofix"],
+
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json", "./begat/tsconfig.json"],
+    "sourceType": "module"
+  },
+
+  "rules": {
+    "@typescript-eslint/brace-style": ["warn"],
+    "@typescript-eslint/comma-dangle": ["warn", "always-multiline"],
+    "@typescript-eslint/comma-spacing": ["warn"],
+    "@typescript-eslint/dot-notation": ["warn"],
+    "@typescript-eslint/func-call-spacing": ["warn"],
+    "@typescript-eslint/indent": ["warn", 2],
+    "@typescript-eslint/keyword-spacing": ["warn"],
+    "@typescript-eslint/object-curly-spacing": ["warn", "always"],
+    "@typescript-eslint/quotes": ["warn", "double", { "allowTemplateLiterals": true }],
+    "@typescript-eslint/return-await": "warn",
+    "@typescript-eslint/semi": ["warn", "never", { "beforeStatementContinuationChars": "always" }],
+    "@typescript-eslint/space-before-function-paren": ["warn", "always"],
+    "@typescript-eslint/space-infix-ops": ["warn", { "int32Hint": false }],
+    "@typescript-eslint/type-annotation-spacing": ["warn"],
+    "arrow-parens": ["warn", "as-needed"],
+    "arrow-spacing": ["warn"],
+    "key-spacing": ["warn"],
+    "linebreak-style": ["warn", "unix"],
+    "no-trailing-spaces": ["warn"],
+    "sort-imports-es6-autofix/sort-imports-es6": "warn",
+    "space-before-blocks": ["warn", "always"],
+    "space-in-parens": ["warn", "never"],
+    "spaced-comment": ["warn", "always"]
+  }
+}
