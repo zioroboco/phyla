@@ -35,8 +35,11 @@ export const hashVolume = async function (volume: VolumeInstance) {
   const hashes = await Promise.all(
     paths
       .map(path => fs.readFile(path, "utf8"))
-      .map(objects => objects.then(object => git.hashBlob({ object })))
-      .map(result => result.then(({ oid }) => oid))
+      .map(promise =>
+        promise
+          .then(object => git.hashBlob({ object }))
+          .then(hash => hash.oid)
+      )
   )
 
   assert.equal(paths.length, hashes.length)
