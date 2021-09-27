@@ -13,10 +13,10 @@
     "semi": false
   },
   "scripts": {
-    "core": "yarn -s workspace begat",
-    "build": "yarn -s workspaces run build",
-    "clean": "yarn -s workspaces run clean",
-    "format": "npx prettier --write '**/*[!.d].{json,mjs,ts,yaml}'",
+    "core": "yarn workspace begat",
+    "build": "yarn workspaces foreach run build",
+    "clean": "yarn workspaces foreach run clean",
+    "format": "yarn dlx prettier --write '**/*[!.d].{json,mjs,ts,yaml}'",
     "test": "jest"
   },
   "devDependencies": {

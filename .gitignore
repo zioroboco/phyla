@@ -9,3 +9,10 @@ docs/
 node_modules/
 tsconfig.tsbuildinfo
 yarn-*.log
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
