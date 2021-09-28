@@ -1,11 +1,12 @@
-import * as nodefs from "fs/promises"
 import { Union } from "ts-toolbelt"
+import { Volume } from "memfs"
+import { fsFromVolume } from "./volume"
 
 type Dependencies = {
-  fs: typeof import("fs/promises")
+  fs: typeof import("fs")
 }
 
-export type Generator<C = {}> = (config: C, deps: Dependencies) => Promise<void>
+export type Generator<C = {}> = (config: C, dependencies: Dependencies) => Promise<void>
 
 /** Union of config properties from a list of generator functions. */
 type ConfigUnion<Gs extends Generator<any>[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
@@ -18,5 +19,6 @@ export const withDependencies = (dependencies: Dependencies) => ({
   }),
 })
 
-// FIXME nodefs vs memfs confusion
-export const { withGenerators } = withDependencies({ fs: nodefs })
+export const withGenerators = withDependencies({
+  fs: fsFromVolume(new Volume()),
+}).withGenerators

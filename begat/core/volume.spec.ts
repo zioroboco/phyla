@@ -1,4 +1,5 @@
-import { Volume, fsFromVolume, globFromVolume, hashVolume } from "./volume"
+import { Volume, globFromVolume, hashVolume } from "./volume"
+import { fsFromVolume } from "./volume"
 
 describe(fsFromVolume.name, () => {
   const volume = Volume.fromJSON({ thing: "data" })
@@ -8,7 +9,7 @@ describe(fsFromVolume.name, () => {
   })
 
   it("returns a filesystem with the correct data", async () => {
-    const data = await fsFromVolume(volume).readFile("thing")
+    const data = await fsFromVolume(volume).promises.readFile("thing")
     expect(data.toString()).toEqual("data")
   })
 })

@@ -29,7 +29,7 @@ test(`end-to-end`, async () => {
   type MyGenerator = Generator<{ projectName: string }>
   const myGenerator: MyGenerator = async (config, deps) => {
     const { fs } = deps
-    await fs.writeFile("/README.md", `# ${config.projectName}\n`)
+    await fs.promises.writeFile("/README.md", `# ${config.projectName}\n`)
   }
 
   await withDependencies({ fs })

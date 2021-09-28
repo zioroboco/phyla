@@ -7,13 +7,8 @@ import { fromPairs, zip } from "ramda"
 export type VolumeInstance = InstanceType<typeof memfs.Volume>
 export const Volume = memfs.Volume
 
-export const fsFromVolumeCB = function (volume: VolumeInstance) {
-  return memfs.createFsFromVolume(volume) as unknown as typeof import("fs")
-}
-
 export const fsFromVolume = function (volume: VolumeInstance) {
-  return memfs.createFsFromVolume(volume)
-    .promises as unknown as typeof import("fs/promises")
+  return memfs.createFsFromVolume(volume) as unknown as typeof import("fs")
 }
 
 export const globFromVolume = function (volume: VolumeInstance) {
@@ -21,7 +16,7 @@ export const globFromVolume = function (volume: VolumeInstance) {
     return fg(patterns, {
       absolute: true,
       cwd: "/",
-      fs: fsFromVolumeCB(volume),
+      fs: fsFromVolume(volume),
       ...options,
     })
   }
@@ -34,7 +29,7 @@ export const hashVolume = async function (volume: VolumeInstance) {
   const paths = await glob("**/*")
   const hashes = await Promise.all(
     paths
-      .map(path => fs.readFile(path, "utf8"))
+      .map(path => fs.promises.readFile(path, "utf8"))
       .map(promise =>
         promise
           .then(object => git.hashBlob({ object }))
