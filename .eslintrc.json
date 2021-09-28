@@ -2,7 +2,7 @@
 {
   "$schema": "https://json.schemastore.org/eslintrc",
 
-  "ignorePatterns": ["*.js"],
+  "ignorePatterns": ["*.js", "*.cjs", "*.mjs"],
 
   "env": { "es6": true, "jest": true, "node": true },
 
