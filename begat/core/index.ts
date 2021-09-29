@@ -15,7 +15,13 @@ export const withDependencies = (dependencies: Dependencies) => ({
   withGenerators: <Gs extends Generator<any>[]>(generators: Gs) => ({
     withConfig: async function (config: ConfigUnion<Gs>) {
       for (const generator of generators) {
-        await generator(config, dependencies)
+        try {
+          await generator(config, dependencies)
+        } catch (e) {
+          throw e instanceof Error ? e : new Error(
+            `Error running generator ${generator.name}: ${e}`
+          )
+        }
       }
     },
   }),
