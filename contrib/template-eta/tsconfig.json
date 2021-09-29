@@ -4,6 +4,7 @@
     "composite": true,
     "types": ["node"]
   },
+  "references": [{ "path": "../../begat" }],
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

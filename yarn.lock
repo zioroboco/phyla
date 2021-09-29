@@ -1370,11 +1370,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat-template-eta@workspace:contrib/template-eta"
   dependencies:
+    begat: "*"
     eta: ^1.12.3
+  peerDependencies:
+    begat: ^0
   languageName: unknown
   linkType: soft
 
-"begat@workspace:begat":
+"begat@*, begat@workspace:begat":
   version: 0.0.0-use.local
   resolution: "begat@workspace:begat"
   dependencies:

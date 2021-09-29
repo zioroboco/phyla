@@ -1,1 +1,1 @@
-export const thing: string = "blep"
+import {} from "begat"
