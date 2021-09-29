@@ -1,12 +1,12 @@
 {
-  "name": "begat-template-eta",
+  "name": "begat-eta",
   "version": "0.0.0",
   "author": "Louis Quinnell <_@ziorobo.co>",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
     "url": "https://github.com/zioroboco/begat.git",
-    "directory": "contrib/template-eta"
+    "directory": "contrib/eta"
   },
   "files": [
     "!**/*.map",
