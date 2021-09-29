@@ -1,9 +1,4 @@
 {
   "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "composite": true,
-    "types": ["node"]
-  },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "include": ["**/*.ts"]
 }
