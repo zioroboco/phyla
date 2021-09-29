@@ -4,12 +4,6 @@
     "begat",
     "contrib/*"
   ],
-  "jest": {
-    "projects": [
-      "begat",
-      "contrib/*"
-    ]
-  },
   "prettier": {
     "arrowParens": "avoid",
     "semi": false
