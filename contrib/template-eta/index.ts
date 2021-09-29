@@ -1,9 +1,11 @@
 import { Generator } from "begat"
 
-export type Config = {
+type Config = {
   templates: string
   variables: { [key: string]: string }
 }
 
-export const generator: Generator<Config> = async function (config) {
+const generator: Generator<Config> = async function (config) {
 }
+
+export default generator

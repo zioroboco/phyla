@@ -1,5 +1,7 @@
-import {  } from "."
+import generator from "."
 
-it(`works`, () => {
-  // expect(thing).toBeTruthy()
+describe(generator.name, () => {
+  it(`exists`, () => {
+    expect(generator).toBeDefined()
+  })
 })
