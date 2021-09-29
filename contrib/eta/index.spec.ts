@@ -15,7 +15,7 @@ describe(`the happy path`, () => {
       .withDependencies({ volume })
       .withGenerators([eta])
       .withConfig({
-        templates: resolve("./fixtures/templates"),
+        templates: resolve(__dirname, "fixtures/simple"),
         variables: {
           projectName: "my-cool-project",
           projectAuthor: "Raymond Luxury-Yacht <rayly@hotmail.com>",
