@@ -8,7 +8,7 @@ export const fsFromVolume = function (volume: VolumeInstance) {
   return memfs.createFsFromVolume(volume) as unknown as typeof import("fs")
 }
 
-type Context = {
+export type Context = {
   volume: VolumeInstance
 }
 
@@ -17,7 +17,7 @@ export type Generator<C = {}> = (config: C, context: Context) => Promise<Context
 /** Union of config properties from a list of generator functions. */
 type ConfigUnion<Gs extends Generator<any>[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
 
-export const withContext = (context: Context) => ({
+export const withContext = (context: Context = { volume: new Volume() }) => ({
   withGenerators: <Gs extends Generator<any>[]>(generators: Gs) => ({
     withConfig: async function (config: ConfigUnion<Gs>): Promise<Context> {
       for (const generator of generators) {
@@ -34,8 +34,6 @@ export const withContext = (context: Context) => ({
   }),
 })
 
-export const withGenerators = withContext({
-  volume: new Volume(),
-}).withGenerators
+export const withGenerators = withContext().withGenerators
 
 export default {}

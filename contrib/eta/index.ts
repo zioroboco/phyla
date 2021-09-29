@@ -1,8 +1,9 @@
 import * as Eta from "eta"
 import * as fs_system from "fs/promises"
 import * as glob from "fast-glob"
-import { Generator, fsFromVolume } from "begat"
-import { resolve } from "path"
+import { Generator, Volume, fsFromVolume } from "begat"
+import { mergeRight } from "ramda"
+import { relative, resolve } from "path"
 
 type EtaConfig = Parameters<typeof Eta.render>[2]
 
@@ -17,16 +18,17 @@ type GeneratorConfig = {
   variables: { [key: string]: string }
 }
 
-const eta: Generator<GeneratorConfig> = async function (config, { volume }) {
-  const fs = fsFromVolume(volume).promises
-
+const eta: Generator<GeneratorConfig> = async function (config, context) {
   const results = await glob("**/*.eta", { cwd: config.templates })
     .then(files => files
       .map(file => resolve(config.templates, file))
       .map(async path => {
         return fs_system.readFile(path, "utf-8")
           .then(content => Eta.render(content, config.variables, defaults))
-          .then(rendered => ({ path, rendered }))
+          .then(rendered => ({
+            path: relative(config.templates, path.replace(/\.eta$/, "")),
+            rendered,
+          }))
       })
     ).then(promises => Promise.all(promises))
 
@@ -40,8 +42,14 @@ const eta: Generator<GeneratorConfig> = async function (config, { volume }) {
     )
   }
 
-  volume.toJSON()
-  results
+  context.volume.fromJSON(mergeRight(
+    context.volume.toJSON(),
+    results.reduce((acc, { path, rendered }) => ({
+      [relative(process.cwd(), path)]: rendered,
+    }), {})
+  ))
+
+  return context
 }
 
 export default eta

@@ -1,31 +1,50 @@
 import * as begat from "begat/core"
-import * as memfs from "memfs"
 import { resolve } from "path"
 import eta from "./index"
 
-let volume: InstanceType<typeof memfs.Volume>
+const config = {
+  templates: resolve(__dirname, "fixtures/simple"),
+  variables: {
+    projectName: "my-cool-project",
+    projectAuthor: "Raymond Luxury-Yacht",
+  },
+}
 
-beforeEach(() => {
-  volume = new memfs.Volume()
+describe(`on a clean volume`, () => {
+  let context: begat.Context
+
+  beforeEach(async () => {
+    context = await begat
+      .withGenerators([eta])
+      .withConfig(config)
+  })
+
+
+  it(`writes to the volume`, async () => {
+    expect(context.volume.toJSON()).toMatchObject({
+      "/simple.txt": `Hello Raymond Luxury-Yacht!\n`,
+    })
+  })
 })
 
-describe(`the happy path`, () => {
+describe(`on a dirty volume`, () => {
+  let context: begat.Context
+
   beforeEach(async () => {
-    await begat
-      .withContext({ volume })
-      .withGenerators([eta])
-      .withConfig({
-        templates: resolve(__dirname, "fixtures/simple"),
-        variables: {
-          projectName: "my-cool-project",
-          projectAuthor: "Raymond Luxury-Yacht <rayly@hotmail.com>",
-        },
+    context = await begat
+      .withContext({
+        volume: begat.Volume.fromJSON({
+          "/other-data.txt": `Hello World!\n`,
+        }),
       })
+      .withGenerators([eta])
+      .withConfig(config)
   })
 
   it(`writes to the volume`, async () => {
-    expect(volume.toJSON()).toMatchObject({
-      "/out.txt": `name: Raymond Luxury-Yacht <rayly@hotmail.com>`,
+    expect(context.volume.toJSON()).toMatchObject({
+      "/other-data.txt": `Hello World!\n`,
+      "/simple.txt": `Hello Raymond Luxury-Yacht!\n`,
     })
   })
 })
