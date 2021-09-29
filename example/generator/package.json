@@ -1,0 +1,9 @@
+{
+  "name": "begat-example-generator",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "jest"
+  }
+}
