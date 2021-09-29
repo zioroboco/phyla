@@ -7,6 +7,7 @@ const { workspaces } = require("./package.json")
  */
 export const common = {
   moduleFileExtensions: ["ts", "js", "json"],
+  modulePathIgnorePatterns: ["\\.js$"],
   preset: "ts-jest",
   testEnvironment: "node",
 
