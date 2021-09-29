@@ -1372,6 +1372,7 @@ __metadata:
   dependencies:
     begat: "*"
     eta: ^1.12.3
+    fast-glob: ^3.2.7
   peerDependencies:
     begat: ^0
   languageName: unknown

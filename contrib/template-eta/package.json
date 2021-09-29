@@ -32,6 +32,7 @@
     "begat": "^0"
   },
   "dependencies": {
-    "eta": "^1.12.3"
+    "eta": "^1.12.3",
+    "fast-glob": "^3.2.7"
   }
 }
