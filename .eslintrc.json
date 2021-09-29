@@ -14,8 +14,7 @@
     "project": [
       "./tsconfig.json",
       "./begat/tsconfig.json",
-      "./contrib/*/tsconfig.json",
-      "./example/*/tsconfig.json"
+      "./contrib/*/tsconfig.json"
     ],
     "sourceType": "module"
   },
