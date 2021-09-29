@@ -1,11 +1,13 @@
 {
   "private": true,
   "workspaces": [
-    "begat"
+    "begat",
+    "contrib/*"
   ],
   "jest": {
     "projects": [
-      "begat"
+      "begat",
+      "contrib/*"
     ]
   },
   "prettier": {

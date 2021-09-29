@@ -1,0 +1,29 @@
+{
+  "name": "begat-template-eta",
+  "version": "0.0.0",
+  "author": "Louis Quinnell <_@ziorobo.co>",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zioroboco/begat.git",
+    "directory": "contrib/template-eta"
+  },
+  "files": [
+    "!**/*.map",
+    "!**/*.ts",
+    "**/*.d.ts",
+    "**/*.js"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "eta": "^1.12.3"
+  }
+}

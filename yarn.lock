@@ -1352,6 +1352,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"begat-template-eta@workspace:contrib/template-eta":
+  version: 0.0.0-use.local
+  resolution: "begat-template-eta@workspace:contrib/template-eta"
+  dependencies:
+    eta: ^1.12.3
+  languageName: unknown
+  linkType: soft
+
 "begat@workspace:begat":
   version: 0.0.0-use.local
   resolution: "begat@workspace:begat"
@@ -2226,6 +2234,13 @@ __metadata:
   version: 2.0.3
   resolution: "esutils@npm:2.0.3"
   checksum: 22b5b08f74737379a840b8ed2036a5fb35826c709ab000683b092d9054e5c2a82c27818f12604bfc2a9a76b90b6834ef081edbc1c7ae30d1627012e067c6ec87
+  languageName: node
+  linkType: hard
+
+"eta@npm:^1.12.3":
+  version: 1.12.3
+  resolution: "eta@npm:1.12.3"
+  checksum: 390c1cd320755cb98fd5a4a911539e8ed498fc49b82414f0023033ff606d80a34e6df0aeeb9fb0b519b318a750e6d17a72fc25f8a8c686cfc52d638e998237a1
   languageName: node
   linkType: hard
 
