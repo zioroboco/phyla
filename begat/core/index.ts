@@ -4,7 +4,6 @@ import { fsFromVolume } from "./volume"
 
 type Dependencies = {
   fs: typeof import("fs")
-  process: typeof process
 }
 
 export type Generator<C = {}> = (config: C, dependencies: Dependencies) => Promise<void>
@@ -24,5 +23,4 @@ export const withDependencies = (dependencies: Dependencies) => ({
 
 export const withGenerators = withDependencies({
   fs: fsFromVolume(new Volume()),
-  process,
 }).withGenerators

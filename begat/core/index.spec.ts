@@ -9,7 +9,7 @@ describe(withDependencies.name, () => {
   const fs = fsFromVolume(new Volume())
   it(`has the expected type`, () => {
     expectType<{ withConfig: (config: { one: 1; two: 2; three?: 3 }) => void }>(
-      withDependencies({ fs, process }).withGenerators([fnOne, fnTwo])
+      withDependencies({ fs }).withGenerators([fnOne, fnTwo])
     )
   })
 })
@@ -32,7 +32,7 @@ test(`end-to-end`, async () => {
     await fs.promises.writeFile("/README.md", `# ${config.projectName}\n`)
   }
 
-  await withDependencies({ fs, process })
+  await withDependencies({ fs })
     .withGenerators([myGenerator])
     .withConfig({ projectName: "my-project" })
 
