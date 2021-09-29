@@ -5,7 +5,9 @@ type Config = {
   variables: { [key: string]: string }
 }
 
-const generator: Generator<Config> = async function (config) {
+const eta: Generator<Config> = async function (config, dependencies) {
+  const fs = dependencies.fs.promises
+  await fs.writeFile("/stuff.txt", "ding!")
 }
 
-export default generator
+export default eta
