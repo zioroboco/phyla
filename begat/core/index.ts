@@ -2,10 +2,10 @@ import { Union } from "ts-toolbelt"
 import { Volume } from "memfs"
 import { fsFromVolume } from "./volume"
 
-type Dependencies = Partial<{
+type Dependencies = {
   fs: typeof import("fs")
   process: typeof process
-}>
+}
 
 export type Generator<C = {}> = (config: C, dependencies: Dependencies) => Promise<void>
 
