@@ -42,6 +42,6 @@
     "sort-imports-es6-autofix/sort-imports-es6": "warn",
     "space-before-blocks": ["warn", "always"],
     "space-in-parens": ["warn", "never"],
-    "spaced-comment": ["warn", "always"]
+    "spaced-comment": ["warn", "always", { "exceptions": ["?"] } ]
   }
 }
