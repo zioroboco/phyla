@@ -1,0 +1,8 @@
+{
+  "name": "<%= it.projectName %>",
+  "version": "<%= it.projectVersion %>",
+  "author": "<%= it.projectAuthor %>",
+  "private": true,
+  "dependencies": {
+  }
+}

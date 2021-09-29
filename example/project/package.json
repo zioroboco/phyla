@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {},
   "dependencies": {
+    "begat": "*",
+    "begat-eta": "*",
     "begat-example-generator": "*"
   }
 }

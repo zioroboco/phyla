@@ -1,6 +1,9 @@
 import * as begat from "begat/core"
-import { resolve } from "path"
+import { dirname, resolve } from "path"
+import { fileURLToPath } from "url"
 import eta from "./index"
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const config = {
   templates: resolve(__dirname, "fixtures/simple"),

@@ -1352,7 +1352,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"begat-eta@workspace:contrib/eta":
+"begat-eta@*, begat-eta@workspace:contrib/eta":
   version: 0.0.0-use.local
   resolution: "begat-eta@workspace:contrib/eta"
   dependencies:
@@ -1374,6 +1374,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat-example-project@workspace:example/project"
   dependencies:
+    begat: "*"
+    begat-eta: "*"
     begat-example-generator: "*"
   languageName: unknown
   linkType: soft

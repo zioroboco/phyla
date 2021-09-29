@@ -6,7 +6,7 @@
     "declarationMap": true,
     "sourceMap": true,
 
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "module": "es2020",
     "moduleResolution": "node"
   },
