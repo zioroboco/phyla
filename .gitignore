@@ -1,7 +1,9 @@
-*/*/**/*.d.ts
-*/*/**/*.d.ts.map
-*/*/**/*.js
-*/*/**/*.js.map
+/*/*/**/*.d.ts
+/*/*/**/*.d.ts.map
+/*/*/**/*.js
+/*/*/**/*.js.map
+
+!/example/**/*.js
 
 .vscode/
 dist/

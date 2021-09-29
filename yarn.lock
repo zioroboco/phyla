@@ -1352,7 +1352,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"begat-example-generator@workspace:example/generator":
+"begat-example-generator@*, begat-example-generator@workspace:example/generator":
   version: 0.0.0-use.local
   resolution: "begat-example-generator@workspace:example/generator"
   languageName: unknown
@@ -1362,7 +1362,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat-example-project@workspace:example/project"
   dependencies:
-    example-generator: "file:../generator"
+    begat-example-generator: "*"
   languageName: unknown
   linkType: soft
 
@@ -2255,13 +2255,6 @@ __metadata:
   version: 1.12.3
   resolution: "eta@npm:1.12.3"
   checksum: 390c1cd320755cb98fd5a4a911539e8ed498fc49b82414f0023033ff606d80a34e6df0aeeb9fb0b519b318a750e6d17a72fc25f8a8c686cfc52d638e998237a1
-  languageName: node
-  linkType: hard
-
-"example-generator@file:../generator::locator=begat-example-project%40workspace%3Aexample%2Fproject":
-  version: 0.0.0
-  resolution: "example-generator@file:../generator#../generator::hash=419997&locator=begat-example-project%40workspace%3Aexample%2Fproject"
-  checksum: cf0f2e8779be9dbab3608c98394bea2d38a0d00b8c378b56a3379f234f3cc8f5fd0a691a515ecf3c39ee1f93cbebeb69446d99bb315dae2055f9644776f9f7ce
   languageName: node
   linkType: hard
 

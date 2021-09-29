@@ -1,12 +1,9 @@
 {
   "name": "begat-example-project",
+  "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
-    "test": "jest"
-  },
+  "scripts": {},
   "dependencies": {
-    "example-generator": "file:../generator"
+    "begat-example-generator": "*"
   }
 }
