@@ -14,7 +14,9 @@ type ConfigUnion<Gs extends Generator<any>[]> = Union.IntersectOf<Parameters<Gs[
 export const withDependencies = (dependencies: Dependencies) => ({
   withGenerators: <Gs extends Generator<any>[]>(generators: Gs) => ({
     withConfig: async function (config: ConfigUnion<Gs>) {
-      await Promise.all(generators.map(g => g(config, dependencies)))
+      for (const generator of generators) {
+        await generator(config, dependencies)
+      }
     },
   }),
 })
