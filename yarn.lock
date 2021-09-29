@@ -1352,6 +1352,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"begat-eta@workspace:contrib/eta":
+  version: 0.0.0-use.local
+  resolution: "begat-eta@workspace:contrib/eta"
+  dependencies:
+    begat: "*"
+    eta: ^1.12.3
+    fast-glob: ^3.2.7
+  peerDependencies:
+    begat: ^0
+  languageName: unknown
+  linkType: soft
+
 "begat-example-generator@*, begat-example-generator@workspace:example/generator":
   version: 0.0.0-use.local
   resolution: "begat-example-generator@workspace:example/generator"
@@ -1363,18 +1375,6 @@ __metadata:
   resolution: "begat-example-project@workspace:example/project"
   dependencies:
     begat-example-generator: "*"
-  languageName: unknown
-  linkType: soft
-
-"begat-template-eta@workspace:contrib/template-eta":
-  version: 0.0.0-use.local
-  resolution: "begat-template-eta@workspace:contrib/template-eta"
-  dependencies:
-    begat: "*"
-    eta: ^1.12.3
-    fast-glob: ^3.2.7
-  peerDependencies:
-    begat: ^0
   languageName: unknown
   linkType: soft
 

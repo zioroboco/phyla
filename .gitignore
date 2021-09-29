@@ -1,7 +1,11 @@
-/*/*/**/*.d.ts
-/*/*/**/*.d.ts.map
-/*/*/**/*.js
-/*/*/**/*.js.map
+begat/**/*.d.ts
+begat/**/*.d.ts.map
+begat/**/*.js
+begat/**/*.js.map
+contrib/**/*.d.ts
+contrib/**/*.d.ts.map
+contrib/**/*.js
+contrib/**/*.js.map
 
 !/example/**/*.js
 
