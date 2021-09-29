@@ -1,9 +1,15 @@
+import * as memfs from "memfs"
 import { Union } from "ts-toolbelt"
-import { Volume } from "memfs"
-import { fsFromVolume } from "./volume"
+
+export type VolumeInstance = InstanceType<typeof memfs.Volume>
+export const Volume = memfs.Volume
+
+export const fsFromVolume = function (volume: VolumeInstance) {
+  return memfs.createFsFromVolume(volume) as unknown as typeof import("fs")
+}
 
 type Dependencies = {
-  fs: typeof import("fs")
+  volume: VolumeInstance
 }
 
 export type Generator<C = {}> = (config: C, dependencies: Dependencies) => Promise<void>
@@ -28,7 +34,7 @@ export const withDependencies = (dependencies: Dependencies) => ({
 })
 
 export const withGenerators = withDependencies({
-  fs: fsFromVolume(new Volume()),
+  volume: new Volume(),
 }).withGenerators
 
 export default {}

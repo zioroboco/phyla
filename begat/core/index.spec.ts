@@ -1,15 +1,14 @@
 import { Generator, withDependencies, withGenerators } from "."
-import { Volume, fsFromVolume } from "./volume"
+import { Volume, fsFromVolume } from "./index"
 import { expectType } from "ts-expect"
 
 const fnOne = async (_: { one: 1 }) => {}
 const fnTwo = async (_: { one: 1; two: 2; three?: 3 }) => {}
 
 describe(withDependencies.name, () => {
-  const fs = fsFromVolume(new Volume())
   it(`has the expected type`, () => {
     expectType<{ withConfig: (config: { one: 1; two: 2; three?: 3 }) => void }>(
-      withDependencies({ fs }).withGenerators([fnOne, fnTwo])
+      withDependencies({ volume: new Volume() }).withGenerators([fnOne, fnTwo])
     )
   })
 })
@@ -28,11 +27,11 @@ test(`end-to-end`, async () => {
 
   type MyGenerator = Generator<{ projectName: string }>
   const myGenerator: MyGenerator = async (config, deps) => {
-    const { fs } = deps
+    const { volume } = deps
     await fs.promises.writeFile("/README.md", `# ${config.projectName}\n`)
   }
 
-  await withDependencies({ fs })
+  await withDependencies({ volume })
     .withGenerators([myGenerator])
     .withConfig({ projectName: "my-project" })
 

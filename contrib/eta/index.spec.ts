@@ -11,11 +11,8 @@ beforeEach(() => {
 
 describe(`the happy path`, () => {
   beforeEach(async () => {
-    // @ts-ignore
-    const fs = memfs.createFsFromVolume(volume) as typeof import("fs")
-
     await begat
-      .withDependencies({ fs })
+      .withDependencies({ volume })
       .withGenerators([eta])
       .withConfig({
         templates: resolve("./fixtures/templates"),

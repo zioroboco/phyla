@@ -1,4 +1,4 @@
-import { Generator } from "begat"
+import { Generator, fsFromVolume } from "begat"
 import { render } from "eta"
 
 type Config = {
@@ -6,8 +6,8 @@ type Config = {
   variables: { [key: string]: string }
 }
 
-const eta: Generator<Config> = async function (config, dependencies) {
-  const fs = dependencies.fs.promises
+const eta: Generator<Config> = async function (config, { volume }) {
+  const fs = fsFromVolume(volume).promises
 
   const output = await render(
     `name: <%= it.name %>`,
