@@ -30,3 +30,5 @@ export const withDependencies = (dependencies: Dependencies) => ({
 export const withGenerators = withDependencies({
   fs: fsFromVolume(new Volume()),
 }).withGenerators
+
+export default {}
