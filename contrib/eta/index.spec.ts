@@ -28,7 +28,7 @@ describe(`the happy path`, () => {
 
   it(`writes to the volume`, async () => {
     expect(volume.toJSON()).toMatchObject({
-      "/stuff.txt": "ding!",
+      "/out.txt": `name: Raymond Luxury-Yacht <rayly@hotmail.com>`,
     })
   })
 })
