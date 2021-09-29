@@ -8,32 +8,33 @@ export const fsFromVolume = function (volume: VolumeInstance) {
   return memfs.createFsFromVolume(volume) as unknown as typeof import("fs")
 }
 
-type Dependencies = {
+type Context = {
   volume: VolumeInstance
 }
 
-export type Generator<C = {}> = (config: C, dependencies: Dependencies) => Promise<void>
+export type Generator<C = {}> = (config: C, context: Context) => Promise<Context>
 
 /** Union of config properties from a list of generator functions. */
 type ConfigUnion<Gs extends Generator<any>[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
 
-export const withDependencies = (dependencies: Dependencies) => ({
+export const withContext = (context: Context) => ({
   withGenerators: <Gs extends Generator<any>[]>(generators: Gs) => ({
-    withConfig: async function (config: ConfigUnion<Gs>) {
+    withConfig: async function (config: ConfigUnion<Gs>): Promise<Context> {
       for (const generator of generators) {
         try {
-          await generator(config, dependencies)
-        } catch (e) {
-          throw e instanceof Error ? e : new Error(
-            `Error running generator ${generator.name}: ${e}`
+          context = await generator(config, context)
+        } catch (e: any) {
+          throw new Error(
+            `Generator ${generator.name} failed with error: ${e.message ?? e}`
           )
         }
       }
+      return context
     },
   }),
 })
 
-export const withGenerators = withDependencies({
+export const withGenerators = withContext({
   volume: new Volume(),
 }).withGenerators
 

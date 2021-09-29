@@ -12,7 +12,7 @@ beforeEach(() => {
 describe(`the happy path`, () => {
   beforeEach(async () => {
     await begat
-      .withDependencies({ volume })
+      .withContext({ volume })
       .withGenerators([eta])
       .withConfig({
         templates: resolve(__dirname, "fixtures/simple"),
