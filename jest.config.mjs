@@ -8,14 +8,14 @@ const { workspaces } = require("./package.json")
 export const common = {
   moduleFileExtensions: ["ts", "js", "json"],
   modulePathIgnorePatterns: ["\\.js$"],
-  preset: "ts-jest",
+  preset: "ts-jest/presets/default-esm",
   testEnvironment: "node",
 
   globals: {
     "ts-jest": {
       diagnostics: { ignoreCodes: [151001] },
-      tsconfig: "<rootDir>/tsconfig.json",
       useESM: true,
+      tsconfig: require("./tsconfig.json").compilerOptions,
     },
   },
 }

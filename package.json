@@ -9,6 +9,14 @@
     "arrowParens": "avoid",
     "semi": false
   },
+  "wallaby": {
+    "autoDetect": true,
+    "env": {
+      "params": {
+        "runner": "--no-warnings --experimental-vm-modules"
+      }
+    }
+  },
   "scripts": {
     "core": "yarn workspace begat",
     "build": "yarn workspaces foreach run build",
@@ -18,7 +26,7 @@
     "lint:eslint": "eslint . --ext .ts",
     "lint:prettier": "prettier '**/*[!.d].{json,mjs,yaml,yml}' --loglevel=warn",
     "log:done": "echo '✔ '",
-    "test": "jest"
+    "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
