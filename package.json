@@ -24,7 +24,7 @@
     "lint": "yarn lint:prettier --write && yarn log:done prettier && yarn lint:eslint --fix && yarn log:done eslint",
     "lint-ci": "yarn lint:prettier --check && yarn log:done prettier && yarn lint:eslint --max-warnings=0 && yarn log:done eslint",
     "lint:eslint": "eslint . --ext .ts",
-    "lint:prettier": "prettier '**/*[!.d].{json,mjs,yaml,yml}' --loglevel=warn",
+    "lint:prettier": "prettier '**/*[!.d].{json,yaml,yml}' --loglevel=warn",
     "log:done": "echo '✔ '",
     "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest"
   },
