@@ -45,7 +45,7 @@ const eta: Generator<GeneratorConfig> = async function (config, context) {
   context.volume.fromJSON(mergeRight(
     context.volume.toJSON(),
     results.reduce((acc, { path, rendered }) => ({
-      [relative(process.cwd(), path)]: rendered,
+      [resolve("/", path)]: rendered,
     }), {})
   ))
 
