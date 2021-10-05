@@ -23,8 +23,7 @@
   "types": "./index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "clean": "tsc --build --clean",
-    "test": "jest"
+    "clean": "tsc --build --clean"
   },
   "devDependencies": {
     "begat": "*"

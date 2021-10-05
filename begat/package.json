@@ -23,8 +23,7 @@
   "types": "./core/index.d.ts",
   "scripts": {
     "build": "tsc --build",
-    "clean": "tsc --build --clean",
-    "test": "jest"
+    "clean": "tsc --build --clean"
   },
   "dependencies": {
     "@types/ramda": "^0.27.45",
