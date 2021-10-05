@@ -1,6 +1,6 @@
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
-import eta from "begat-eta"
+import eta from "begat/std/eta"
 import type { Generator } from "begat"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))

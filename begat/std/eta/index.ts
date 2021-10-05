@@ -1,9 +1,9 @@
 import * as Eta from "eta"
 import * as fs_system from "fs/promises"
-import { Generator } from "begat"
 import { mergeRight } from "ramda"
 import { relative, resolve } from "path"
 import glob from "fast-glob"
+import type { Generator } from "begat/core"
 
 type EtaConfig = Parameters<typeof Eta.render>[2]
 

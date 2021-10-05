@@ -10,10 +10,10 @@
     "clean": "tsc --build --clean",
     "test": "jest"
   },
+  "devDependencies": {
+    "begat": "*"
+  },
   "peerDependencies": {
     "begat": "^0"
-  },
-  "dependencies": {
-    "begat-eta": "^0"
   }
 }
