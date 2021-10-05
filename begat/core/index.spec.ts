@@ -1,5 +1,5 @@
 import { Generator, generators } from "."
-import { Volume, fsFromVolume } from "./index"
+import { fsFromVolume } from "./index"
 
 test(`with one generator`, async () => {
   type MyGenerator = Generator<{ projectName: string }>

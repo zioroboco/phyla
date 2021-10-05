@@ -12,14 +12,21 @@ export type Context = {
   volume: VolumeInstance
 }
 
-export type Generator<O = {}> = (options: O, context: Context) => Promise<Context>
+const makeDefaultContext = function (c: Partial<Context>): Context {
+  return {
+    volume: c.volume ?? new Volume(),
+  }
+}
+
+export type Generator<Options = {}> = (o: Options, c: Context) => Promise<Context>
 
 type AbstractGenerator = Generator<any>
 type OptionsUnion<Gs extends AbstractGenerator[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
 
 export const generators = <Gs extends AbstractGenerator[]>(gs: Gs) => ({
-  context: (context: Context = { volume: new Volume() }) => ({
+  context: (c: Partial<Context> = {}) => ({
     options: async function (options: OptionsUnion<Gs>) {
+      let context = makeDefaultContext(c)
       for (const generator of gs) {
         try {
           context = await generator(options, context)
