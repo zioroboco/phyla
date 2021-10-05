@@ -19,8 +19,8 @@
     "node": ">=16"
   },
   "type": "module",
-  "main": "./index.js",
-  "types": "./index.d.ts",
+  "main": "./core/index.js",
+  "types": "./core/index.d.ts",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
