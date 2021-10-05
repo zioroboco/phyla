@@ -13,7 +13,8 @@
   "parserOptions": {
     "project": [
       "./begat/tsconfig.json",
-      "./contrib/*/tsconfig.json"
+      "./contrib/*/tsconfig.json",
+      "./example/*/tsconfig.json"
     ],
     "sourceType": "module"
   },

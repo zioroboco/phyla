@@ -1,0 +1,5 @@
+{
+  "extends": "../../tsconfig.json",
+  "references": [{ "path": "../../begat" }, { "path": "../../contrib/eta" }],
+  "include": ["**/*.ts"]
+}

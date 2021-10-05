@@ -2,5 +2,18 @@
   "name": "begat-example-generator",
   "version": "0.0.0",
   "private": true,
-  "scripts": {}
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "begat": "^0"
+  },
+  "dependencies": {
+    "begat-eta": "^0"
+  }
 }

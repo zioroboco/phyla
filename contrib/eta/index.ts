@@ -13,20 +13,20 @@ const defaults: EtaConfig = {
   rmWhitespace: false,
 }
 
-type GeneratorConfig = {
+type Options = {
   templates: string
   variables: { [key: string]: string }
 }
 
-const eta: Generator<GeneratorConfig> = async function (config, context) {
-  const results = await glob("**/*.eta", { cwd: config.templates })
+const eta: Generator<Options> = async function (options, context) {
+  const results = await glob("**/*.eta", { cwd: options.templates })
     .then(files => files
-      .map(file => resolve(config.templates, file))
+      .map(file => resolve(options.templates, file))
       .map(async path => {
         return fs_system.readFile(path, "utf-8")
-          .then(content => Eta.render(content, config.variables, defaults))
+          .then(content => Eta.render(content, options.variables, defaults))
           .then(rendered => ({
-            path: relative(config.templates, path.replace(/\.eta$/, "")),
+            path: relative(options.templates, path.replace(/\.eta$/, "")),
             rendered,
           }))
       })

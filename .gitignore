@@ -6,8 +6,10 @@ contrib/**/*.d.ts
 contrib/**/*.d.ts.map
 contrib/**/*.js
 contrib/**/*.js.map
-
-!/example/**/*.js
+example/**/*.d.ts
+example/**/*.d.ts.map
+example/**/*.js
+example/**/*.js.map
 
 .vscode/
 dist/
