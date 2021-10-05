@@ -45,6 +45,7 @@ const eta: Generator<Options> = async function (options, context) {
   context.volume.fromJSON(mergeRight(
     context.volume.toJSON(),
     results.reduce((acc, { path, rendered }) => ({
+      ...acc,
       [resolve("/", path)]: rendered,
     }), {})
   ))
