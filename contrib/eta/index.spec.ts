@@ -5,7 +5,7 @@ import eta from "./index"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const config = {
+const options = {
   templates: resolve(__dirname, "fixtures/simple"),
   variables: {
     projectName: "my-cool-project",
@@ -19,7 +19,8 @@ describe(`on a clean volume`, () => {
   beforeEach(async () => {
     context = await begat
       .withGenerators([eta])
-      .withConfig(config)
+      .withContext()
+      .withOptions(options)
   })
 
 
@@ -35,13 +36,13 @@ describe(`on a dirty volume`, () => {
 
   beforeEach(async () => {
     context = await begat
+      .withGenerators([eta])
       .withContext({
         volume: begat.Volume.fromJSON({
           "/other-data.txt": `Hello World!\n`,
         }),
       })
-      .withGenerators([eta])
-      .withConfig(config)
+      .withOptions(options)
   })
 
   it(`writes to the volume`, async () => {

@@ -12,17 +12,17 @@ export type Context = {
   volume: VolumeInstance
 }
 
-export type Generator<C = {}> = (config: C, context: Context) => Promise<Context>
+export type Generator<O = {}> = (options: O, context: Context) => Promise<Context>
 
-/** Union of config properties from a list of generator functions. */
-type ConfigUnion<Gs extends Generator<any>[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
+type AbstractGenerator = Generator<any>
+type OptionsUnion<Gs extends AbstractGenerator[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
 
-export const withContext = (context: Context = { volume: new Volume() }) => ({
-  withGenerators: <Gs extends Generator<any>[]>(generators: Gs) => ({
-    withConfig: async function (config: ConfigUnion<Gs>): Promise<Context> {
+export const withGenerators = <Gs extends AbstractGenerator[]>(generators: Gs) => ({
+  withContext: (context: Context = { volume: new Volume() }) => ({
+    withOptions: async function (options: OptionsUnion<Gs>): Promise<Context> | Context {
       for (const generator of generators) {
         try {
-          context = await generator(config, context)
+          context = await generator(options, context)
         } catch (e: any) {
           throw new Error(
             `Generator ${generator.name} failed with error: ${e.message ?? e}`
@@ -33,7 +33,5 @@ export const withContext = (context: Context = { volume: new Volume() }) => ({
     },
   }),
 })
-
-export const withGenerators = withContext().withGenerators
 
 export default {}

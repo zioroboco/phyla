@@ -9,7 +9,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 begat
   .withGenerators([eta])
-  .withConfig({
+  .withContext()
+  .withOptions({
     templates: resolve(__dirname, "templates"),
     variables: {
       projectName: "amazing-begat-example-project",

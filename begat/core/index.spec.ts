@@ -1,19 +1,18 @@
-import * as memfs from "memfs"
-import { Generator, VolumeInstance, withContext, withGenerators } from "."
+import { Generator, withGenerators } from "."
 import { Volume, fsFromVolume } from "./index"
 
 test(`with one generator`, async () => {
   type MyGenerator = Generator<{ projectName: string }>
 
-  const myGenerator: MyGenerator = async (config, context) => {
+  const myGenerator: MyGenerator = async (options, context) => {
     const fs = fsFromVolume(context.volume)
-    await fs.promises.writeFile("/README.md", `# ${config.projectName}\n`)
+    await fs.promises.writeFile("/README.md", `# ${options.projectName}\n`)
     return context
   }
 
-  const actual = await withContext({ volume: new Volume() })
-    .withGenerators([myGenerator])
-    .withConfig({ projectName: "my-project" })
+  const actual = await withGenerators([myGenerator])
+    .withContext({ volume: new Volume() })
+    .withOptions({ projectName: "my-project" })
 
   expect(actual.volume.toJSON()).toMatchObject({
     "/README.md": "# my-project\n",
@@ -37,9 +36,11 @@ test(`with multiple generators`, async () => {
     return context
   }
 
-  const actual = await withContext({ volume: new Volume() })
-    .withGenerators([generatorOne, generatorTwo])
-    .withConfig({ projectName: "my-project" })
+  const actual = await withGenerators([generatorOne, generatorTwo])
+    .withContext({ volume: new Volume() })
+    .withOptions({
+      projectName: "my-project",
+    })
 
   expect(actual.volume.toJSON()).toMatchObject({
     "/README.md": "# my-project\n",
