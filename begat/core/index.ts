@@ -17,10 +17,10 @@ export type Generator<O = {}> = (options: O, context: Context) => Promise<Contex
 type AbstractGenerator = Generator<any>
 type OptionsUnion<Gs extends AbstractGenerator[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
 
-export const withGenerators = <Gs extends AbstractGenerator[]>(generators: Gs) => ({
-  withContext: (context: Context = { volume: new Volume() }) => ({
-    withOptions: async function (options: OptionsUnion<Gs>): Promise<Context> | Context {
-      for (const generator of generators) {
+export const generators = <Gs extends AbstractGenerator[]>(gs: Gs) => ({
+  context: (context: Context = { volume: new Volume() }) => ({
+    options: async function (options: OptionsUnion<Gs>) {
+      for (const generator of gs) {
         try {
           context = await generator(options, context)
         } catch (e: any) {
@@ -32,6 +32,9 @@ export const withGenerators = <Gs extends AbstractGenerator[]>(generators: Gs) =
       return context
     },
   }),
+  options: async function (options: OptionsUnion<Gs>) {
+    return generators(gs).context().options(options)
+  },
 })
 
 export default {}

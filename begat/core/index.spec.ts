@@ -1,4 +1,4 @@
-import { Generator, withGenerators } from "."
+import { Generator, generators } from "."
 import { Volume, fsFromVolume } from "./index"
 
 test(`with one generator`, async () => {
@@ -10,9 +10,8 @@ test(`with one generator`, async () => {
     return context
   }
 
-  const actual = await withGenerators([myGenerator])
-    .withContext({ volume: new Volume() })
-    .withOptions({ projectName: "my-project" })
+  const actual = await generators([myGenerator])
+    .options({ projectName: "my-project" })
 
   expect(actual.volume.toJSON()).toMatchObject({
     "/README.md": "# my-project\n",
@@ -36,9 +35,8 @@ test(`with multiple generators`, async () => {
     return context
   }
 
-  const actual = await withGenerators([generatorOne, generatorTwo])
-    .withContext({ volume: new Volume() })
-    .withOptions({
+  const actual = await generators([generatorOne, generatorTwo])
+    .options({
       projectName: "my-project",
     })
 

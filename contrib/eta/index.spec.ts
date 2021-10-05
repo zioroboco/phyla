@@ -18,9 +18,8 @@ describe(`on a clean volume`, () => {
 
   beforeEach(async () => {
     context = await begat
-      .withGenerators([eta])
-      .withContext()
-      .withOptions(options)
+      .generators([eta])
+      .options(options)
   })
 
 
@@ -36,13 +35,13 @@ describe(`on a dirty volume`, () => {
 
   beforeEach(async () => {
     context = await begat
-      .withGenerators([eta])
-      .withContext({
+      .generators([eta])
+      .context({
         volume: begat.Volume.fromJSON({
           "/other-data.txt": `Hello World!\n`,
         }),
       })
-      .withOptions(options)
+      .options(options)
   })
 
   it(`writes to the volume`, async () => {

@@ -8,9 +8,8 @@ const require = createRequire(import.meta.url)
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 begat
-  .withGenerators([eta])
-  .withContext()
-  .withOptions({
+  .generators([eta])
+  .options({
     templates: resolve(__dirname, "templates"),
     variables: {
       projectName: "amazing-begat-example-project",
