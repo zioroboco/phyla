@@ -7,7 +7,7 @@ import type { Generator } from "begat/core"
 
 type EtaConfig = Parameters<typeof Eta.render>[2]
 
-const defaults: EtaConfig = {
+const etaConfig: EtaConfig = {
   autoEscape: false,
   autoTrim: false,
   rmWhitespace: false,
@@ -18,13 +18,13 @@ type Options = {
   variables: { [key: string]: string }
 }
 
-const eta: Generator<Options> = async function (options, context) {
-  const results = await glob("**/*.eta", { cwd: options.templates })
+const templateGenerator: Generator<Options> = async function (options, context) {
+  const results = await glob("**/*", { cwd: options.templates })
     .then(files => files
       .map(file => resolve(options.templates, file))
       .map(async path => {
         return fs_system.readFile(path, "utf-8")
-          .then(content => Eta.render(content, options.variables, defaults))
+          .then(content => Eta.render(content, options.variables, etaConfig))
           .then(rendered => ({
             path: relative(options.templates, path.replace(/\.eta$/, "")),
             rendered,
@@ -53,4 +53,4 @@ const eta: Generator<Options> = async function (options, context) {
   return context
 }
 
-export default eta
+export default templateGenerator

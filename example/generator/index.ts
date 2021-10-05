@@ -1,6 +1,6 @@
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
-import eta from "begat/std/eta"
+import templateGenerator from "begat/std/template-generator"
 import type { Generator } from "begat"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -10,8 +10,8 @@ type Options = {
   projectAuthor: string
 }
 
-const generator: Generator<Options> = function (options, context) {
-  return eta({
+const exampleGenerator: Generator<Options> = function (options, context) {
+  return templateGenerator({
     templates: resolve(__dirname, "templates"),
     variables: {
       projectName: options.projectName,
@@ -20,4 +20,4 @@ const generator: Generator<Options> = function (options, context) {
   }, context)
 }
 
-export default generator
+export default exampleGenerator

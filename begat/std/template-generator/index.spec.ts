@@ -1,7 +1,7 @@
 import * as begat from "begat/core"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
-import eta from "./index"
+import templateGenerator from "."
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -18,7 +18,7 @@ describe(`on a clean volume`, () => {
 
   beforeEach(async () => {
     context = await begat
-      .generators([eta])
+      .generators([templateGenerator])
       .options(options)
   })
 
@@ -35,7 +35,7 @@ describe(`on a dirty volume`, () => {
 
   beforeEach(async () => {
     context = await begat
-      .generators([eta])
+      .generators([templateGenerator])
       .context({
         volume: begat.Volume.fromJSON({
           "/other-data.txt": `Hello World!\n`,
