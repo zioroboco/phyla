@@ -44,4 +44,6 @@ export const generators = <Gs extends AbstractGenerator[]>(gs: Gs) => ({
   },
 })
 
-export default {}
+export default {
+  generators,
+}

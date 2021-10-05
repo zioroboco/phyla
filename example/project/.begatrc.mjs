@@ -1,4 +1,4 @@
-import * as begat from "begat"
+import begat from "begat"
 import exampleGenerator from "begat-example-generator"
 
 begat
