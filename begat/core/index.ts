@@ -12,24 +12,28 @@ export type Context = {
   volume: VolumeInstance
 }
 
-const makeDefaultContext = function (c: Partial<Context>): Context {
+export const defaultContext: Context = {
+  volume: new Volume(),
+}
+
+export const makeDefaultContext = function (overrides: Partial<Context> = {}): Context {
   return {
-    volume: c.volume ?? new Volume(),
+    ...defaultContext,
+    ...overrides,
   }
 }
 
-export type Generator<Options = {}> = (o: Options, c: Context) => Promise<Context>
+export type Generator<Options = {}> = (options: Options) => (context: Context) => Promise<Context>
 
 type AbstractGenerator = Generator<any>
 type OptionsUnion<Gs extends AbstractGenerator[]> = Union.IntersectOf<Parameters<Gs[number]>[0]>
 
-export const generators = <Gs extends AbstractGenerator[]>(gs: Gs) => ({
-  context: (c: Partial<Context> = {}) => ({
-    options: async function (options: OptionsUnion<Gs>) {
-      let context = makeDefaultContext(c)
-      for (const generator of gs) {
+export const compose = function <Gs extends AbstractGenerator[]>(generators: Gs) {
+  return function (options: OptionsUnion<Gs>) {
+    return async function (context: Context): Promise<Context> {
+      for (const generator of generators) {
         try {
-          context = await generator(options, context)
+          context = await generator(options)(context)
         } catch (e: any) {
           throw new Error(
             `Generator ${generator.name} failed with error: ${e.message ?? e}`
@@ -37,13 +41,16 @@ export const generators = <Gs extends AbstractGenerator[]>(gs: Gs) => ({
         }
       }
       return context
-    },
-  }),
-  options: async function (options: OptionsUnion<Gs>) {
-    return generators(gs).context().options(options)
-  },
-})
+    }
+  }
+}
 
-export default {
-  generators,
+export const apply = {
+  generators: function <Gs extends AbstractGenerator[]>(generators: Gs) {
+    return {
+      withOptions: function (options: OptionsUnion<Gs>): Promise<Context> {
+        return compose(generators)(options)(makeDefaultContext())
+      },
+    }
+  },
 }

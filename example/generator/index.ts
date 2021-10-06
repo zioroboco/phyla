@@ -10,14 +10,14 @@ type Options = {
   projectAuthor: string
 }
 
-const exampleGenerator: Generator<Options> = function (options, context) {
+const exampleGenerator: Generator<Options> = function (options) {
   return templateGenerator({
     templates: resolve(__dirname, "templates"),
     variables: {
       projectName: options.projectName,
       projectAuthor: options.projectAuthor,
     },
-  }, context)
+  })
 }
 
 export default exampleGenerator

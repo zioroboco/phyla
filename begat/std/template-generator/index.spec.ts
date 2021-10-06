@@ -1,4 +1,4 @@
-import * as begat from "begat/core"
+import { Context, Volume, apply } from "begat/core"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import templateGenerator from "."
@@ -14,12 +14,12 @@ const options = {
 }
 
 describe(`on a clean volume`, () => {
-  let context: begat.Context
+  let context: Context
 
   beforeEach(async () => {
-    context = await begat
+    context = await apply
       .generators([templateGenerator])
-      .options(options)
+      .withOptions(options)
   })
 
 
@@ -31,17 +31,14 @@ describe(`on a clean volume`, () => {
 })
 
 describe(`on a dirty volume`, () => {
-  let context: begat.Context
+  let context: Context
 
   beforeEach(async () => {
-    context = await begat
-      .generators([templateGenerator])
-      .context({
-        volume: begat.Volume.fromJSON({
-          "/other-data.txt": `Hello World!\n`,
-        }),
-      })
-      .options(options)
+    context = await templateGenerator(options)({
+      volume: Volume.fromJSON({
+        "/other-data.txt": `Hello World!\n`,
+      }),
+    })
   })
 
   it(`writes to the volume`, async () => {

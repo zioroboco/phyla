@@ -20,7 +20,7 @@ type Options = {
   pattern?: string
 }
 
-const templateGenerator: Generator<Options> = async function (options, context) {
+const templateGenerator: Generator<Options> = options => async context => {
   const pattern = options.pattern ?? "**/*"
   const results = await glob(pattern, { cwd: options.templates })
     .then(files => files

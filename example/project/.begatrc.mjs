@@ -1,9 +1,14 @@
-import begat from "begat"
 import exampleGenerator from "begat-example-generator"
+import { apply } from "begat"
 
-begat
-  .generators([exampleGenerator])
-  .options({
+apply
+  .generators([
+    exampleGenerator,
+  ])
+  .withOptions({
     projectName: "begat-example-project",
     projectAuthor: "Dirk Gently",
+  })
+  .then(function ({ volume }) {
+    console.log(volume.toJSON())
   })

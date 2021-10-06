@@ -1,47 +1,60 @@
-import { Generator, generators } from "."
-import { fsFromVolume } from "./index"
+import { Generator, Volume, apply, compose, fsFromVolume } from "."
 
-test(`with one generator`, async () => {
+it(`applies individual generators`, async () => {
   type MyGenerator = Generator<{ projectName: string }>
 
-  const myGenerator: MyGenerator = async (options, context) => {
+  const myGenerator: MyGenerator = options => async context => {
     const fs = fsFromVolume(context.volume)
     await fs.promises.writeFile("/README.md", `# ${options.projectName}\n`)
     return context
   }
 
-  const actual = await generators([myGenerator])
-    .options({ projectName: "my-project" })
+  const volume = new Volume()
+  await myGenerator({ projectName: "my-project" })({ volume })
 
-  expect(actual.volume.toJSON()).toMatchObject({
+  expect(volume.toJSON()).toMatchObject({
     "/README.md": "# my-project\n",
   })
 })
 
-test(`with multiple generators`, async () => {
+describe(`with multiple generators`, () => {
   type GeneratorOne = Generator<{ projectName: string }>
 
-  const generatorOne: GeneratorOne = async (config, context) => {
+  const generatorOne: GeneratorOne = options => async context => {
     const fs = fsFromVolume(context.volume)
-    await fs.promises.writeFile("/README.md", `# ${config.projectName}\n`)
+    await fs.promises.writeFile("/README.md", `# ${options.projectName}\n`)
     return context
   }
 
   type GeneratorTwo = Generator<{ projectName: string }>
 
-  const generatorTwo: GeneratorTwo = async (config, context) => {
+  const generatorTwo: GeneratorTwo = options => async context => {
     const fs = fsFromVolume(context.volume)
-    await fs.promises.writeFile("/package.json", `{\n  "name": "${config.projectName}"\n}\n`)
+    await fs.promises.writeFile("/package.json", `{\n  "name": "${options.projectName}"\n}\n`)
     return context
   }
 
-  const actual = await generators([generatorOne, generatorTwo])
-    .options({
+  it(`presents a DIY ${compose.name} api`, async () => {
+    const volume = new Volume()
+    await compose([generatorOne, generatorTwo])({
       projectName: "my-project",
-    })
+    })({ volume })
 
-  expect(actual.volume.toJSON()).toMatchObject({
-    "/README.md": "# my-project\n",
-    "/package.json": `{\n  "name": "my-project"\n}\n`,
+    expect(volume.toJSON()).toMatchObject({
+      "/README.md": "# my-project\n",
+      "/package.json": `{\n  "name": "my-project"\n}\n`,
+    })
+  })
+
+  it(`presents a dotchained "apply.generators(...)" api`, async () => {
+    const { volume } = await apply
+      .generators([generatorOne, generatorTwo])
+      .withOptions({ projectName: "my-dotchained-project" })
+
+    expect(volume.toJSON()).toMatchObject({
+      "/README.md": "# my-dotchained-project\n",
+      "/package.json": `{\n  "name": "my-dotchained-project"\n}\n`,
+    })
   })
 })
+
