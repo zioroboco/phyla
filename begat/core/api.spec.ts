@@ -1,4 +1,4 @@
-import { Generator, Volume, apply, compose, fsFromVolume } from "begat/core/api"
+import { Generator, Volume, begat, compose, fsFromVolume } from "begat/core/api"
 
 it(`applies individual generators`, async () => {
   type MyGenerator = Generator<{ projectName: string }>
@@ -46,9 +46,9 @@ describe(`with multiple generators`, () => {
     })
   })
 
-  it(`presents a dotchained "apply.generators(...)" api`, async () => {
-    const { volume } = await apply
-      .generators([generatorOne, generatorTwo])
+  it(`presents a dotchained "begat.compose(...)" api`, async () => {
+    const { volume } = await begat
+      .compose([generatorOne, generatorTwo])
       .withOptions({ projectName: "my-dotchained-project" })
 
     expect(volume.toJSON()).toMatchObject({

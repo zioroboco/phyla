@@ -45,8 +45,8 @@ export const compose = function <Gs extends AbstractGenerator[]>(generators: Gs)
   }
 }
 
-export const apply = {
-  generators: function <Gs extends AbstractGenerator[]>(generators: Gs) {
+export const begat = {
+  compose: function <Gs extends AbstractGenerator[]>(generators: Gs) {
     return {
       withOptions: function (options: OptionsUnion<Gs>): Promise<Context> {
         return compose(generators)(options)(makeDefaultContext())

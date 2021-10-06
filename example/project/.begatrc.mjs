@@ -1,10 +1,10 @@
 import { exampleGenerator } from "begat-example-generator"
-import { apply } from "begat"
+import { begat } from "begat"
 import { clone } from "begat/std/clone"
 import { patch } from "begat/std/patch"
 
-apply
-  .generators([
+begat
+  .compose([
     clone,
     exampleGenerator,
   ])

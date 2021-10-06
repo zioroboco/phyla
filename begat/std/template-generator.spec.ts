@@ -1,4 +1,4 @@
-import { Context, Volume, apply } from "begat/core/api"
+import { Context, Volume, begat } from "begat/core/api"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { templateGenerator } from "./template-generator"
@@ -17,8 +17,8 @@ describe(`on a clean volume`, () => {
   let context: Context
 
   beforeEach(async () => {
-    context = await apply
-      .generators([templateGenerator])
+    context = await begat
+      .compose([templateGenerator])
       .withOptions(options)
   })
 
