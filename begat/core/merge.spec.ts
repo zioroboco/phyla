@@ -5,7 +5,10 @@ const input = Volume.fromJSON({
   "/one": "data-one",
   "/deep/two": "data-two",
   "/deep/deep/three": "data-three",
+  "/executable": "#!/bin/sh\n\necho neato\n",
 })
+
+input.chmodSync("/executable", 0o755)
 
 it(`merges into the root of an empty volume`, async () => {
   const output = Volume.fromJSON({})
@@ -57,4 +60,15 @@ it(`merges into a deep directory of an empty volume`, async () => {
     "/working/directory/deep/two": "data-two",
     "/working/directory/deep/deep/three": "data-three",
   })
+})
+
+it(`matches the input file mode`, async () => {
+  const output = Volume.fromJSON({})
+
+  await merge({
+    from: { fs: fsFromVolume(input), path: "/" },
+    to: { fs: fsFromVolume(output), path: "/" },
+  })
+
+  expect(output.statSync("/executable").mode.toString(8)).toMatch(/755$/)
 })

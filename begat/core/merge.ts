@@ -18,6 +18,7 @@ export const merge = async function (args: { from: FsPath, to: FsPath }) {
     if (stats.isFile()) {
       const content = await from.fs.readFile(resolve(from.path, entry))
       await to.fs.writeFile(resolve(to.path, entry), content)
+      await to.fs.chmod(resolve(to.path, entry), stats.mode)
     } else {
       await merge({
         from: { fs: args.from.fs, path: resolve(from.path, entry) },
