@@ -1,4 +1,5 @@
-import { Generator, Volume, begat, compose, fsFromVolume } from "begat/core/api"
+import { Generator, begat, compose } from "begat/core/api"
+import { Volume, fsFromVolume } from "begat/core/volume"
 
 it(`applies individual generators`, async () => {
   type MyGenerator = Generator<{ projectName: string }>

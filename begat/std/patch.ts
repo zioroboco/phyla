@@ -1,8 +1,9 @@
-import { Context, fsFromVolume } from "begat/core/api"
 import { SpawnOptions, spawn } from "child_process"
+import { fsFromVolume } from "begat/core/volume"
 import { sync } from "begat/core/sync"
 import fs from "fs"
 import tmp from "tmp-promise"
+import type { Context } from "begat/core/api"
 
 const spawnOptions: SpawnOptions = {
   stdio: "inherit",

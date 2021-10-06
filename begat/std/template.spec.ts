@@ -1,4 +1,5 @@
-import { Context, Volume, begat } from "begat/core/api"
+import { Context, begat } from "begat/core/api"
+import { Volume } from "begat/core/volume"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import { template } from "./template"

@@ -1,6 +1,7 @@
-import { Generator, fsFromVolume } from "begat/core/api"
+import { fsFromVolume } from "begat/core/volume"
 import { sync } from "begat/core/sync"
 import fs from "fs"
+import type { Generator } from "begat/core/api"
 
 type Options = {
   clonePath?: string
