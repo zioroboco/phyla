@@ -20,7 +20,7 @@ type Options = {
   patterns?: string | string[]
 }
 
-const templateGenerator: Generator<Options> = options => async context => {
+export const templateGenerator: Generator<Options> = options => async context => {
   const results = await glob(options.patterns ?? "**/*", { cwd: options.templates })
     .then(files => files
       .map(file => resolve(options.templates, file))
@@ -47,5 +47,3 @@ const templateGenerator: Generator<Options> = options => async context => {
 
   return context
 }
-
-export default templateGenerator

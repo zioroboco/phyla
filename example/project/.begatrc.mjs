@@ -1,4 +1,4 @@
-import exampleGenerator from "begat-example-generator"
+import { exampleGenerator } from "begat-example-generator"
 import { apply } from "begat"
 
 apply
