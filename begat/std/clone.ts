@@ -3,12 +3,12 @@ import { sync } from "begat/core/sync"
 import fs from "fs"
 
 type Options = {
-  cloneFromPath?: string
+  clonePath?: string
 }
 
-export const cloneGenerator: Generator<Options> = options => async context => {
+export const clone: Generator<Options> = options => async context => {
   await sync({
-    from: { fs, path: options.cloneFromPath ?? process.cwd() },
+    from: { fs, path: options.clonePath ?? process.cwd() },
     to: { fs: fsFromVolume(context.volume), path: "/" },
   })
   return context

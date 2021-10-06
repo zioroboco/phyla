@@ -1,11 +1,11 @@
 import { exampleGenerator } from "begat-example-generator"
 import { apply } from "begat"
-import { cloneGenerator } from "begat/std/clone-generator"
+import { clone } from "begat/std/clone"
 import { patch } from "begat/core/patch"
 
 apply
   .generators([
-    cloneGenerator,
+    clone,
     exampleGenerator,
   ])
   .withOptions({
