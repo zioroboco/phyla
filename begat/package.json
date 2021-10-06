@@ -19,8 +19,8 @@
     "node": ">=16"
   },
   "type": "module",
-  "main": "./core/index.js",
-  "types": "./core/index.d.ts",
+  "main": "./core/api.js",
+  "types": "./core/api.d.ts",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean"

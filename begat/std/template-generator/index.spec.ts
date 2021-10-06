@@ -1,4 +1,4 @@
-import { Context, Volume, apply } from "begat/core"
+import { Context, Volume, apply } from "begat/core/api"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
 import templateGenerator from "."

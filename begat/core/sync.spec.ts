@@ -1,4 +1,4 @@
-import { Volume, fsFromVolume } from "begat/core"
+import { Volume, fsFromVolume } from "begat/core/api"
 import { sync } from "begat/core/sync"
 
 const input = Volume.fromJSON({
