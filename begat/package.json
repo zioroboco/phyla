@@ -31,6 +31,7 @@
     "fast-glob": "^3.2.7",
     "memfs": "^3.3.0",
     "ramda": "^0.27.1",
+    "tmp-promise": "^3.0.2",
     "ts-toolbelt": "^9.6.0"
   }
 }

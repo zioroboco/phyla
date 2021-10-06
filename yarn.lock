@@ -1373,6 +1373,7 @@ __metadata:
     fast-glob: ^3.2.7
     memfs: ^3.3.0
     ramda: ^0.27.1
+    tmp-promise: ^3.0.2
     ts-toolbelt: ^9.6.0
   languageName: unknown
   linkType: soft
@@ -5124,6 +5125,24 @@ fsevents@^2.3.2:
   version: 6.0.1
   resolution: "throat@npm:6.0.1"
   checksum: 782d4171ee4e3cf947483ed2ff1af3e17cc4354c693b9d339284f61f99fbc401d171e0b0d2db3295bb7d447630333e9319c174ebd7ef315c6fb791db9675369c
+  languageName: node
+  linkType: hard
+
+"tmp-promise@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "tmp-promise@npm:3.0.2"
+  dependencies:
+    tmp: ^0.2.0
+  checksum: 2d8457c9512e896633f64fab33e5e3fd273c4d8fca33cfc74a04a104a0b921d15ed3e832c4f2a50108635ac88264afef85abddbe5ad8480e15f55fc7f8e76969
+  languageName: node
+  linkType: hard
+
+"tmp@npm:^0.2.0":
+  version: 0.2.1
+  resolution: "tmp@npm:0.2.1"
+  dependencies:
+    rimraf: ^3.0.0
+  checksum: 8b1214654182575124498c87ca986ac53dc76ff36e8f0e0b67139a8d221eaecfdec108c0e6ec54d76f49f1f72ab9325500b246f562b926f85bcdfca8bf35df9e
   languageName: node
   linkType: hard
 
