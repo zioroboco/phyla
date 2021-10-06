@@ -1,10 +1,20 @@
 import { Context, fsFromVolume } from "begat/core/api"
-import { spawn } from "child_process"
+import { SpawnOptions, spawn } from "child_process"
 import { sync } from "begat/core/sync"
 import fs from "fs"
 import tmp from "tmp-promise"
 
-export const patch = async (context: Context, cwd: string = process.cwd()): Promise<Context> => {
+const spawnOptions: SpawnOptions = {
+  stdio: "inherit",
+}
+
+type Options = Partial<{
+  cwd: string
+}>
+
+export const patch = async (context: Context, options?: Options): Promise<Context> => {
+  options = { cwd: process.cwd(), ...options }
+
   const dir = await tmp.dir({ unsafeCleanup: true })
 
   await sync({
@@ -12,8 +22,10 @@ export const patch = async (context: Context, cwd: string = process.cwd()): Prom
     to: { fs, path: dir.path },
   })
 
+  const gitArgs = `diff --no-index --patch ${options.cwd} ${dir.path}`
+
   return new Promise((resolve, reject) => {
-    spawn("git", ["diff", "--no-index", "--patch", cwd, dir.path], { stdio: "inherit" }).on("exit", () => {
+    spawn("git", gitArgs.split(" "), spawnOptions).on("exit", () => {
       dir.cleanup()
       resolve(context)
     })
