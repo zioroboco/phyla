@@ -37,16 +37,6 @@ const templateGenerator: Generator<Options> = options => async context => {
       })
     ).then(promises => Promise.all(promises))
 
-  const errors = results
-    .filter(({ rendered }) => rendered === undefined)
-    .reduce((acc, { path }) => [...acc, path], [] as string[])
-
-  if (errors.length > 0) {
-    throw new Error(
-      `Failed to render ${errors.length} templates: ${errors.join(", ")}`
-    )
-  }
-
   context.volume.fromJSON(mergeRight(
     context.volume.toJSON(),
     results.reduce((acc, { path, rendered }) => ({
