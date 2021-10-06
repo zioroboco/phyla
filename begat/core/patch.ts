@@ -5,7 +5,7 @@ import { sync } from "begat/core/sync"
 import { withDir } from "tmp-promise"
 import fs from "fs"
 
-export const patch = async function (context: Context, cwd: string): Promise<Context> {
+export const patch = async (context: Context, cwd: string = process.cwd()): Promise<Context> => {
   await withDir(async ({ path }) => {
     await sync({
       from: { fs: fsFromVolume(context.volume), path: "/" },
