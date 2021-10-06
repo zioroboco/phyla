@@ -1,7 +1,7 @@
 import { Context, Volume, apply } from "begat/core/api"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
-import templateGenerator from "."
+import templateGenerator from "./template-generator"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
