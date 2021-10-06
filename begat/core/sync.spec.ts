@@ -1,5 +1,5 @@
 import { Volume, fsFromVolume } from "begat/core"
-import { merge } from "begat/core/merge"
+import { sync } from "begat/core/sync"
 
 const input = Volume.fromJSON({
   "/one": "data-one",
@@ -10,10 +10,10 @@ const input = Volume.fromJSON({
 
 input.chmodSync("/executable", 0o755)
 
-it(`merges into the root of an empty volume`, async () => {
+it(`syncs into the root of an empty volume`, async () => {
   const output = Volume.fromJSON({})
 
-  await merge({
+  await sync({
     from: { fs: fsFromVolume(input), path: "/" },
     to: { fs: fsFromVolume(output), path: "/" },
   })
@@ -32,7 +32,7 @@ it(`merges into the root of a dirty volume`, async () => {
     "/elsewhere/noise": "noise",
   })
 
-  await merge({
+  await sync({
     from: { fs: fsFromVolume(input), path: "/" },
     to: { fs: fsFromVolume(output), path: "/" },
   })
@@ -47,10 +47,10 @@ it(`merges into the root of a dirty volume`, async () => {
   })
 })
 
-it(`merges into a deep directory of an empty volume`, async () => {
+it(`syncs into a deep directory of an empty volume`, async () => {
   const output = Volume.fromJSON({})
 
-  await merge({
+  await sync({
     from: { fs: fsFromVolume(input), path: "/" },
     to: { fs: fsFromVolume(output), path: "/working/directory" },
   })
@@ -62,10 +62,10 @@ it(`merges into a deep directory of an empty volume`, async () => {
   })
 })
 
-it(`matches the input file mode`, async () => {
+it(`syncs the input file mode`, async () => {
   const output = Volume.fromJSON({})
 
-  await merge({
+  await sync({
     from: { fs: fsFromVolume(input), path: "/" },
     to: { fs: fsFromVolume(output), path: "/" },
   })
