@@ -1,7 +1,7 @@
 import { exampleGenerator } from "begat-example-generator"
 import { apply } from "begat"
 import { clone } from "begat/std/clone"
-import { patch } from "begat/core/patch"
+import { patch } from "begat/std/patch"
 
 apply
   .generators([
