@@ -17,12 +17,11 @@ type Options = {
   templates: string
   variables: { [key: string]: string }
   config?: EtaConfig
-  pattern?: string
+  patterns?: string | string[]
 }
 
 const templateGenerator: Generator<Options> = options => async context => {
-  const pattern = options.pattern ?? "**/*"
-  const results = await glob(pattern, { cwd: options.templates })
+  const results = await glob(options.patterns ?? "**/*", { cwd: options.templates })
     .then(files => files
       .map(file => resolve(options.templates, file))
       .map(async path => {
