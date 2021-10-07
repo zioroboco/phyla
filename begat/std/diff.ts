@@ -13,7 +13,7 @@ type Options = Partial<{
   cwd: string
 }>
 
-export const patch = async (context: Context, options?: Options): Promise<Context> => {
+export const diff = async (context: Context, options?: Options): Promise<Context> => {
   options = { cwd: process.cwd(), ...options }
 
   const dir = await tmp.dir({ unsafeCleanup: true })

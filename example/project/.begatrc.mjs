@@ -1,7 +1,7 @@
 import { exampleGenerator } from "begat-example-generator"
 import { begat } from "begat"
 import { clone } from "begat/std/clone"
-import { patch } from "begat/std/patch"
+import { diff } from "begat/std/diff"
 
 begat
   .compose([
@@ -12,4 +12,4 @@ begat
     projectName: "begat-example-project",
     projectAuthor: "Dirk Gently",
   })
-  .then(patch)
+  .then(diff)
