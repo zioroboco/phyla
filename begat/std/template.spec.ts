@@ -1,4 +1,4 @@
-import { Context, begat } from "begat/core/api"
+import { Context, pipeline } from "begat/core/api"
 import { Volume } from "begat/core/volume"
 import { dirname, resolve } from "path"
 import { fileURLToPath } from "url"
@@ -18,9 +18,7 @@ describe(`on a clean volume`, () => {
   let context: Context
 
   beforeEach(async () => {
-    context = await begat
-      .compose([template])
-      .withOptions(options)
+    context = await pipeline([template]).withOptions(options)
   })
 
 

@@ -1,4 +1,4 @@
-import { Generator, begat, compose } from "begat/core/api"
+import { Generator, compose, pipeline } from "begat/core/api"
 import { Volume, fsFromVolume } from "begat/core/volume"
 
 it(`applies individual generators`, async () => {
@@ -35,11 +35,10 @@ describe(`with multiple generators`, () => {
     return context
   }
 
-  it(`presents a DIY ${compose.name} api`, async () => {
+  it(`presents a (flexible) ${compose.name} api`, async () => {
     const volume = new Volume()
-    await compose([generatorOne, generatorTwo])({
-      projectName: "my-project",
-    })({ volume })
+    const projectName = "my-project"
+    await compose([generatorOne, generatorTwo])({ projectName })({ volume })
 
     expect(volume.toJSON()).toMatchObject({
       "/README.md": "# my-project\n",
@@ -47,9 +46,8 @@ describe(`with multiple generators`, () => {
     })
   })
 
-  it(`presents a dotchained "begat.compose(...)" api`, async () => {
-    const { volume } = await begat
-      .compose([generatorOne, generatorTwo])
+  it(`presents a (dotchained) ${pipeline.name} api`, async () => {
+    const { volume } = await pipeline([generatorOne, generatorTwo])
       .withOptions({ projectName: "my-dotchained-project" })
 
     expect(volume.toJSON()).toMatchObject({
