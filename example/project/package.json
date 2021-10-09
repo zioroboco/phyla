@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "setup": "node --experimental-specifier-resolution=node .begatrc.mjs"
+    "setup": "node .begatrc.mjs"
   },
   "dependencies": {
     "begat": "*",

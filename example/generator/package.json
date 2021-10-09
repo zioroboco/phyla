@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "main": "./index.js",
-  "types": "./index.d.ts",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",

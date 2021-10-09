@@ -8,6 +8,14 @@
     "url": "https://github.com/zioroboco/begat.git",
     "directory": "begat"
   },
+  "engines": {
+    "node": ">=16"
+  },
+  "type": "module",
+  "main": "./core/api.js",
+  "exports": {
+    "./*": "./*.js"
+  },
   "files": [
     "!**/*.map",
     "!**/*.ts",
@@ -15,12 +23,6 @@
     "**/*.js",
     "!**/*.spec.*"
   ],
-  "engines": {
-    "node": ">=16"
-  },
-  "type": "module",
-  "main": "./core/api.js",
-  "types": "./core/api.d.ts",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean"
