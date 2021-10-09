@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as begat from "begat"
 import { clone } from "begat/std/clone"
 import { diff } from "begat/std/diff"

@@ -2,9 +2,6 @@
   "name": "begat-example-project",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "setup": "node .begatrc.mjs"
-  },
   "dependencies": {
     "begat": "*",
     "begat-example-generator": "*"
