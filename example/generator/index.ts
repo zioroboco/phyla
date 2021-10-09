@@ -1,21 +1,46 @@
-import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
+import { createRequire } from "module"
+import { dirname, join } from "path"
+import { fsFromVolume } from "begat/core/volume"
 import { template } from "begat/std/template"
 import type { Generator } from "begat"
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const require = createRequire(import.meta.url)
+
+const templates = join(
+  dirname(require.resolve("begat-example-generator")),
+  "templates"
+)
 
 type Options = {
-  projectName: string,
-  projectAuthor: string
+  license: "MIT"
+  author: string
 }
 
-export const exampleGenerator: Generator<Options> = function (options) {
-  return template({
-    templates: resolve(__dirname, "templates"),
-    variables: {
-      projectName: options.projectName,
-      projectAuthor: options.projectAuthor,
-    },
-  })
+export const license: Generator<Options> = function (options) {
+  if (options.license !== "MIT") {
+    throw new Error("Only the MIT license is supported")
+  }
+
+  return async function (context) {
+    const fs = fsFromVolume(context.volume).promises
+
+    const packageJson = JSON.parse(await fs.readFile("/package.json", "utf8"))
+
+    packageJson.author = options.author
+    packageJson.license = options.license
+
+    await fs.writeFile(
+      "/package.json",
+      JSON.stringify(packageJson, null, 2) + "\n"
+    )
+
+    await template({
+      templates,
+      variables: {
+        author: options.author,
+      },
+    })(context)
+
+    return context
+  }
 }

@@ -3,12 +3,13 @@
 import * as begat from "begat"
 import { clone } from "begat/std/clone"
 import { diff } from "begat/std/diff"
-import { exampleGenerator } from "begat-example-generator"
+
+import { license } from "begat-example-generator"
 
 export default begat
-  .pipeline([clone, exampleGenerator])
+  .pipeline([clone, license])
   .withOptions({
-    projectName: "begat-example-project",
-    projectAuthor: "Dirk Gently",
+    author: "Raymond Luxury-Yacht <rayly@hotmail.com>",
+    license: "MIT",
   })
   .then(diff)

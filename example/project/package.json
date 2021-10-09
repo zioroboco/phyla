@@ -1,6 +1,7 @@
 {
   "name": "begat-example-project",
   "version": "0.0.0",
+  "author": "Ray",
   "private": true,
   "dependencies": {
     "begat": "*",
