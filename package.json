@@ -1,8 +1,8 @@
 {
   "private": true,
   "workspaces": [
-    "begat",
-    "example/*"
+    "example/*",
+    "package"
   ],
   "prettier": {
     "arrowParens": "avoid",

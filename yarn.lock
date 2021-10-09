@@ -1362,9 +1362,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"begat@*, begat@workspace:begat":
+"begat@*, begat@workspace:package":
   version: 0.0.0-use.local
-  resolution: "begat@workspace:begat"
+  resolution: "begat@workspace:package"
   dependencies:
     "@types/ramda": ^0.27.45
     eta: ^1.12.3

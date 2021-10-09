@@ -12,8 +12,7 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": [
-      "./begat/tsconfig.json",
-      "./contrib/*/tsconfig.json",
+      "./package/tsconfig.json",
       "./example/*/tsconfig.json"
     ],
     "sourceType": "module"

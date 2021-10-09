@@ -10,6 +10,6 @@
     "module": "es2020",
     "moduleResolution": "node"
   },
-  "references": [{ "path": "./begat" }, { "path": "./example/generator" }],
+  "references": [{ "path": "./package" }, { "path": "./example/generator" }],
   "files": []
 }
