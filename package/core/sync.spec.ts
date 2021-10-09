@@ -2,6 +2,7 @@ import { Volume, fsFromVolume } from "begat/core/volume"
 import { sync } from "begat/core/sync"
 
 const input = Volume.fromJSON({
+  "/.git/stuff": "dot-git-stuff",
   "/one": "data-one",
   "/deep/two": "data-two",
   "/deep/deep/three": "data-three",
@@ -19,6 +20,7 @@ it(`syncs into the root of an empty volume`, async () => {
   })
 
   expect(output.toJSON()).toMatchObject({
+    "/.git/stuff": "dot-git-stuff",
     "/one": "data-one",
     "/deep/two": "data-two",
     "/deep/deep/three": "data-three",
@@ -71,4 +73,28 @@ it(`syncs the input file mode`, async () => {
   })
 
   expect(output.statSync("/executable").mode.toString(8)).toMatch(/755$/)
+})
+
+it(`respects ignore patterns`, async () => {
+  const output = Volume.fromJSON({})
+
+  await sync({
+    from: { fs: fsFromVolume(input), path: "/" },
+    to: { fs: fsFromVolume(output), path: "/" },
+    ignore: [".git"],
+  })
+
+  expect(output.toJSON()).toMatchObject(
+    expect.objectContaining({
+      "/one": "data-one",
+      "/deep/two": "data-two",
+      "/deep/deep/three": "data-three",
+    }),
+  )
+
+  expect(output.toJSON()).toMatchObject(
+    expect.not.objectContaining({
+      "/.git/stuff": "dot-git-stuff",
+    })
+  )
 })

@@ -1,29 +1,38 @@
-import { resolve } from "path"
+import { join } from "path"
+import glob from "fast-glob"
 
 type FsPath = {
   fs: typeof import("fs")
   path: string,
 }
 
-export const sync = async function (args: { from: FsPath, to: FsPath }) {
-  const from = { fs: args.from.fs.promises, path: args.from.path }
-  const to = { fs: args.to.fs.promises, path: args.to.path }
+type Args = {
+  from: FsPath,
+  to: FsPath,
+  ignore?: string[],
+}
 
-  await to.fs.mkdir(to.path, { recursive: true })
+export const sync = async function (args: Args) {
+  const { from, to, ignore } = args
 
-  const entries = await from.fs.readdir(from.path)
+  const options: glob.Options = {
+    cwd: from.path,
+    fs: from.fs,
+    ignore,
 
-  for (const entry of entries) {
-    const stats = await from.fs.stat(resolve(from.path, entry))
-    if (stats.isFile()) {
-      const content = await from.fs.readFile(resolve(from.path, entry))
-      await to.fs.writeFile(resolve(to.path, entry), content)
-      await to.fs.chmod(resolve(to.path, entry), stats.mode)
-    } else {
-      await sync({
-        from: { fs: args.from.fs, path: resolve(from.path, entry) },
-        to: { fs: args.to.fs, path: resolve(to.path, entry) },
-      })
-    }
+    dot: true,
+  }
+
+  const directories = await glob("**/*", { ...options, onlyDirectories: true })
+  for (const directory of directories.map(d => join(to.path, d))) {
+    await to.fs.promises.mkdir(directory, { recursive: true })
+  }
+
+  const files = await glob("**/*", { ...options })
+  for (const file of files) {
+    const content = await from.fs.promises.readFile(join(from.path, file))
+    await to.fs.promises.writeFile(join(to.path, file), content)
+    const stats = await from.fs.promises.stat(join(from.path, file))
+    await to.fs.promises.chmod(join(to.path, file), stats.mode)
   }
 }
