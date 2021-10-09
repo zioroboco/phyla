@@ -17,9 +17,8 @@
     }
   },
   "scripts": {
-    "core": "yarn workspace begat",
-    "build": "yarn workspaces foreach run build",
-    "clean": "yarn workspaces foreach run clean",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "lint": "yarn lint:prettier --write && yarn log:done prettier && yarn lint:eslint --fix && yarn log:done eslint",
     "lint-ci": "yarn lint:prettier --check && yarn log:done prettier && yarn lint:eslint --max-warnings=0 && yarn log:done eslint",
     "lint:eslint": "eslint . --ext .ts",

@@ -4,14 +4,6 @@
   "private": true,
   "type": "module",
   "main": "./index.js",
-  "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
-    "test": "jest"
-  },
-  "devDependencies": {
-    "begat": "*"
-  },
   "peerDependencies": {
     "begat": "^0"
   }

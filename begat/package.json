@@ -23,10 +23,6 @@
     "**/*.js",
     "!**/*.spec.*"
   ],
-  "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean"
-  },
   "dependencies": {
     "@types/ramda": "^0.27.45",
     "eta": "^1.12.3",
