@@ -20,6 +20,7 @@ jobs:
           title: Release
           commit: Release
           publish: yarn release
+          version: yarn version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
