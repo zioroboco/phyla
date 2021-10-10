@@ -19,13 +19,14 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
+    "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest",
     "lint": "yarn lint:prettier --write && yarn log:done prettier && yarn lint:eslint --fix && yarn log:done eslint",
     "lint-ci": "yarn lint:prettier --check && yarn log:done prettier && yarn lint:eslint --max-warnings=0 && yarn log:done eslint",
     "lint:eslint": "eslint . --ext .ts",
     "lint:prettier": "prettier '**/*[!.d].{json,yaml,yml}' --loglevel=warn",
     "log:done": "echo '✔ '",
-    "release": "yarn build && cp README.md package && changeset publish",
-    "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest",
+    "copy-docs": "cp README.md package && cp LICENSE package",
+    "release": "yarn build && yarn copy-docs && changeset publish",
     "version": "changeset version && yarn"
   },
   "devDependencies": {

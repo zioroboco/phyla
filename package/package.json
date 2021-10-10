@@ -1,8 +1,9 @@
 {
   "name": "begat",
   "version": "0.1.0",
+  "description": "Build families of composable project (re-)generators 📖",
   "author": "Louis Quinnell <_@ziorobo.co>",
-  "license": "UNLICENSED",
+  "license": "LGPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/zioroboco/begat.git",
