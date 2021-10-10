@@ -24,6 +24,7 @@
   - [`begat/std/template` (generator)](#begatstdtemplate-generator)
   - [`begat/std/aside` (generator)](#begatstdaside-generator)
   - [`begat/std/diff`](#begatstddiff)
+  - [`begat/std/write`](#begatstdwrite)
 
 ## Usage
 
@@ -127,4 +128,18 @@ begat
   .pipeline([ ... ])
   .withOptions({ ... })
   .then(diff)
+```
+
+### `begat/std/write`
+
+Copy all files from the root of the volume into your working directory.
+
+```js
+import * as begat from "begat"
+import { diff } from "begat/std/diff"
+
+begat
+  .pipeline([ ... ])
+  .withOptions({ ... })
+  .then(write)
 ```

@@ -24,7 +24,7 @@
     "lint:eslint": "eslint . --ext .ts",
     "lint:prettier": "prettier '**/*[!.d].{json,yaml,yml}' --loglevel=warn",
     "log:done": "echo '✔ '",
-    "release": "yarn build && changeset publish",
+    "release": "yarn build && cp README.md package && changeset publish",
     "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest"
   },
   "devDependencies": {
