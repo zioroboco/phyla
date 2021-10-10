@@ -136,7 +136,7 @@ Copy all files from the root of the volume into your working directory.
 
 ```js
 import * as begat from "begat"
-import { diff } from "begat/std/diff"
+import { write } from "begat/std/write"
 
 begat
   .pipeline([ ... ])
