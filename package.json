@@ -24,9 +24,12 @@
     "lint:eslint": "eslint . --ext .ts",
     "lint:prettier": "prettier '**/*[!.d].{json,yaml,yml}' --loglevel=warn",
     "log:done": "echo '✔ '",
+    "release": "yarn build && changeset publish",
     "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.4.1",
+    "@changesets/cli": "^2.17.0",
     "@tsconfig/node16": "^1.0.2",
     "@types/jest": "*",
     "@types/node": "*",
