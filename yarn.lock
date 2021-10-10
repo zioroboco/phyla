@@ -473,17 +473,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/changelog-github@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "@changesets/changelog-github@npm:0.4.1"
-  dependencies:
-    "@changesets/get-github-info": ^0.5.0
-    "@changesets/types": ^4.0.1
-    dotenv: ^8.1.0
-  checksum: eae7151d7044038506ab4d012e092d0bee286f8096167729718c9a23f5f64c58dc2f7ef585004b11f86a3b5e628440172f20d34d2f01d0749f6265beb5b5ee9d
-  languageName: node
-  linkType: hard
-
 "@changesets/cli@npm:^2.17.0":
   version: 2.17.0
   resolution: "@changesets/cli@npm:2.17.0"
@@ -1311,6 +1300,17 @@ __metadata:
     "@typescript-eslint/types": 4.31.2
     eslint-visitor-keys: ^2.0.0
   checksum: 5f3d16d3d282e9b4b02acd06e787e182e9afb9e0a1c42a19268d9f8e02895163ff81674281db27e4777cc239675d6be2abfab8129458f670fe0c17a0d19ad796
+  languageName: node
+  linkType: hard
+
+"@zioroboco/changelog-github@https://github.com/zioroboco/changelog-github#v0.1.1":
+  version: 0.1.1
+  resolution: "@zioroboco/changelog-github@https://github.com/zioroboco/changelog-github.git#commit=2af5e293045772d38f516e7196b5485aee05f295"
+  dependencies:
+    "@changesets/get-github-info": ^0.5.0
+    "@changesets/types": ^4.0.1
+    dotenv: ^8.1.0
+  checksum: cb23140fdc21f79c6b0557c2fe5c3c66ea953aa29aea115f0990a7a826a2653aa97e00198666e8477a0791d60f07e239cecfa75e9928f08e4a32adcdc16c13be
   languageName: node
   linkType: hard
 
@@ -5612,13 +5612,13 @@ fsevents@^2.3.2:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@changesets/changelog-github": ^0.4.1
     "@changesets/cli": ^2.17.0
     "@tsconfig/node16": ^1.0.2
     "@types/jest": "*"
     "@types/node": "*"
     "@typescript-eslint/eslint-plugin": ^4.31.2
     "@typescript-eslint/parser": ^4.31.2
+    "@zioroboco/changelog-github": "https://github.com/zioroboco/changelog-github#v0.1.1"
     eslint: ^7.32.0
     eslint-import-resolver-typescript: ^2.5.0
     eslint-plugin-import: ^2.24.2
