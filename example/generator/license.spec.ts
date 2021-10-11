@@ -1,5 +1,5 @@
 import { Volume, fsFromVolume } from "begat/core/volume"
-import { license } from "begat-example-generator"
+import { license } from "./license"
 
 describe(license.name, () => {
   let fs: typeof import("fs").promises
