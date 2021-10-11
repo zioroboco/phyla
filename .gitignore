@@ -7,6 +7,7 @@ example/**/*.d.ts.map
 example/**/*.js
 example/**/*.js.map
 
+*.code-workspace
 .vscode/
 dist/
 docs/
