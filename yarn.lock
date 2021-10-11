@@ -1681,22 +1681,26 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat-example-project@workspace:example/project"
   dependencies:
-    begat: "*"
+    begat: ^0.1.1
     begat-example-generator: "*"
   languageName: unknown
   linkType: soft
 
-"begat@*, begat@workspace:package":
+"begat@^0.1.1, begat@workspace:package":
   version: 0.0.0-use.local
   resolution: "begat@workspace:package"
   dependencies:
     "@types/ramda": ^0.27.45
+    clipanion: ^3.2.0-rc.3
     eta: ^1.12.3
     fast-glob: ^3.2.7
     memfs: ^3.3.0
     ramda: ^0.27.1
     tmp-promise: ^3.0.2
     ts-toolbelt: ^9.6.0
+    typanion: ^3.5.0
+  bin:
+    begat: ./bin/begat.mjs
   languageName: unknown
   linkType: soft
 
@@ -1967,6 +1971,17 @@ __metadata:
   version: 1.0.0
   resolution: "cli-boxes@npm:1.0.0"
   checksum: 101cfd6464a418a76523c332665eaf0641522f30ecc2492de48263ada6b0852333b2ed47b2998ddda621e7008471c51f597f813be798db237c33ba45b27e802a
+  languageName: node
+  linkType: hard
+
+"clipanion@npm:^3.2.0-rc.3":
+  version: 3.2.0-rc.3
+  resolution: "clipanion@npm:3.2.0-rc.3"
+  dependencies:
+    typanion: ^3.3.1
+  peerDependencies:
+    typanion: "*"
+  checksum: 3b202a331b323e5f2fe5ceb6e2282eb69cba87e588e75f009bbb87ea1e64f17f5203067b760549d689d71a966267d8928f805354c68777781083fb3b1a8a4662
   languageName: node
   linkType: hard
 
@@ -6370,6 +6385,13 @@ fsevents@^2.3.2:
   bin:
     tty-table: adapters/terminal-adapter.js
   checksum: 7dd03d7bbc8d945533fed1df73b393681ad4b9e50626a3c523fbe86f90d83d08163cb58d76a326b3f5cb7bdc8d751c31c61441902565dc800c25313e67656e00
+  languageName: node
+  linkType: hard
+
+"typanion@npm:^3.3.1, typanion@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "typanion@npm:3.5.0"
+  checksum: 9d9c7e7ba99f61a9bce3d02c486c264c1071bf946623d43c47b317450e37978bbb5c0dcab0aa31b8eb867a45417bc3ffbef3d1e59a32b92c3b932e4af488c77b
   languageName: node
   linkType: hard
 

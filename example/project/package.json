@@ -4,7 +4,7 @@
   "author": "Ray",
   "private": true,
   "dependencies": {
-    "begat": "*",
+    "begat": "^0.1.1",
     "begat-example-generator": "*"
   }
 }

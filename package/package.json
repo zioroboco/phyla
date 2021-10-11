@@ -18,6 +18,7 @@
     ".": "./core/api.js",
     "./*": "./*.js"
   },
+  "bin": "./bin/begat.mjs",
   "files": [
     "!**/*.map",
     "!**/*.ts",
@@ -27,11 +28,13 @@
   ],
   "dependencies": {
     "@types/ramda": "^0.27.45",
+    "clipanion": "^3.2.0-rc.3",
     "eta": "^1.12.3",
     "fast-glob": "^3.2.7",
     "memfs": "^3.3.0",
     "ramda": "^0.27.1",
     "tmp-promise": "^3.0.2",
-    "ts-toolbelt": "^9.6.0"
+    "ts-toolbelt": "^9.6.0",
+    "typanion": "^3.5.0"
   }
 }

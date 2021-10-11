@@ -18,6 +18,7 @@
     }
   },
   "scripts": {
+    "begat": "cd example/project && yarn begat",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest",
