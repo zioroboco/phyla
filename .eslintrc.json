@@ -2,7 +2,7 @@
 {
   "$schema": "https://json.schemastore.org/eslintrc",
 
-  "ignorePatterns": ["*.js", "*.cjs", "*.mjs", "*.d.ts"],
+  "ignorePatterns": ["*.js", "*.cjs", "*.d.ts", "jest.config.mjs"],
 
   "env": { "es6": true, "jest": true, "node": true },
 
@@ -11,6 +11,7 @@
 
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "extraFileExtensions": [".mjs"],
     "project": [
       "./package/tsconfig.json",
       "./example/*/tsconfig.json"
