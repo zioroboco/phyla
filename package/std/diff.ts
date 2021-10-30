@@ -9,13 +9,7 @@ const spawnOptions: SpawnOptions = {
   stdio: "inherit",
 }
 
-type Options = Partial<{
-  cwd: string
-}>
-
-export const diff = async (context: Context, options?: Options): Promise<Context> => {
-  options = { cwd: process.cwd(), ...options }
-
+export const diff = async (context: Context): Promise<Context> => {
   const dir = await tmp.dir({ unsafeCleanup: true })
 
   await sync({
@@ -23,7 +17,7 @@ export const diff = async (context: Context, options?: Options): Promise<Context
     to: { fs, path: dir.path },
   })
 
-  const gitArgs = `diff --no-index --patch ${options.cwd} ${dir.path}`
+  const gitArgs = `diff --no-index --patch ${context.cwd} ${dir.path}`
 
   return new Promise((resolve, reject) => {
     spawn("git", gitArgs.split(" "), spawnOptions).on("exit", () => {
