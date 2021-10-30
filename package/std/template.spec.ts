@@ -1,13 +1,10 @@
 import { Context, pipeline } from "begat/core/api"
+import { URL } from "url"
 import { Volume } from "begat/core/volume"
-import { dirname, resolve } from "path"
-import { fileURLToPath } from "url"
 import { template } from "./template"
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
 const options = {
-  templates: resolve(__dirname, "fixtures/simple"),
+  templates: new URL("./fixtures/simple", import.meta.url).pathname,
   variables: {
     projectName: "my-cool-project",
     projectAuthor: "Raymond Luxury-Yacht",

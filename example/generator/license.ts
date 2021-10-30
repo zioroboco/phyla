@@ -1,10 +1,9 @@
-import { dirname, join } from "path"
-import { fileURLToPath } from "url"
+import { URL } from "url"
 import { fsFromVolume } from "begat/core/volume"
 import { template } from "begat/std/template"
 import type { Generator } from "begat"
 
-const templates = join(dirname(fileURLToPath(import.meta.url)), "templates")
+const templates = new URL("./templates", import.meta.url).pathname
 
 type Options = {
   license: "MIT"
