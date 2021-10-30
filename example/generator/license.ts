@@ -1,15 +1,10 @@
-import { createRequire } from "module"
 import { dirname, join } from "path"
+import { fileURLToPath } from "url"
 import { fsFromVolume } from "begat/core/volume"
 import { template } from "begat/std/template"
 import type { Generator } from "begat"
 
-const require = createRequire(import.meta.url)
-
-const templates = join(
-  dirname(require.resolve("begat-example-generator")),
-  "templates"
-)
+const templates = join(dirname(fileURLToPath(import.meta.url)), "templates")
 
 type Options = {
   license: "MIT"
