@@ -1,3 +1,4 @@
+import { Context } from "begat"
 import { Volume, fsFromVolume } from "begat/core/volume"
 import { license } from "./license"
 
@@ -5,19 +6,22 @@ describe(license.name, () => {
   let fs: typeof import("fs").promises
 
   beforeAll(async () => {
-    const volume = Volume.fromJSON({
-      "/package.json": `{
+    const context: Context = {
+      cwd: "/somewhere",
+      volume: Volume.fromJSON({
+        "/package.json": `{
         "name": "test-project",
         "version": "0.0.0"
       }`,
-    })
+      }),
+    }
 
-    fs = fsFromVolume(volume).promises
+    fs = fsFromVolume(context.volume).promises
 
     await license({
       author: "test-author",
       license: "MIT",
-    })({ volume })
+    })(context)
   })
 
   describe(`the license file`, () => {

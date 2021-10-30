@@ -1,4 +1,4 @@
-import { Generator, compose, pipeline } from "begat/core/api"
+import { Context, Generator, compose, pipeline } from "begat/core/api"
 import { Volume, fsFromVolume } from "begat/core/volume"
 
 it(`applies individual generators`, async () => {
@@ -10,10 +10,14 @@ it(`applies individual generators`, async () => {
     return context
   }
 
-  const volume = new Volume()
-  await myGenerator({ projectName: "my-project" })({ volume })
+  const context: Context = {
+    cwd: "/working",
+    volume: new Volume(),
+  }
 
-  expect(volume.toJSON()).toMatchObject({
+  await myGenerator({ projectName: "my-project" })(context)
+
+  expect(context.volume.toJSON()).toMatchObject({
     "/README.md": "# my-project\n",
   })
 })
@@ -36,11 +40,16 @@ describe(`with multiple generators`, () => {
   }
 
   it(`presents a (flexible) ${compose.name} api`, async () => {
-    const volume = new Volume()
-    const projectName = "my-project"
-    await compose([generatorOne, generatorTwo])({ projectName })({ volume })
+    const context: Context = {
+      cwd: "/working",
+      volume: new Volume(),
+    }
 
-    expect(volume.toJSON()).toMatchObject({
+    const projectName = "my-project"
+
+    await compose([generatorOne, generatorTwo])({ projectName })(context)
+
+    expect(context.volume.toJSON()).toMatchObject({
       "/README.md": "# my-project\n",
       "/package.json": `{\n  "name": "my-project"\n}\n`,
     })

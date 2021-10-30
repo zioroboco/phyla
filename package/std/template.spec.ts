@@ -31,6 +31,7 @@ describe(`on a dirty volume`, () => {
 
   beforeEach(async () => {
     context = await template(options)({
+      cwd: "/somewhere",
       volume: Volume.fromJSON({
         "/other-data.txt": `Hello World!\n`,
       }),

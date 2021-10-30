@@ -2,10 +2,12 @@ import { Union } from "ts-toolbelt"
 import { Volume, VolumeInstance } from "begat/core/volume"
 
 export type Context = {
+  cwd: string
   volume: VolumeInstance
 }
 
 export const defaultContext: Context = {
+  cwd: process.cwd(),
   volume: new Volume(),
 }
 

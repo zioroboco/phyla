@@ -12,7 +12,7 @@ type Options = {
 
 export const clone: Generator<Options> = options => async context => {
   await sync({
-    from: { fs, path: options.clone?.path ?? process.cwd() },
+    from: { fs, path: options.clone?.path ?? context.cwd },
     to: { fs: fsFromVolume(context.volume), path: "/" },
     ignore: options.clone?.ignore,
   })
