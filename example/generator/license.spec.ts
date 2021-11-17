@@ -9,10 +9,10 @@ describe(license.name, () => {
     const context: Context = {
       cwd: "/somewhere",
       volume: Volume.fromJSON({
-        "/package.json": `{
-        "name": "test-project",
-        "version": "0.0.0"
-      }`,
+        "/package.json": JSON.stringify({
+          name: "test-project",
+          version: "0.0.0",
+        }),
       }),
     }
 
