@@ -1,6 +1,13 @@
 import { Context } from "begat"
 import { Volume, fsFromVolume } from "begat/core/volume"
+import { jest } from "@jest/globals"
 import { license } from "./license"
+
+beforeAll(() => {
+  jest.spyOn(Date.prototype, "getFullYear").mockReturnValue(1999)
+})
+
+afterAll(jest.restoreAllMocks)
 
 describe(license.name, () => {
   let fs: typeof import("fs").promises
@@ -36,7 +43,7 @@ describe(license.name, () => {
     })
 
     it(`includes the current year`, async () => {
-      expect(licenseFile).toContain(new Date().getFullYear().toString())
+      expect(licenseFile).toContain("1999")
     })
   })
 
