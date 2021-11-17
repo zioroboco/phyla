@@ -1644,7 +1644,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat-example-generator@workspace:example/generator"
   peerDependencies:
-    begat: ^0.1.1
+    begat: ^0.2.0
   languageName: unknown
   linkType: soft
 
@@ -1652,12 +1652,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat-example-project@workspace:example/project"
   dependencies:
-    begat: ^0.1.1
+    begat: ^0.2.0
     begat-example-generator: "*"
   languageName: unknown
   linkType: soft
 
-"begat@^0.1.1, begat@workspace:package":
+"begat@^0.2.0, begat@workspace:package":
   version: 0.0.0-use.local
   resolution: "begat@workspace:package"
   dependencies:
