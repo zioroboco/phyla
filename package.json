@@ -32,21 +32,21 @@
     "version": "changeset version && yarn"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.17.0",
+    "@changesets/cli": "^2.18.1",
     "@tsconfig/node16": "^1.0.2",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.11.6",
-    "@typescript-eslint/eslint-plugin": "^5.2.0",
-    "@typescript-eslint/parser": "^5.2.0",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.11",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
     "@zioroboco/changelog-github": "https://github.com/zioroboco/changelog-github#v0.1.1",
-    "eslint": "^8.1.0",
+    "eslint": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.5.0",
-    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
-    "jest": "^27.3.1",
-    "prettier": "^2.4.1",
+    "jest": "^27.4.3",
+    "prettier": "^2.5.0",
     "ts-expect": "^1.3.0",
     "ts-jest": "^27.0.7",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   }
 }
