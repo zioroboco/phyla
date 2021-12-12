@@ -5,12 +5,12 @@ import type { Generator } from "begat"
 
 const templates = new URL("./templates", import.meta.url).pathname
 
-type Options = {
+type LicenseOptions = {
   license: "MIT"
   author: string
 }
 
-export const license: Generator<Options> = function (options) {
+export const license: Generator<LicenseOptions> = function (options) {
   if (options.license !== "MIT") {
     throw new Error("Only the MIT license is supported")
   }
