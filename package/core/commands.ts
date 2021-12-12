@@ -1,14 +1,14 @@
 import { Command, Option } from "clipanion"
 import { Context } from "begat/core/api"
 import { resolve } from "path"
+import { write } from "begat/std/write"
 
-export class LogVolumeCommand extends Command {
+export class WriteCommand extends Command {
   config = Option.String({ name: "config", required: false })
 
   async execute () {
-    const context = await import(resolve(this.config ?? ".begatrc.mjs"))
-      .then(module => module.default) as Context
-
-    console.log(context.volume.toJSON())
+    await import(resolve(this.config ?? ".begatrc.mjs"))
+      .then(module => module.default as Context)
+      .then(write)
   }
 }
