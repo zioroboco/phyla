@@ -1,7 +1,7 @@
 <header>
   <div align="center">
     <h1>
-      <p>📖</p>
+      <p>🧬</p>
       <p>begat</p>
     </h1>
     <p>Build families of composable project (re-)generators.</p>
