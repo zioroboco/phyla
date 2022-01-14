@@ -3,7 +3,7 @@ import { fsFromVolume } from "begat/core/volume"
 import { template } from "begat/std/template"
 import type { Generator } from "begat"
 
-const templates = new URL("./templates", import.meta.url).pathname
+const templates = new URL("../templates", import.meta.url).pathname
 
 type LicenseOptions = {
   license: "MIT"

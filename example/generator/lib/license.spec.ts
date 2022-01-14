@@ -1,13 +1,15 @@
 import { Context } from "begat"
 import { Volume, fsFromVolume } from "begat/core/volume"
-import { jest } from "@jest/globals"
+import { afterAll, beforeAll, describe, expect, it, jest } from "@jest/globals"
 import { license } from "./license"
 
 beforeAll(() => {
   jest.spyOn(Date.prototype, "getFullYear").mockReturnValue(1999)
 })
 
-afterAll(jest.restoreAllMocks)
+afterAll(() => {
+  jest.restoreAllMocks()
+})
 
 describe(license.name, () => {
   let fs: typeof import("fs").promises

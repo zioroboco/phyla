@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./license.js",
+  "main": "./lib/license.js",
   "peerDependencies": {
     "begat": "^0.2.0"
   }
