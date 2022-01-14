@@ -27,12 +27,12 @@
     "!**/*.spec.*"
   ],
   "dependencies": {
-    "@types/ramda": "^0.27.58",
-    "clipanion": "^3.2.0-rc.4",
+    "@types/ramda": "^0.27.63",
+    "clipanion": "^3.2.0-rc.5",
     "eta": "^1.12.3",
-    "fast-glob": "^3.2.7",
-    "memfs": "^3.4.0",
-    "ramda": "^0.27.1",
+    "fast-glob": "^3.2.10",
+    "memfs": "^3.4.1",
+    "ramda": "^0.27.2",
     "tmp-promise": "^3.0.3",
     "ts-toolbelt": "^9.6.0",
     "typanion": "^3.7.1"
