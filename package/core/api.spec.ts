@@ -1,5 +1,6 @@
 import { Context, Generator, compose, pipeline } from "begat/core/api"
 import { Volume, fsFromVolume } from "begat/core/volume"
+import { describe, expect, it } from "@jest/globals"
 
 it(`applies individual generators`, async () => {
   type MyGenerator = Generator<{ projectName: string }>

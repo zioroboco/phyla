@@ -3,7 +3,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": { "begat/*": ["./*"] },
-    "types": [],
     "noEmit": false
   },
   "include": ["**/*.ts", "bin/begat.mjs"],

@@ -1,5 +1,6 @@
 import { Volume, VolumeInstance, fsFromVolume } from "begat/core/volume"
 import { expectType } from "ts-expect"
+import { it } from "@jest/globals"
 
 const volume = new Volume()
 

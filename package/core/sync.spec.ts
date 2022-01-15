@@ -1,4 +1,5 @@
 import { Volume, fsFromVolume } from "begat/core/volume"
+import { expect, it } from "@jest/globals"
 import { sync } from "begat/core/sync"
 
 const input = Volume.fromJSON({
@@ -84,17 +85,13 @@ it(`respects ignore patterns`, async () => {
     ignore: [".git"],
   })
 
-  expect(output.toJSON()).toMatchObject(
-    expect.objectContaining({
-      "/one": "data-one",
-      "/deep/two": "data-two",
-      "/deep/deep/three": "data-three",
-    }),
-  )
+  expect(output.toJSON()).toMatchObject({
+    "/one": "data-one",
+    "/deep/two": "data-two",
+    "/deep/deep/three": "data-three",
+  })
 
-  expect(output.toJSON()).toMatchObject(
-    expect.not.objectContaining({
-      "/.git/stuff": "dot-git-stuff",
-    })
-  )
+  expect(output.toJSON()).not.toMatchObject({
+    "/.git/stuff": "dot-git-stuff",
+  })
 })
