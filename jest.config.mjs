@@ -14,6 +14,7 @@ export const common = {
 
   globals: {
     "ts-jest": {
+      isolatedModules: true,
       diagnostics: { ignoreCodes: [151001] },
       useESM: true,
       tsconfig: require("./tsconfig.json").compilerOptions,
