@@ -5,6 +5,6 @@ import { license } from "begat-example-generator"
 export default begat
   .pipeline([clone, license])
   .withOptions({
-    author: "Raymond Luxury-Yacht <rayly@hotmail.com>",
+    author: "Raymond Luxury-Yacht <rayly@example.com>",
     license: "MIT",
   })
