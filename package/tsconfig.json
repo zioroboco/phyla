@@ -4,5 +4,6 @@
     "baseUrl": ".",
     "paths": { "begat/*": ["./*"] }
   },
-  "include": ["**/*.ts", "bin/begat.mjs"]
+  "include": ["**/*.ts", "bin/begat.mjs"],
+  "exclude": ["**/*.spec.ts", "node_modules"]
 }

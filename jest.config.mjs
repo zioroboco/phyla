@@ -6,6 +6,7 @@ const { workspaces } = require("./package.json")
  * @type {import("@jest/types").Config.InitialOptions}
  */
 export const common = {
+  testMatch: ["**/*.spec.ts"],
   moduleFileExtensions: ["ts", "js", "json"],
   modulePathIgnorePatterns: ["\\.js$"],
   preset: "ts-jest/presets/default-esm",

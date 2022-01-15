@@ -1,5 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "references": [{ "path": "../../package" }],
-  "include": ["lib/**/*.ts"]
+  "include": ["**/*.ts"],
+  "exclude": ["**/*.spec.ts", "node_modules"]
 }
