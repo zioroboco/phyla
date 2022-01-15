@@ -1,0 +1,22 @@
+{
+  "files.exclude": {
+    "**/*.js": true,
+    "**/*.d.ts": true,
+    "**/*.map": true,
+    "**/tsconfig.tsbuildinfo": true
+  },
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+
+  "[typescript]": {
+    "editor.formatOnSave": false
+  },
+
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
