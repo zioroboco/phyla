@@ -15,7 +15,7 @@
     "project": [
       "./tsconfig.json",
       "./lib/tsconfig.json",
-      "./example/*/tsconfig.json"
+      "./examples/*/tsconfig.json"
     ],
     "sourceType": "module"
   },

@@ -97,7 +97,7 @@ A good first step in a generator pipeline which modifies an existing project.
 
 Renders [eta templates](https://eta.js.org/) (similar to ejs) to the output volume.
 
-See the [example workspaces](./example) for an example based on this generator.
+See the [example workspaces](./examples) for an example based on this generator.
 
 ### `begat/std/aside` (generator)
 

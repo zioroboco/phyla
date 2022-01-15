@@ -1933,17 +1933,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"begat-example-generator@*, begat-example-generator@workspace:example/generator":
+"begat-example-generator@*, begat-example-generator@workspace:examples/generator":
   version: 0.0.0-use.local
-  resolution: "begat-example-generator@workspace:example/generator"
+  resolution: "begat-example-generator@workspace:examples/generator"
   peerDependencies:
     begat: ^0.2.0
   languageName: unknown
   linkType: soft
 
-"begat-example-project@workspace:example/project":
+"begat-example-project@workspace:examples/project":
   version: 0.0.0-use.local
-  resolution: "begat-example-project@workspace:example/project"
+  resolution: "begat-example-project@workspace:examples/project"
   dependencies:
     begat: ^0.2.0
     begat-example-generator: "*"

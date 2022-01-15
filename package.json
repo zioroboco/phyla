@@ -2,7 +2,7 @@
   "packageManager": "yarn@3.1.0",
   "private": true,
   "workspaces": [
-    "example/*",
+    "examples/*",
     "lib"
   ],
   "prettier": {
@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "begat": "cd example/project && yarn begat",
+    "begat": "cd examples/project && yarn begat",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest",
