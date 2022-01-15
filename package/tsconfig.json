@@ -2,7 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": { "begat/*": ["./*"] }
+    "paths": { "begat/*": ["./*"] },
+    "noEmit": false
   },
   "include": ["**/*.ts", "bin/begat.mjs"],
   "exclude": ["**/*.spec.ts", "node_modules"]

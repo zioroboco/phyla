@@ -8,8 +8,11 @@
 
     "esModuleInterop": true,
     "module": "es2020",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+
+    "noEmit": true
   },
   "references": [{ "path": "./package" }, { "path": "./example/generator" }],
-  "files": []
+  "include": ["**/*.spec.ts"],
+  "exclude": ["node_modules"]
 }

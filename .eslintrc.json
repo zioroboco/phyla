@@ -13,6 +13,7 @@
   "parserOptions": {
     "extraFileExtensions": [".mjs"],
     "project": [
+      "./tsconfig.json",
       "./package/tsconfig.json",
       "./example/*/tsconfig.json"
     ],

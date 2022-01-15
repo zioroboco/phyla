@@ -1,5 +1,8 @@
 {
   "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false
+  },
   "references": [{ "path": "../../package" }],
   "include": ["**/*.ts"],
   "exclude": ["**/*.spec.ts", "node_modules"]
