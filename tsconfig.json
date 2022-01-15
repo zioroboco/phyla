@@ -13,7 +13,7 @@
 
     "noEmit": true
   },
-  "references": [{ "path": "./package" }, { "path": "./example/generator" }],
+  "references": [{ "path": "./lib" }, { "path": "./example/generator" }],
   "include": ["**/*.spec.ts"],
   "exclude": ["node_modules"]
 }

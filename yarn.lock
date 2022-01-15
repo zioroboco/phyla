@@ -1950,9 +1950,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"begat@^0.2.0, begat@workspace:package":
+"begat@^0.2.0, begat@workspace:lib":
   version: 0.0.0-use.local
-  resolution: "begat@workspace:package"
+  resolution: "begat@workspace:lib"
   dependencies:
     "@types/ramda": ^0.27.63
     clipanion: ^3.2.0-rc.5

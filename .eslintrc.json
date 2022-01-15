@@ -14,7 +14,7 @@
     "extraFileExtensions": [".mjs"],
     "project": [
       "./tsconfig.json",
-      "./package/tsconfig.json",
+      "./lib/tsconfig.json",
       "./example/*/tsconfig.json"
     ],
     "sourceType": "module"

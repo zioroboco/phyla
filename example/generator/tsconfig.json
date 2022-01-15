@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": false
   },
-  "references": [{ "path": "../../package" }],
+  "references": [{ "path": "../../lib" }],
   "include": ["**/*.ts"],
   "exclude": ["**/*.spec.ts", "node_modules"]
 }

@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/zioroboco/begat.git",
-    "directory": "package"
+    "directory": "lib"
   },
   "engines": {
     "node": ">=16"
