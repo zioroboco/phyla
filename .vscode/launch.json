@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "test: file",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": ["--runInBand", "${fileBasenameNoExtension}"],
+      "runtimeArgs": ["--experimental-vm-modules"],
+      "skipFiles": ["*jest*", "<node_internals>/**"],
+      "request": "launch",
+      "type": "pwa-node"
+    },
+    {
+      "name": "test: all",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": ["--runInBand"],
+      "runtimeArgs": ["--experimental-vm-modules"],
+      "skipFiles": ["*jest*", "<node_internals>/**"],
+      "request": "launch",
+      "type": "pwa-node"
+    }
+  ]
+}
