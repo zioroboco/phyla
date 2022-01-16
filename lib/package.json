@@ -13,9 +13,9 @@
     "node": ">=16"
   },
   "type": "module",
-  "main": "./core/api.js",
+  "main": "./core/index.js",
   "exports": {
-    ".": "./core/api.js",
+    ".": "./core/index.js",
     "./*": "./*.js"
   },
   "bin": "./bin/begat.mjs",

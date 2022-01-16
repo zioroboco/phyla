@@ -1,4 +1,4 @@
-import { OPTIONS_POS, Task, TaskFn, config } from "./config"
+import { OPTIONS_POS, Task, TaskFn, config } from "./api"
 import { expect, it } from "@jest/globals"
 import { expectType } from "ts-expect"
 
