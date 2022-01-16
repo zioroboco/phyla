@@ -1,11 +1,19 @@
 import { Command, Option } from "clipanion"
+import { inspect } from "util"
 import { resolve } from "path"
 
-export class WriteCommand extends Command {
-  config = Option.String({ name: "config", required: false })
+export class ShowConfigCommand extends Command {
+  static paths = [["show-config"]]
+  static usage = Command.Usage({
+    category: "util",
+    description: "Write config to stdout.",
+  })
+
+  config = Option.String({ name: "path", required: false })
 
   async execute () {
-    await import(resolve(this.config ?? ".begatrc.mjs"))
-      .then(config => console.log({ config }))
+    const config = await import(resolve(this.config ?? ".begatrc.mjs"))
+    this.context.stdout.write(inspect(config.default))
+    process.exit(0)
   }
 }
