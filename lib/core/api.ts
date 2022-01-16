@@ -1,4 +1,3 @@
-import { Suite } from "mocha"
 import { Union } from "ts-toolbelt"
 
 export type Context = {
@@ -14,6 +13,8 @@ export type TaskFn<Options, Return> =
   (context: Context, options: Options) => Return
 
 export type AbstractOptions = any
+
+export type Suite = unknown
 
 export type Task<Options extends AbstractOptions> = {
   implementation: TaskFn<Options, void | Promise<void>>
