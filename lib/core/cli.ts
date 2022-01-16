@@ -1,14 +1,14 @@
-import { Command, Option } from "clipanion"
+import { Command } from "clipanion"
 import { inspect } from "util"
-import { resolve } from "path"
+import { join } from "path"
 
 enum Category {
   Main = "main",
   Util = "util",
 }
 
-const importConfig = async function (configPath?: string) {
-  return import(resolve(configPath ?? ".begatrc.mjs")).then(
+const importConfig = async function () {
+  return import(join(process.cwd(), ".begatrc.mjs")).then(
     module => module.default
   )
 }
@@ -17,13 +17,11 @@ export class RunCommand extends Command {
   static paths = [["run"]]
   static usage = Command.Usage({
     category: Category.Main,
-    description: `Run pipeline configured at path (default: ".")`,
+    description: `Run pipeline`,
   })
 
-  config = Option.String({ name: "path", required: false })
-
   async execute () {
-    const config = await importConfig(this.config)
+    const config = await importConfig()
   }
 }
 
@@ -31,13 +29,11 @@ export class ShowConfigCommand extends Command {
   static paths = [["config"]]
   static usage = Command.Usage({
     category: Category.Util,
-    description: `Write config at path to stdout (default: ".")`,
+    description: `Write config to stdout`,
   })
 
-  config = Option.String({ name: "path", required: false })
-
   async execute () {
-    const config = await importConfig(this.config)
+    const config = await importConfig()
     this.context.stdout.write(inspect(config))
     process.exit(0)
   }
