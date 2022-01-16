@@ -38,7 +38,24 @@ export const config = function <Tasks extends AbstractTask[]>(config: {
   return config
 }
 
-export const run = async function (
-  config: Config,
-  context: Context,
-) {}
+export const run = async function (config: Config, context: Context) {
+  const { pipeline, options } = config
+
+  for (const task of pipeline) {
+
+    // if (task.before) {
+    //   for (const suite of task.before(context, options)) {
+    //     suite.run()
+    //   }
+    // }
+
+    await task.implementation(context, options)
+
+    // if (task.after) {
+    //   for (const suite of task.after(context, options)) {
+    //     suite.run()
+    //   }
+    // }
+
+  }
+}
