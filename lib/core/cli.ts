@@ -14,11 +14,11 @@ const importConfig = async function () {
   )
 }
 
-export class RunCommand extends Command {
-  static paths = [["run"]]
+export class WriteCommand extends Command {
+  static paths = [["write"]]
   static usage = Command.Usage({
     category: Category.Main,
-    description: `Run pipeline`,
+    description: `Run pipeline and write changes to disk`,
   })
 
   async execute () {
