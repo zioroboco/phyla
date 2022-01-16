@@ -1,1 +1,6 @@
-export { config, Task, Context } from "begat/core/config"
+export {
+  Context,
+  Task,
+  config,
+  run,
+} from "begat/core/config"

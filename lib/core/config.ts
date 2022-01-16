@@ -1,7 +1,10 @@
 import { Suite } from "mocha"
 import { Union } from "ts-toolbelt"
 
-export type Context = {}
+export type Context = {
+  cwd: string,
+  fs: typeof import("fs"),
+}
 
 /** Position (type-level) of the `options` argument to the `TaskFn` type. */
 export type OPTIONS_POS = 1
@@ -23,9 +26,19 @@ export type AbstractTask = Task<AbstractOptions>
 export type OptionsUnion<Tasks extends AbstractTask[]> =
   Union.IntersectOf<Parameters<Tasks[number]["implementation"]>[OPTIONS_POS]>
 
-export const config = function <Tasks extends AbstractTask[]>(args: {
+export type Config = {
+  pipeline: AbstractTask[],
+  options: AbstractOptions
+}
+
+export const config = function <Tasks extends AbstractTask[]>(config: {
   pipeline: Tasks
   options: OptionsUnion<Tasks>
-}) {
-  return args
+}): Config {
+  return config
 }
+
+export const run = async function (
+  config: Config,
+  context: Context,
+) {}
