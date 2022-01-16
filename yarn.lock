@@ -1954,6 +1954,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat@workspace:lib"
   dependencies:
+    "@types/node": ^17.0.8
     "@types/ramda": ^0.27.63
     clipanion: ^3.2.0-rc.5
     eta: ^1.12.3

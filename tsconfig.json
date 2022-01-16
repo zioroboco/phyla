@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "module": "es2020",
     "moduleResolution": "node",
-    "types": [],
+    "types": ["node"],
 
     "noEmit": true
   },

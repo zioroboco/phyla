@@ -1,5 +1,5 @@
 import { OPTIONS_POS, Task, TaskFn, config, run } from "./api"
-import { expect, it, jest } from "@jest/globals"
+import { describe, expect, it, jest } from "@jest/globals"
 import { expectType } from "ts-expect"
 
 describe(config.name, () => {
