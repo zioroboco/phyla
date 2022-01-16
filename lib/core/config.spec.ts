@@ -1,5 +1,5 @@
 import { OPTIONS_POS, Task, TaskFn, config } from "./config"
-import { expect, it, test } from "@jest/globals"
+import { expect, it } from "@jest/globals"
 import { expectType } from "ts-expect"
 
 it(`includes the options argument to task fns in the expected position`, () => {
