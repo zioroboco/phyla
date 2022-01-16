@@ -10,5 +10,11 @@ export const license: Task<Options> = {
     if (options.license !== "MIT") {
       throw new Error("Only the MIT license is supported")
     }
+
+    // @ts-ignore
+    console.log({
+      context,
+      options,
+    })
   },
 }

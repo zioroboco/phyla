@@ -60,8 +60,8 @@ describe(run.name, () => {
 
   it(`runs tasks with the passed context and options`, async () => {
     await run(
+      context,
       config({ pipeline: [taskOne, taskTwo], options }),
-      context
     )
 
     expect(taskOne.implementation).toHaveBeenCalledWith(context, options)

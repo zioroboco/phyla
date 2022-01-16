@@ -38,7 +38,7 @@ export const config = function <Tasks extends AbstractTask[]>(config: {
   return config
 }
 
-export const run = async function (config: Config, context: Context) {
+export const run = async function (context: Context, config: Config) {
   const { pipeline, options } = config
 
   for (const task of pipeline) {

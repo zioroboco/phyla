@@ -1,4 +1,5 @@
 import { Command } from "clipanion"
+import { Config, Context, run } from "begat/core/api"
 import { inspect } from "util"
 import { join } from "path"
 
@@ -21,7 +22,14 @@ export class RunCommand extends Command {
   })
 
   async execute () {
-    const config = await importConfig()
+    const config: Config = await importConfig()
+
+    const context: Context = {
+      fs: await import("fs"),
+      cwd: process.cwd(),
+    }
+
+    await run(context, config)
   }
 }
 
