@@ -2,8 +2,8 @@ import * as pico from "picospec"
 import { Union } from "ts-toolbelt"
 
 export type Context = {
-  cwd: string,
-  fs: typeof import("fs"),
+  cwd: string
+  fs: typeof import("fs")
 }
 
 export type AbstractOptions = any
@@ -20,7 +20,7 @@ export type OptionsUnion<Tasks extends AbstractTask[]> =
   Union.IntersectOf<Parameters<Tasks[number]>[0]>
 
 export type Config = {
-  pipeline: AbstractTask[],
+  pipeline: AbstractTask[]
   options: AbstractOptions
 }
 
