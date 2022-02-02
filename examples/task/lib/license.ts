@@ -2,8 +2,10 @@ import { Task } from "begat"
 import { join } from "path"
 import expect from "expect"
 
+const supportedLicenses = ["MIT"] as const
+
 type Options = {
-  license: "MIT"
+  license: typeof supportedLicenses[number]
   author: string
 }
 
@@ -14,8 +16,8 @@ export const license: Task<Options> = options => ({
         expect(options.author).toMatch("")
       })
 
-      it(`specifies a supported license`, () => {
-        expect(options.license).toBe("MIT")
+      it(`includes a supported license`, () => {
+        expect(supportedLicenses).toContain(options.license)
       })
     })
 
