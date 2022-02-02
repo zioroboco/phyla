@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "begat": "cd examples/project && yarn begat",
+    "begat": "yarn build && cd examples/project && node --no-warnings --experimental-specifier-resolution=node ../../node_modules/.bin/begat",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest",

@@ -1,3 +1,4 @@
+import * as pico from "picospec"
 import { Union } from "ts-toolbelt"
 
 export type Context = {
@@ -7,12 +8,10 @@ export type Context = {
 
 export type AbstractOptions = any
 
-export type Suite = unknown
-
 export type Task<Options extends AbstractOptions> = {
   implementation: (context: Context, options: Options) => void | Promise<void>
-  before?: (context: Context, options: Options) => Suite
-  after?: (context: Context, options: Options) => Suite
+  before?: (context: Context, options: Options) => Promise<pico.Suite>
+  after?: (context: Context, options: Options) => Promise<pico.Suite>
 }
 
 export type AbstractTask = Task<AbstractOptions>
@@ -39,20 +38,24 @@ export const run = async function (context: Context, config: Config) {
   const { pipeline, options } = config
 
   for (const task of pipeline) {
-
-    // if (task.before) {
-    //   for (const suite of task.before(context, options)) {
-    //     suite.run()
-    //   }
-    // }
+    if (task.before) {
+      const test = pico.runner(await task.before(context, options))
+      await test().then(results => {
+        if (results.failures) {
+          throw new Error(`before suite failed`)
+        }
+      })
+    }
 
     await task.implementation(context, options)
 
-    // if (task.after) {
-    //   for (const suite of task.after(context, options)) {
-    //     suite.run()
-    //   }
-    // }
-
+    if (task.after) {
+      const test = pico.runner(await task.after(context, options))
+      await test().then(results => {
+        if (results.failures) {
+          throw new Error(`after suite failed`)
+        }
+      })
+    }
   }
 }
