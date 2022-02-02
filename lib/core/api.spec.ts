@@ -26,8 +26,8 @@ describe(config.name, () => {
   })
 
   describe(`with tasks`, () => {
-    const taskOne: Task<{ one: 1 }> = { implementation: (ctx, opts) => {} }
-    const taskTwo: Task<{ two: 2 }> = { implementation: (ctx, opts) => {} }
+    const taskOne: Task<{ one: 1 }> = { action: (ctx, opts) => {} }
+    const taskTwo: Task<{ two: 2 }> = { action: (ctx, opts) => {} }
 
     it(`type errors on specific missing options`, () => {
       // @ts-expect-error
@@ -52,8 +52,8 @@ describe(config.name, () => {
 })
 
 describe(run.name, () => {
-  const taskOne: Task<{ one: 1 }> = { implementation: jest.fn() }
-  const taskTwo: Task<{ two: 2 }> = { implementation: jest.fn() }
+  const taskOne: Task<{ one: 1 }> = { action: jest.fn() }
+  const taskTwo: Task<{ two: 2 }> = { action: jest.fn() }
 
   const context = { cwd: "/somewhere", fs: {} as typeof import("fs") }
   const options = { one: 1, two: 2 } as const
@@ -64,7 +64,7 @@ describe(run.name, () => {
       config({ pipeline: [taskOne, taskTwo], options }),
     )
 
-    expect(taskOne.implementation).toHaveBeenCalledWith(context, options)
-    expect(taskTwo.implementation).toHaveBeenCalledWith(context, options)
+    expect(taskOne.action).toHaveBeenCalledWith(context, options)
+    expect(taskTwo.action).toHaveBeenCalledWith(context, options)
   })
 })

@@ -9,7 +9,7 @@ export type Context = {
 export type AbstractOptions = any
 
 export type Task<Options extends AbstractOptions> = {
-  implementation: (context: Context, options: Options) => void | Promise<void>
+  action: (context: Context, options: Options) => void | Promise<void>
   before?: (context: Context, options: Options) => Promise<pico.Suite>
   after?: (context: Context, options: Options) => Promise<pico.Suite>
 }
@@ -20,7 +20,7 @@ export type AbstractTask = Task<AbstractOptions>
 export type OPTIONS_POS = 1
 
 export type OptionsUnion<Tasks extends AbstractTask[]> =
-  Union.IntersectOf<Parameters<Tasks[number]["implementation"]>[OPTIONS_POS]>
+  Union.IntersectOf<Parameters<Tasks[number]["action"]>[OPTIONS_POS]>
 
 export type Config = {
   pipeline: AbstractTask[],
@@ -47,7 +47,7 @@ export const run = async function (context: Context, config: Config) {
       })
     }
 
-    await task.implementation(context, options)
+    await task.action(context, options)
 
     if (task.after) {
       const test = pico.runner(await task.after(context, options))

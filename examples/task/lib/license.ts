@@ -33,7 +33,7 @@ export const license: Task<Options> = {
     })
   },
 
-  implementation: async (context, options) => {
+  action: async (context, options) => {
     const fs = context.fs.promises
     const cwd = context.cwd
 
