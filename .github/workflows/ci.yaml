@@ -3,16 +3,6 @@ name: ci
 on: push
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-          cache: yarn
-      - run: yarn install --immutable
-      - run: yarn build
   test:
     runs-on: ubuntu-latest
     steps:
@@ -22,6 +12,7 @@ jobs:
           node-version: 16.x
           cache: yarn
       - run: yarn install --immutable
+      - run: yarn build
       - run: yarn test --ci
   lint:
     runs-on: ubuntu-latest
