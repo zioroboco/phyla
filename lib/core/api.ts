@@ -9,7 +9,7 @@ export type Context = {
 export type AbstractOptions = any
 
 export type Task<Options extends AbstractOptions> = (options: Options) => {
-  action: (context: Context) => void | Promise<void>
+  action?: (context: Context) => void | Promise<void>
   before?: (context: Context) => Promise<pico.Suite>
   after?: (context: Context) => Promise<pico.Suite>
 }
@@ -44,7 +44,9 @@ export const run = async function (context: Context, config: Config) {
       })
     }
 
-    await instance.action(context)
+    if (instance.action) {
+      await instance.action(context)
+    }
 
     if (instance.after) {
       const test = pico.runner(await instance.after(context))
