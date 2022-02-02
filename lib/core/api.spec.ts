@@ -1,14 +1,7 @@
-import { Context, OPTIONS_POS, Task, config, run } from "./api"
+import { Context, Task, config, run } from "./api"
 import { describe, expect, it, jest } from "@jest/globals"
-import { expectType } from "ts-expect"
 
 describe(config.name, () => {
-  it(`includes options argument to task fns in the expected position`, () => {
-    const options = { property: null }
-    const taskFn = (ctx: Context, opts: typeof options) => {}
-    expectType<Parameters<typeof taskFn>[OPTIONS_POS]>(options)
-  })
-
   it(`returns its arguments intact`, () => {
     const args = Object.freeze({ pipeline: [], options: {} })
     expect(config(args)).toEqual(args)
@@ -26,8 +19,8 @@ describe(config.name, () => {
   })
 
   describe(`with tasks`, () => {
-    const taskOne: Task<{ one: 1 }> = { action: (ctx, opts) => {} }
-    const taskTwo: Task<{ two: 2 }> = { action: (ctx, opts) => {} }
+    const taskOne: Task<{ one: 1 }> = opts => ({ action: ctx => {} })
+    const taskTwo: Task<{ two: 2 }> = opts => ({ action: ctx => {} })
 
     it(`type errors on specific missing options`, () => {
       // @ts-expect-error
@@ -52,8 +45,11 @@ describe(config.name, () => {
 })
 
 describe(run.name, () => {
-  const taskOne: Task<{ one: 1 }> = { action: jest.fn() }
-  const taskTwo: Task<{ two: 2 }> = { action: jest.fn() }
+  const taskOneAction = jest.fn() as (ctx: Context) => void
+  const taskOne: Task<{ one: 1 }> = opts => ({ action: taskOneAction })
+
+  const taskTwoAction = jest.fn() as (ctx: Context) => void
+  const taskTwo: Task<{ two: 2 }> = opts => ({ action: taskTwoAction })
 
   const context = { cwd: "/somewhere", fs: {} as typeof import("fs") }
   const options = { one: 1, two: 2 } as const
@@ -64,7 +60,7 @@ describe(run.name, () => {
       config({ pipeline: [taskOne, taskTwo], options }),
     )
 
-    expect(taskOne.action).toHaveBeenCalledWith(context, options)
-    expect(taskTwo.action).toHaveBeenCalledWith(context, options)
+    expect(taskOne(options).action).toHaveBeenCalledWith(context)
+    expect(taskTwo(options).action).toHaveBeenCalledWith(context)
   })
 })

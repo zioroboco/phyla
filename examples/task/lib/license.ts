@@ -7,8 +7,8 @@ type Options = {
   author: string
 }
 
-export const license: Task<Options> = {
-  before: async ({ cwd, fs }, options) => ({ describe, it }) => {
+export const license: Task<Options> = options => ({
+  before: async ({ cwd, fs }) => ({ describe, it }) => {
     describe(`the options object`, () => {
       it(`includes an author`, () => {
         expect(options.author).toMatch("")
@@ -30,7 +30,7 @@ export const license: Task<Options> = {
     })
   },
 
-  action: async ({ cwd, fs }, options) => {
+  action: async ({ cwd, fs }) => {
     const packageJson = JSON.parse(
       await fs.promises.readFile(join(cwd, "package.json"), "utf8")
     )
@@ -44,7 +44,7 @@ export const license: Task<Options> = {
     )
   },
 
-  after: async ({ cwd, fs }, options) => ({ describe, it }) => {
+  after: async ({ cwd, fs }) => ({ describe, it }) => {
     describe(`the package.json file`, async () => {
       const packageJson = JSON.parse(
         await fs.promises.readFile(join(cwd, "package.json"), "utf8")
@@ -59,4 +59,4 @@ export const license: Task<Options> = {
       })
     })
   },
-}
+})
