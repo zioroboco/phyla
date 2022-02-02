@@ -5,24 +5,20 @@ export type Context = {
   fs: typeof import("fs"),
 }
 
-/** Position (type-level) of the `options` argument to the `TaskFn` type. */
-export type OPTIONS_POS = 1
-
-/** Function of `Context` and `Options` implemented in the `Task` type. */
-export type TaskFn<Options, Return> =
-  (context: Context, options: Options) => Return
-
 export type AbstractOptions = any
 
 export type Suite = unknown
 
 export type Task<Options extends AbstractOptions> = {
-  implementation: TaskFn<Options, void | Promise<void>>
-  before?: TaskFn<Options, Suite[]>
-  after?: TaskFn<Options, Suite[]>
+  implementation: (context: Context, options: Options) => void | Promise<void>
+  before?: (context: Context, options: Options) => Suite
+  after?: (context: Context, options: Options) => Suite
 }
 
 export type AbstractTask = Task<AbstractOptions>
+
+/** Position (type-level) of the `options` argument to task functions. */
+export type OPTIONS_POS = 1
 
 export type OptionsUnion<Tasks extends AbstractTask[]> =
   Union.IntersectOf<Parameters<Tasks[number]["implementation"]>[OPTIONS_POS]>

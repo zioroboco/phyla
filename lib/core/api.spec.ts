@@ -1,11 +1,11 @@
-import { OPTIONS_POS, Task, TaskFn, config, run } from "./api"
+import { Context, OPTIONS_POS, Task, config, run } from "./api"
 import { describe, expect, it, jest } from "@jest/globals"
 import { expectType } from "ts-expect"
 
 describe(config.name, () => {
   it(`includes options argument to task fns in the expected position`, () => {
     const options = { property: null }
-    const taskFn: TaskFn<typeof options, void> = (ctx, opts) => {}
+    const taskFn = (ctx: Context, opts: typeof options) => {}
     expectType<Parameters<typeof taskFn>[OPTIONS_POS]>(options)
   })
 
