@@ -1950,7 +1950,7 @@ __metadata:
     eta: ^1.12.3
     fast-glob: ^3.2.11
     memfs: ^3.4.1
-    picospec: ^0.2.0
+    picospec: ~0.3.1
     ramda: ^0.28.0
     tmp-promise: ^3.0.3
     ts-toolbelt: ^9.6.0
@@ -5481,10 +5481,10 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"picospec@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "picospec@npm:0.2.0"
-  checksum: 7ce8f3f829c779d206ca636e3d4d438ebb4703428971e19b276afbd9a1d3b6d5e2a7fafe559558709ca14c354c1ec8ed5b43bbb2408145f41fa274d868c8e963
+"picospec@npm:~0.3.1":
+  version: 0.3.1
+  resolution: "picospec@npm:0.3.1"
+  checksum: 9bdea4cd29ac8cdf952c962605d8375c3e5abc08458cf58b11b76cc9f755e209b89e5b3a4f388a5775dc725a5a9629d31ff10576697758ee8788dc4adcd64d03
   languageName: node
   linkType: hard
 

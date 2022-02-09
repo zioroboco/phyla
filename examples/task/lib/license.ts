@@ -1,4 +1,4 @@
-import { Task } from "begat"
+import { Task, describe, it, suite } from "begat"
 import { join } from "path"
 import expect from "expect"
 
@@ -10,27 +10,29 @@ type Options = {
 }
 
 export const license: Task<Options> = options => ({
-  before: async ({ cwd, fs }) => ({ describe, it }) => {
-    describe(`the options object`, () => {
-      it(`includes an author`, () => {
-        expect(options.author).toMatch("")
-      })
+  before: async ({ cwd, fs }) =>
+    suite([
+      describe(`the options object`).assert(() => [
+        it(`includes an author`, () => {
+          expect(options.author).toMatch("")
+        }),
+        it(`includes a supported license`, () => {
+          expect(supportedLicenses).toContain(options.license)
+        }),
+      ]),
 
-      it(`includes a supported license`, () => {
-        expect(supportedLicenses).toContain(options.license)
-      })
-    })
-
-    describe(`the package.json file`, async () => {
-      const packageJson = JSON.parse(
-        await fs.promises.readFile(join(cwd, "package.json"), "utf8")
-      )
-
-      it(`exists`, async () => {
-        expect(packageJson).toMatchObject({})
-      })
-    })
-  },
+      describe(`the package.json file`)
+        .setup(async () => ({
+          packageJson: JSON.parse(
+            await fs.promises.readFile(join(cwd, "package.json"), "utf8")
+          ),
+        }))
+        .assert(({ packageJson }) => [
+          it(`exists`, async () => {
+            expect(packageJson).toMatchObject({})
+          }),
+        ]),
+    ]),
 
   action: async ({ cwd, fs }) => {
     const packageJson = JSON.parse(
@@ -46,19 +48,21 @@ export const license: Task<Options> = options => ({
     )
   },
 
-  after: async ({ cwd, fs }) => ({ describe, it }) => {
-    describe(`the package.json file`, async () => {
-      const packageJson = JSON.parse(
-        await fs.promises.readFile(join(cwd, "package.json"), "utf8")
-      )
-
-      it(`records the expected author`, async () => {
-        expect(packageJson.author).toBe(options.author)
-      })
-
-      it(`records the expected license`, async () => {
-        expect(packageJson.license).toBe(options.license)
-      })
-    })
-  },
+  after: async ({ cwd, fs }) =>
+    suite([
+      describe(`the package.json file`)
+        .setup(async () => ({
+          packageJson: JSON.parse(
+            await fs.promises.readFile(join(cwd, "package.json"), "utf8")
+          ),
+        }))
+        .assert(({ packageJson }) => [
+          it(`records the expected author`, async () => {
+            expect(packageJson.author).toBe(options.author)
+          }),
+          it(`records the expected license`, async () => {
+            expect(packageJson.license).toBe(options.license)
+          }),
+        ]),
+    ]),
 })

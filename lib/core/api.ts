@@ -8,10 +8,16 @@ export type Context = {
 
 export type AbstractOptions = any
 
+export const describe = pico.describe
+export const it = pico.it
+export const suite = pico.suite
+
+export type Suite = ReturnType<typeof pico.suite>
+
 export type Task<Options extends AbstractOptions> = (options: Options) => {
   action?: (context: Context) => void | Promise<void>
-  before?: (context: Context) => Promise<pico.Suite>
-  after?: (context: Context) => Promise<pico.Suite>
+  before?: (context: Context) => Suite
+  after?: (context: Context) => Suite
 }
 
 export type AbstractTask = Task<AbstractOptions>
@@ -36,12 +42,11 @@ export const run = async function (context: Context, config: Config) {
     const instance = task(config.options)
 
     if (instance.before) {
-      const test = pico.runner(await instance.before(context))
-      await test().then(results => {
-        if (results.failures) {
-          throw new Error(`before suite failed`)
-        }
-      })
+      console.info(`\n--- before ${task.name} ---`)
+      const report = await instance.before(context)
+      if (report.failures) {
+        process.exit(1)
+      }
     }
 
     if (instance.action) {
@@ -49,12 +54,11 @@ export const run = async function (context: Context, config: Config) {
     }
 
     if (instance.after) {
-      const test = pico.runner(await instance.after(context))
-      await test().then(results => {
-        if (results.failures) {
-          throw new Error(`after suite failed`)
-        }
-      })
+      console.info(`\n--- after ${task.name} ---`)
+      const report = await instance.after(context)
+      if (report.failures) {
+        process.exit(1)
+      }
     }
   }
 }
