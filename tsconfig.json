@@ -13,7 +13,7 @@
 
     "noEmit": true
   },
-  "references": [{ "path": "./lib" }, { "path": "./examples/task" }],
+  "references": [{ "path": "./package" }, { "path": "./examples/task" }],
   "include": ["**/*.spec.ts"],
   "exclude": ["node_modules"]
 }

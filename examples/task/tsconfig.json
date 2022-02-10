@@ -4,7 +4,7 @@
     "resolveJsonModule": true,
     "noEmit": false
   },
-  "references": [{ "path": "../../lib" }],
+  "references": [{ "path": "../../package" }],
   "include": ["**/*.ts", "package.json"],
   "exclude": ["**/*.spec.ts", "node_modules"]
 }
