@@ -19,8 +19,8 @@ describe(config.name, () => {
   })
 
   describe(`with tasks`, () => {
-    const taskOne: Task<{ one: 1 }> = opts => ({ action: ctx => {} })
-    const taskTwo: Task<{ two: 2 }> = opts => ({ action: ctx => {} })
+    const taskOne: Task<{ one: 1 }> = opts => ({ run: ctx => {} })
+    const taskTwo: Task<{ two: 2 }> = opts => ({ run: ctx => {} })
 
     it(`type errors on specific missing options`, () => {
       // @ts-expect-error
@@ -46,21 +46,21 @@ describe(config.name, () => {
 
 describe(run.name, () => {
   const taskOneAction = jest.fn() as (ctx: Context) => void
-  const taskOne: Task<{ one: 1 }> = opts => ({ action: taskOneAction })
+  const taskOne: Task<{ one: 1 }> = opts => ({ run: taskOneAction })
 
   const taskTwoAction = jest.fn() as (ctx: Context) => void
-  const taskTwo: Task<{ two: 2 }> = opts => ({ action: taskTwoAction })
+  const taskTwo: Task<{ two: 2 }> = opts => ({ run: taskTwoAction })
 
-  const context = { cwd: "/somewhere", fs: {} as typeof import("fs") }
   const options = { one: 1, two: 2 } as const
+  const context: Context = {
+    cwd: "/somewhere",
+    fs: {} as typeof import("fs"),
+    pipeline: [taskOne, taskTwo].map(t => t(options)),
+  }
 
   it(`runs tasks with the passed context and options`, async () => {
-    await run(
-      context,
-      config({ pipeline: [taskOne, taskTwo], options }),
-    )
-
-    expect(taskOne(options).action).toHaveBeenCalledWith(context)
-    expect(taskTwo(options).action).toHaveBeenCalledWith(context)
+    await run(context)
+    expect(taskOne(options).run).toHaveBeenCalledWith(context)
+    expect(taskTwo(options).run).toHaveBeenCalledWith(context)
   })
 })

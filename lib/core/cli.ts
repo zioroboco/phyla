@@ -27,9 +27,10 @@ export class WriteCommand extends Command {
     const context: Context = {
       fs: await import("fs"),
       cwd: process.cwd(),
+      pipeline: config.pipeline.map(task => task(config.options)),
     }
 
-    await run(context, config)
+    await run(context)
   }
 }
 

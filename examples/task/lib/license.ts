@@ -1,6 +1,7 @@
 import { Task, describe, it, suite } from "begat"
 import { join } from "path"
 import expect from "expect"
+import meta from "begat-example-task/package.json"
 
 const supportedLicenses = ["MIT"] as const
 
@@ -10,6 +11,9 @@ type Options = {
 }
 
 export const license: Task<Options> = options => ({
+  name: meta.name,
+  version: meta.version,
+
   before: async ({ cwd, fs }) =>
     suite([
       describe(`the options object`).assert(() => [
@@ -34,7 +38,7 @@ export const license: Task<Options> = options => ({
         ]),
     ]),
 
-  action: async ({ cwd, fs }) => {
+  run: async ({ cwd, fs }) => {
     const packageJson = JSON.parse(
       await fs.promises.readFile(join(cwd, "package.json"), "utf8")
     )
