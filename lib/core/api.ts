@@ -10,7 +10,10 @@ export type Suite = ReturnType<typeof pico.suite>
 export type Context = {
   cwd: string
   fs: typeof import("fs")
-  pipeline: TaskInstance[]
+  pipeline: {
+    prev: TaskInstance[],
+    next: TaskInstance[],
+  }
 }
 
 export type TaskInstance = {
@@ -42,25 +45,39 @@ export const config = function <Tasks extends AbstractTask[]>(config: {
   return config
 }
 
-export const run = async function (context: Context) {
-  for (const instance of context.pipeline) {
+export const run = async function (
+  instance: TaskInstance | undefined,
+  context: Context
+): Promise<void> {
+  if (!instance) {
+    return
+  }
 
-    if (instance.before) {
-      console.info(`\n--- before ${instance.name} ---`)
-      const report = await instance.before(context)
-      if (report.failures) {
-        process.exit(1)
-      }
-    }
-
-    await instance.run(context)
-
-    if (instance.after) {
-      console.info(`\n--- after ${instance.name} ---`)
-      const report = await instance.after(context)
-      if (report.failures) {
-        process.exit(1)
-      }
+  if (instance.before) {
+    console.info(`\n--- before ${instance.name} ---`)
+    const report = await instance.before(context)
+    if (report.failures) {
+      process.exit(1)
     }
   }
+
+  await instance.run(context)
+
+  if (instance.after) {
+    console.info(`\n--- after ${instance.name} ---`)
+    const report = await instance.after(context)
+    if (report.failures) {
+      process.exit(1)
+    }
+  }
+
+  const [head, ...rest] = context.pipeline.next
+
+  await run(head, {
+    ...context,
+    pipeline: {
+      prev: [...context.pipeline.prev, instance],
+      next: rest,
+    },
+  })
 }

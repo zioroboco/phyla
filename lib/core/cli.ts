@@ -1,5 +1,5 @@
 import { Command } from "clipanion"
-import { Config, Context, run } from "begat/core/api"
+import { Config, run } from "begat/core/api"
 import { inspect } from "util"
 import { join } from "path"
 
@@ -24,13 +24,16 @@ export class WriteCommand extends Command {
   async execute () {
     const config: Config = await importConfig()
 
-    const context: Context = {
+    const [head, ...rest] = config.pipeline.map(task => task(config.options))
+
+    await run(head, {
       fs: await import("fs"),
       cwd: process.cwd(),
-      pipeline: config.pipeline.map(task => task(config.options)),
-    }
-
-    await run(context)
+      pipeline: {
+        prev: [],
+        next: rest,
+      },
+    })
   }
 }
 

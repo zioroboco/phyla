@@ -1,4 +1,4 @@
-import { Context, Task, config, run } from "./api"
+import { Context, Task, TaskInstance, config, run } from "./api"
 import { describe, expect, it, jest } from "@jest/globals"
 
 describe(config.name, () => {
@@ -45,22 +45,46 @@ describe(config.name, () => {
 })
 
 describe(run.name, () => {
-  const taskOneAction = jest.fn() as (ctx: Context) => void
-  const taskOne: Task<{ one: 1 }> = opts => ({ run: taskOneAction })
+  const firstMock = jest.fn()
+  const first = { run: firstMock } as TaskInstance
 
-  const taskTwoAction = jest.fn() as (ctx: Context) => void
-  const taskTwo: Task<{ two: 2 }> = opts => ({ run: taskTwoAction })
+  const secondMock = jest.fn()
+  const second = { run: secondMock } as TaskInstance
 
-  const options = { one: 1, two: 2 } as const
+  const thirdMock = jest.fn()
+  const third = { run: thirdMock } as TaskInstance
+
   const context: Context = {
     cwd: "/somewhere",
     fs: {} as typeof import("fs"),
-    pipeline: [taskOne, taskTwo].map(t => t(options)),
+    pipeline: {
+      prev: [],
+      next: [second, third],
+    },
   }
 
-  it(`runs tasks with the passed context and options`, async () => {
-    await run(context)
-    expect(taskOne(options).run).toHaveBeenCalledWith(context)
-    expect(taskTwo(options).run).toHaveBeenCalledWith(context)
+  it(`runs tasks from the passed context`, async () => {
+    await run(first, context)
+
+    expect(firstMock).toHaveBeenCalledWith(expect.objectContaining({
+      pipeline: {
+        prev: [],
+        next: [second, third],
+      },
+    }))
+
+    expect(secondMock).toHaveBeenCalledWith(expect.objectContaining({
+      pipeline: {
+        prev: [first],
+        next: [third],
+      },
+    }))
+
+    expect(thirdMock).toHaveBeenCalledWith(expect.objectContaining({
+      pipeline: {
+        prev: [first, second],
+        next: [],
+      },
+    }))
   })
 })
