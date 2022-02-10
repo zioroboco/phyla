@@ -25,17 +25,16 @@
     "**/*.d.ts",
     "**/*.js"
   ],
-  "dependencies": {
+  "devDependencies": {
     "@types/node": "^17.0.14",
-    "@types/ramda": "^0.27.64",
+    "@types/ramda": "^0.27.64"
+  },
+  "dependencies": {
     "clipanion": "^3.2.0-rc.6",
     "eta": "^1.12.3",
     "fast-glob": "^3.2.11",
-    "memfs": "^3.4.1",
     "picospec": "~0.3.1",
     "ramda": "^0.28.0",
-    "tmp-promise": "^3.0.3",
-    "ts-toolbelt": "^9.6.0",
     "typanion": "^3.7.1"
   }
 }
