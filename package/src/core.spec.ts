@@ -1,4 +1,4 @@
-import { Context, Task, TaskInstance, config, run } from "./core"
+import { Context, Task, TaskInstance, config, run } from "begat/core"
 import { describe, expect, it, jest } from "@jest/globals"
 
 describe(config.name, () => {

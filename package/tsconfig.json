@@ -3,6 +3,12 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
+
+    "baseUrl": ".",
+    "paths": {
+      "begat/*": ["./src/*"]
+    },
+
     "noEmit": false
   },
   "include": ["src/**/*.ts"]

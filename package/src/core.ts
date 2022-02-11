@@ -1,5 +1,5 @@
 import * as pico from "picospec"
-import * as reporting from "./reporting"
+import * as reporting from "begat/reporting"
 import { Union } from "ts-toolbelt"
 
 export type Context = {
