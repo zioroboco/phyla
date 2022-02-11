@@ -6,5 +6,8 @@
   "main": "./dist/license.js",
   "peerDependencies": {
     "begat": "^0.2.0"
+  },
+  "devDependencies": {
+    "memfs": "^3.4.1"
   }
 }

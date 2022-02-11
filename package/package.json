@@ -30,6 +30,7 @@
     "picospec": "portal:../../picospec"
   },
   "dependencies": {
+    "chalk": "^4.0.0",
     "clipanion": "^3.2.0-rc.6",
     "eta": "^1.12.3",
     "fast-glob": "^3.2.11",

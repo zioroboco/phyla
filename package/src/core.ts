@@ -1,5 +1,6 @@
 import * as pico from "picospec"
 import { Union } from "ts-toolbelt"
+import chalk from "chalk"
 
 export type Context = {
   cwd: string
@@ -44,14 +45,33 @@ export const config = function <Tasks extends AbstractTask[]>(config: {
   return config
 }
 
+function fail (report: pico.Report, meta: TaskInstance, phase: "pre" | "post") {
+  const failures = report.results.filter(r => r.outcome != pico.Pass)
 
+  if (failures.length) {
+    const boldred = (s: string) => chalk.bold(chalk.red(s))
+    const inverse = (s: string) => chalk.inverse(boldred(s))
 
-function format (descriptions: string[], error: unknown) {
-  const boldred = (str: string) => `\x1b[1m\x1b[31m${str}\x1b[0m`
-  const body = error instanceof Error
-    ? error.stack ?? error.message
-    : String(error)
-  return `\n\n❌  ${boldred(descriptions.join(" → "))}\n\n${body}\n\n`
+    failures.forEach(({ descriptions, outcome }, i) => {
+      const body = outcome instanceof Error
+        ? outcome.stack ?? outcome.message
+        : String(outcome)
+
+      process.stderr.write(
+        [
+          inverse(` ${phase.toUpperCase()} (${i + 1}/${failures.length}) `),
+          meta.name,
+          chalk.dim(`v${meta.version}`),
+          "\n",
+          boldred(`  ● ${boldred(descriptions.join(" → "))}`),
+          "\n\n",
+          body,
+          "\n\n",
+        ].join(" ")
+      )
+    })
+    throw `${failures.length} failure(s) in ${phase}-assertion phase`
+  }
 }
 
 export const run = async function (
@@ -68,13 +88,7 @@ export const run = async function (
       it: pico.it,
     })
     const report = await pico.run(suite)
-    const failures = report.results.filter(r => r.outcome != pico.Pass)
-    if (failures.length) {
-      for (const { descriptions, outcome } of failures) {
-        console.error(format(descriptions, outcome))
-      }
-      throw `${failures.length} failure(s) in pre-assertions`
-    }
+    fail(report, instance, "pre")
   }
 
   await instance.run(context)
@@ -85,13 +99,7 @@ export const run = async function (
       it: pico.it,
     })
     const report = await pico.run(suite)
-    const failures = report.results.filter(r => r.outcome != pico.Pass)
-    if (failures.length) {
-      for (const { descriptions, outcome } of failures) {
-        console.error(format(descriptions, outcome))
-      }
-      throw `${failures.length} failure(s) in post-assertions`
-    }
+    fail(report, instance, "post")
   }
 
   const [head, ...rest] = context.pipeline.next

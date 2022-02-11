@@ -7,7 +7,7 @@ const meta = createRequire(import.meta.url)("../package.json")
 
 const supportedLicenses = ["MIT"] as const
 
-type Options = {
+export type Options = {
   license: typeof supportedLicenses[number]
   author: string
 }

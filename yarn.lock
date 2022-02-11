@@ -1935,6 +1935,8 @@ __metadata:
 "begat-example-task@*, begat-example-task@workspace:examples/task":
   version: 0.0.0-use.local
   resolution: "begat-example-task@workspace:examples/task"
+  dependencies:
+    memfs: ^3.4.1
   peerDependencies:
     begat: ^0.2.0
   languageName: unknown
@@ -1946,6 +1948,7 @@ __metadata:
   dependencies:
     "@types/node": ^17.0.14
     "@types/ramda": ^0.27.64
+    chalk: ^4.0.0
     clipanion: ^3.2.0-rc.6
     eta: ^1.12.3
     fast-glob: ^3.2.11
@@ -3259,6 +3262,13 @@ __metadata:
   dependencies:
     minipass: ^3.0.0
   checksum: 1b8d128dae2ac6cc94230cc5ead341ba3e0efaef82dab46a33d171c044caaa6ca001364178d42069b2809c35a1c3c35079a32107c770e9ffab3901b59af8c8b1
+  languageName: node
+  linkType: hard
+
+"fs-monkey@npm:1.0.3":
+  version: 1.0.3
+  resolution: "fs-monkey@npm:1.0.3"
+  checksum: cf50804833f9b88a476911ae911fe50f61a98d986df52f890bd97e7262796d023698cb2309fa9b74fdd8974f04315b648748a0a8ee059e7d5257b293bfc409c0
   languageName: node
   linkType: hard
 
@@ -4842,6 +4852,15 @@ fsevents@^2.3.2:
   version: 4.3.0
   resolution: "map-obj@npm:4.3.0"
   checksum: fbc554934d1a27a1910e842bc87b177b1a556609dd803747c85ece420692380827c6ae94a95cce4407c054fa0964be3bf8226f7f2cb2e9eeee432c7c1985684e
+  languageName: node
+  linkType: hard
+
+"memfs@npm:^3.4.1":
+  version: 3.4.1
+  resolution: "memfs@npm:3.4.1"
+  dependencies:
+    fs-monkey: 1.0.3
+  checksum: 6d2f49d447d1be24ff9c747618933784eeb059189bc6a0d77b7a51c7daf06e2d3a74674a2e2ff1520e2c312bf91e719ed37144cf05087379b3ba0aef0b6aa062
   languageName: node
   linkType: hard
 
