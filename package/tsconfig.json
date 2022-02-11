@@ -1,10 +1,9 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": { "begat/*": ["./*"] },
+    "outDir": "dist",
+    "rootDir": "src",
     "noEmit": false
   },
-  "include": ["**/*.ts", "bin/begat.mjs"],
-  "exclude": ["**/*.spec.ts", "node_modules"]
+  "include": ["src/**/*.ts"]
 }

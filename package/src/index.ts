@@ -7,4 +7,4 @@ export {
   it,
   run,
   suite,
-} from "begat/core/api"
+} from "./core"

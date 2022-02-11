@@ -1,14 +1,14 @@
 import { createRequire } from "module"
+import { dirname, join } from "path"
+import { fileURLToPath } from "url"
+
 const require = createRequire(import.meta.url)
-const { workspaces } = require("./package.json")
 
 /**
  * @type {import("@jest/types").Config.InitialOptions}
  */
-export const common = {
+export const common = url => ({
   testMatch: ["**/*.spec.ts"],
-  moduleFileExtensions: ["ts", "js", "json"],
-  modulePathIgnorePatterns: ["\\.js$"],
   preset: "ts-jest/presets/default-esm",
   testEnvironment: "node",
 
@@ -17,16 +17,17 @@ export const common = {
       isolatedModules: true,
       diagnostics: { ignoreCodes: [151001] },
       useESM: true,
-      tsconfig: require("./tsconfig.json").compilerOptions,
+      tsconfig: require(join(dirname(fileURLToPath(url)), "tsconfig.json"))
+        .compilerOptions,
     },
   },
-}
+})
 
 /**
  * @type {import("@jest/types").Config.InitialOptions}
  */
 const config = {
-  projects: workspaces,
+  projects: require("./package.json").workspaces,
 }
 
 export default config

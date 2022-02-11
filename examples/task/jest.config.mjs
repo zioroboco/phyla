@@ -1,4 +1,4 @@
-import { common } from "../jest.config.mjs"
+import { common } from "../../jest.config.mjs"
 
 /**
  * @type {import("@jest/types").Config.InitialOptions}

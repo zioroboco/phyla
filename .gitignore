@@ -1,6 +1,6 @@
 *.d.ts
-*.js
 *.map
+dist/
 node_modules/
 tsconfig.tsbuildinfo
 yarn-*.log

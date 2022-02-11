@@ -1,5 +1,5 @@
 import { Command } from "clipanion"
-import { Config, run } from "begat/core/api"
+import { Config, run } from "./core"
 import { inspect } from "util"
 import { join } from "path"
 

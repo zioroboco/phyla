@@ -13,17 +13,16 @@
     "node": ">=16"
   },
   "type": "module",
-  "main": "./core/index.js",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./core/index.js",
-    "./*": "./*.js"
+    ".": "./dist/index.js",
+    "./*": "./dist/*.js"
   },
   "bin": "./bin/begat.mjs",
   "files": [
+    "dist",
     "!**/*.map",
-    "!**/*.ts",
-    "**/*.d.ts",
-    "**/*.js"
+    "!**/*.spec.*"
   ],
   "devDependencies": {
     "@types/node": "^17.0.14",

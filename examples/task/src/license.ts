@@ -1,7 +1,9 @@
 import { Task, describe, it, suite } from "begat"
+import { createRequire } from "module"
 import { join } from "path"
 import expect from "expect"
-import meta from "begat-example-task/package.json"
+
+const meta = createRequire(import.meta.url)("../package.json")
 
 const supportedLicenses = ["MIT"] as const
 
