@@ -8,9 +8,11 @@
     "begat": "^0.2.0"
   },
   "devDependencies": {
+    "@types/ramda": "^0.27.64",
     "memfs": "^3.4.1"
   },
   "dependencies": {
-    "eta": "^1.12.3"
+    "eta": "^1.12.3",
+    "ramda": "^0.28.0"
   }
 }

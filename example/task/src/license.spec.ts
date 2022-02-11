@@ -1,9 +1,10 @@
 import { Options, license } from "./license"
 import { Volume, createFsFromVolume } from "memfs"
-import { it } from "@jest/globals"
+import { expect, test } from "@jest/globals"
+import { fromPairs, toPairs } from "ramda"
 import { run } from "begat"
 
-it(`passes`, async () => {
+test(`the happy path`, async () => {
   const volume = Volume.fromJSON(
     {
       "package.json": JSON.stringify({
@@ -12,7 +13,7 @@ it(`passes`, async () => {
         author: "blep",
       }),
     },
-    "/somewhere"
+    "/my-project"
   )
 
   const options: Options = {
@@ -21,9 +22,25 @@ it(`passes`, async () => {
   }
 
   await run(license(options), {
-    cwd: "/somewhere",
     // @ts-ignore
     fs: createFsFromVolume(volume),
+    cwd: "/my-project",
     pipeline: { next: [], prev: [] },
+  })
+
+  const entries = fromPairs(
+    toPairs(volume.toJSON()).map(([path, data]) => [
+      path,
+      JSON.parse(String(data)),
+    ])
+  )
+
+  expect(entries).toMatchObject({
+    "/my-project/package.json": {
+      name: "test",
+      version: "1.0.0",
+      author: "Blep B. Leppington",
+      license: "MIT",
+    },
   })
 })
