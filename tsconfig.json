@@ -13,6 +13,6 @@
 
     "noEmit": true
   },
-  "references": [{ "path": "./package" }, { "path": "./examples/task" }],
+  "references": [{ "path": "./package" }, { "path": "./example/task" }],
   "files": []
 }
