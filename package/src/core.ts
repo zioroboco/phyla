@@ -70,7 +70,8 @@ function fail (report: pico.Report, meta: TaskInstance, phase: "pre" | "post") {
         ].join(" ")
       )
     })
-    throw `${failures.length} failure(s) in ${phase}-assertion phase`
+    const n = failures.length
+    throw `${n} failure${n > 1 ? "s" : ""} in ${phase}-assertion phase`
   }
 }
 
