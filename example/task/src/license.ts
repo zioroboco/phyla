@@ -16,7 +16,7 @@ export const license: Task<Options> = options => ({
   name: meta.name,
   version: meta.version,
 
-  before: ({ cwd, fs }) => ({ describe, it }) => [
+  pre: ({ describe, it }, ctx) => [
     describe(`the options object`).assert(() => [
       it(`includes an author`, () => {
         expect(options.author).toMatch("")
@@ -29,7 +29,7 @@ export const license: Task<Options> = options => ({
     describe(`the package.json file`)
       .setup(async () => ({
         packageJson: JSON.parse(
-          await fs.promises.readFile(join(cwd, "package.json"), "utf8")
+          await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
         ),
       }))
       .assert(({ packageJson }) => [
@@ -39,25 +39,25 @@ export const license: Task<Options> = options => ({
       ]),
   ],
 
-  run: async ({ cwd, fs }) => {
+  run: async ctx => {
     const packageJson = JSON.parse(
-      await fs.promises.readFile(join(cwd, "package.json"), "utf8")
+      await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
     )
 
     packageJson.author = options.author
     packageJson.license = options.license
 
-    await fs.promises.writeFile(
-      join(cwd, "package.json"),
+    await ctx.fs.promises.writeFile(
+      join(ctx.cwd, "package.json"),
       JSON.stringify(packageJson, null, 2) + "\n"
     )
   },
 
-  after: ({ cwd, fs }) => ({ describe, it }) => [
+  post: ({ describe, it }, ctx) => [
     describe(`the package.json file`)
       .setup(async () => ({
         packageJson: JSON.parse(
-          await fs.promises.readFile(join(cwd, "package.json"), "utf8")
+          await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
         ),
       }))
       .assert(({ packageJson }) => [

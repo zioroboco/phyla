@@ -11,17 +11,20 @@ export type Context = {
   }
 }
 
-type Assertions = (api: {
-  describe: typeof pico.describe
-  it: typeof pico.it
-}) => Array<pico.Block | pico.Test>
+type Assertions = (
+  { describe, it }: {
+    describe: typeof pico.describe
+    it: typeof pico.it
+  },
+  context: Context,
+) => Array<pico.Block | pico.Test>
 
 export type TaskInstance = {
   name?: string
   version?: string
   run: (context: Context) => void | Promise<void>
-  before?: (context: Context) => Assertions
-  after?: (context: Context) => Assertions
+  pre?: Assertions
+  post?: Assertions
 }
 
 export type AbstractOptions = any
@@ -83,22 +86,22 @@ export const run = async function (
     return
   }
 
-  if (instance.before) {
-    const suite = instance.before(context)({
-      describe: pico.describe,
-      it: pico.it,
-    })
+  if (instance.pre) {
+    const suite = instance.pre(
+      { describe: pico.describe, it: pico.it },
+      context
+    )
     const report = await pico.run(suite)
     fail(report, instance, "pre")
   }
 
   await instance.run(context)
 
-  if (instance.after) {
-    const suite = instance.after(context)({
-      describe: pico.describe,
-      it: pico.it,
-    })
+  if (instance.post) {
+    const suite = instance.post(
+      { describe: pico.describe, it: pico.it },
+      context
+    )
     const report = await pico.run(suite)
     fail(report, instance, "post")
   }
