@@ -63,14 +63,16 @@ function fail (report: pico.Report, meta: TaskInstance, phase: "pre" | "post") {
       process.stderr.write(
         [
           inverse(` ${phase.toUpperCase()} (${i + 1}/${failures.length}) `),
-          meta.name,
-          chalk.dim(`v${meta.version}`),
+          meta.name && meta.name,
+          meta.version && chalk.dim(`v${meta.version}`),
           "\n",
           boldred(`  ● ${boldred(descriptions.join(" → "))}`),
           "\n\n",
           body,
           "\n\n",
-        ].join(" ")
+        ]
+          .filter(Boolean)
+          .join(" ")
       )
     })
     const n = failures.length
