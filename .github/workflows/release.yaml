@@ -14,6 +14,11 @@ jobs:
         with:
           node-version: 16.x
           cache: yarn
+      - name: Install picospec
+        run: |
+          export VERSION=$(jq -r .dependencies.picospec ./package/package.json)
+          yarn workspace begat remove picospec
+          yarn workspace begat add picospec@${VERSION}
       - run: yarn install --immutable
       - uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
         with:

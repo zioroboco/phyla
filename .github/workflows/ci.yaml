@@ -11,6 +11,11 @@ jobs:
         with:
           node-version: 16.x
           cache: yarn
+      - name: Install picospec
+        run: |
+          export VERSION=$(jq -r .dependencies.picospec ./package/package.json)
+          yarn workspace begat remove picospec
+          yarn workspace begat add picospec@${VERSION}
       - run: yarn install --immutable
       - run: yarn build
       - run: yarn test --ci
@@ -22,5 +27,10 @@ jobs:
         with:
           node-version: 16.x
           cache: yarn
+      - name: install picospec
+        run: |
+          export VERSION=$(jq -r .dependencies.picospec ./package/package.json)
+          yarn workspace begat remove picospec
+          yarn workspace begat add picospec@${VERSION}
       - run: yarn install --immutable
       - run: yarn lint-ci

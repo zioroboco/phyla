@@ -1949,7 +1949,7 @@ __metadata:
     clipanion: ^3.2.0-rc.6
     eta: ^1.12.3
     fast-glob: ^3.2.11
-    picospec: ~0.3.1
+    picospec: "portal:../../picospec"
     ramda: ^0.28.0
     typanion: ^3.7.1
   bin:
@@ -5462,12 +5462,11 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"picospec@npm:~0.3.1":
-  version: 0.3.1
-  resolution: "picospec@npm:0.3.1"
-  checksum: 9bdea4cd29ac8cdf952c962605d8375c3e5abc08458cf58b11b76cc9f755e209b89e5b3a4f388a5775dc725a5a9629d31ff10576697758ee8788dc4adcd64d03
+"picospec@portal:../../picospec::locator=begat%40workspace%3Apackage":
+  version: 0.0.0-use.local
+  resolution: "picospec@portal:../../picospec::locator=begat%40workspace%3Apackage"
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "pify@npm:^4.0.1":
   version: 4.0.1
