@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "memfs": "^3.4.1"
+  },
+  "dependencies": {
+    "eta": "^1.12.3"
   }
 }

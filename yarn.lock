@@ -1413,15 +1413,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ramda@npm:^0.27.64":
-  version: 0.27.64
-  resolution: "@types/ramda@npm:0.27.64"
-  dependencies:
-    ts-toolbelt: ^6.15.1
-  checksum: 8512be3bf220d63df398fe333aafb21a48e1967300afa629f21de5e35e757bdf37323bd59a67da025ab549520bc9c9119e6ca9702a95948eef5bd17ae9b319d2
-  languageName: node
-  linkType: hard
-
 "@types/semver@npm:^6.0.0":
   version: 6.2.3
   resolution: "@types/semver@npm:6.2.3"
@@ -1936,6 +1927,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat-example-task@workspace:example/task"
   dependencies:
+    eta: ^1.12.3
     memfs: ^3.4.1
   peerDependencies:
     begat: ^0.2.0
@@ -1947,13 +1939,10 @@ __metadata:
   resolution: "begat@workspace:package"
   dependencies:
     "@types/node": ^17.0.17
-    "@types/ramda": ^0.27.64
     chalk: ^4.1.2
     clipanion: ^3.2.0-rc.8
-    eta: ^1.12.3
-    fast-glob: ^3.2.11
     picospec: "portal:../../picospec"
-    ramda: ^0.28.0
+    ts-toolbelt: ^9.6.0
     typanion: ^3.7.1
   bin:
     begat: ./bin/begat.mjs
@@ -3101,19 +3090,6 @@ __metadata:
     merge2: ^1.3.0
     micromatch: ^4.0.4
   checksum: 2f4708ff112d2b451888129fdd9a0938db88b105b0ddfd043c064e3c4d3e20eed8d7c7615f7565fee660db34ddcf08a2db1bf0ab3c00b87608e4719694642d78
-  languageName: node
-  linkType: hard
-
-"fast-glob@npm:^3.2.11":
-  version: 3.2.11
-  resolution: "fast-glob@npm:3.2.11"
-  dependencies:
-    "@nodelib/fs.stat": ^2.0.2
-    "@nodelib/fs.walk": ^1.2.3
-    glob-parent: ^5.1.2
-    merge2: ^1.3.0
-    micromatch: ^4.0.4
-  checksum: f473105324a7780a20c06de842e15ddbb41d3cb7e71d1e4fe6e8373204f22245d54f5ab9e2061e6a1c613047345954d29b022e0e76f5c28b1df9858179a0e6d7
   languageName: node
   linkType: hard
 
@@ -5654,13 +5630,6 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"ramda@npm:^0.28.0":
-  version: 0.28.0
-  resolution: "ramda@npm:0.28.0"
-  checksum: 44ea6e5010bba70151b6a92d8114a91915e8b5a16105cce65fae58c9d7386b812c429645e35f21141d7087568550ce383bc10ee1a65cdec951f4b69ea457e6a4
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^17.0.1":
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
@@ -6480,10 +6449,10 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"ts-toolbelt@npm:^6.15.1":
-  version: 6.15.5
-  resolution: "ts-toolbelt@npm:6.15.5"
-  checksum: 24ad00cfd9ce735c76c873a9b1347eac475b94e39ebbdf100c9019dce88dd5f4babed52884cf82bb456a38c28edd0099ab6f704b84b2e5e034852b618472c1f3
+"ts-toolbelt@npm:^9.6.0":
+  version: 9.6.0
+  resolution: "ts-toolbelt@npm:9.6.0"
+  checksum: 9f35fd95d895a5d32ea9fd2e532a695b0bae6cbff6832b77292efa188a0ed1ed6e54f63f74a8920390f3d909a7a3adb20a144686372a8e78b420246a9bd3d58a
   languageName: node
   linkType: hard
 
