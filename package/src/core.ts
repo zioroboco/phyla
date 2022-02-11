@@ -1,6 +1,6 @@
 import * as pico from "picospec"
+import * as reporting from "./reporting"
 import { Union } from "ts-toolbelt"
-import chalk from "chalk"
 
 export type Context = {
   cwd: string
@@ -48,38 +48,6 @@ export const config = function <Tasks extends AbstractTask[]>(config: {
   return config
 }
 
-function fail (report: pico.Report, meta: TaskInstance, phase: "pre" | "post") {
-  const failures = report.results.filter(r => r.outcome != pico.Pass)
-
-  if (failures.length) {
-    const boldred = (s: string) => chalk.bold(chalk.red(s))
-    const inverse = (s: string) => chalk.inverse(boldred(s))
-
-    failures.forEach(({ descriptions, outcome }, i) => {
-      const body = outcome instanceof Error
-        ? outcome.stack ?? outcome.message
-        : String(outcome)
-
-      process.stderr.write(
-        [
-          inverse(` ${phase.toUpperCase()} (${i + 1}/${failures.length}) `),
-          meta.name && meta.name,
-          meta.version && chalk.dim(`v${meta.version}`),
-          "\n",
-          boldred(`  ● ${boldred(descriptions.join(" → "))}`),
-          "\n\n",
-          body,
-          "\n\n",
-        ]
-          .filter(Boolean)
-          .join(" ")
-      )
-    })
-    const n = failures.length
-    throw `${n} failure${n > 1 ? "s" : ""} in ${phase}-assertion phase`
-  }
-}
-
 export const run = async function (
   instance: TaskInstance | undefined,
   context: Context
@@ -94,7 +62,7 @@ export const run = async function (
       context
     )
     const report = await pico.run(suite)
-    fail(report, instance, "pre")
+    reporting.check(report, instance, "pre")
   }
 
   await instance.run(context)
@@ -105,7 +73,7 @@ export const run = async function (
       context
     )
     const report = await pico.run(suite)
-    fail(report, instance, "post")
+    reporting.check(report, instance, "post")
   }
 
   const [head, ...rest] = context.pipeline.next
