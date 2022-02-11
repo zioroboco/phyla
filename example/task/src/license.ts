@@ -1,9 +1,13 @@
+import * as Eta from "eta"
+import * as sys_fs from "fs/promises"
 import { Task } from "begat"
 import { createRequire } from "module"
+import { dirname } from "path"
 import { join } from "path"
 import expect from "expect"
 
-const meta = createRequire(import.meta.url)("../package.json")
+const require = createRequire(import.meta.url)
+const meta = require("../package.json")
 
 const supportedLicenses = ["MIT"] as const
 
@@ -40,6 +44,26 @@ export const license: Task<Options> = options => ({
   ],
 
   run: async ctx => {
+    const templateDir = join(
+      dirname(require.resolve(meta.name)),
+      "../templates"
+    )
+
+    const templateData = await sys_fs.readFile(
+      join(templateDir, "LICENSE.eta"),
+      "utf8"
+    )
+
+    const rendered = await Eta.render(templateData, options, {
+      autoEscape: false,
+      autoTrim: false,
+      rmWhitespace: false,
+    })
+
+    if (rendered) {
+      await ctx.fs.promises.writeFile(join(ctx.cwd, "LICENSE"), rendered)
+    }
+
     const packageJson = JSON.parse(
       await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
     )
