@@ -1,24 +1,37 @@
-import { ServerConfig, serverActions, serverMachine } from "./services"
+import { ServerActions, ServerConfig, Watcher, serverMachine, watcherMachine } from "./services"
+import { assign, interpret, spawn } from "xstate"
 import { expect, jest, test } from "@jest/globals"
 import { fromPairs } from "ramda"
-import { interpret } from "xstate"
 
-test("server", () => {
-  // @ts-ignore
-  const mocks: Record<typeof serverActions[number], ReturnType<typeof jest.fn>>
-    = fromPairs(serverActions.map(action => [action, jest.fn()]))
+test("server", async () => {
+  const mocks = {
+    initialiseProject: jest.fn(),
+    applyPipeline: jest.fn(),
+    openEditor: jest.fn(),
+    syncProject: jest.fn(),
+  } as Record<Partial<ServerActions["type"]>, ReturnType<typeof jest.fn>>
 
   const serverConfig: ServerConfig = {
-    actions: mocks as ServerConfig["actions"],
+    actions: {
+      ...mocks,
+      spawnWatchers: context => {
+        context.watchers = [
+          spawn(watcherMachine, { sync: true }),
+        ]
+      },
+    },
   }
 
   const server = interpret(serverMachine.withConfig(serverConfig))
 
   server.start()
 
+  let { watchers } = server.state.context
+  expect(watchers).toHaveLength(1)
+
   expect(server.state.value).toBe("initialising")
-  expect(mocks.spawnWatchers).toHaveBeenCalled()
   expect(mocks.initialiseProject).toHaveBeenCalled()
+  expect(watchers[0].getSnapshot().value).toBe("waiting")
 
   server.send({ type: "APPLY" })
   expect(server.state.value).toBe("applying")
@@ -29,12 +42,11 @@ test("server", () => {
   server.send({ type: "READY" })
   expect(server.state.value).toBe("watching")
   expect(mocks.openEditor).toHaveBeenCalled()
-  expect(mocks.startWatchers).toHaveBeenCalled()
 
   server.send({ type: "SYNC" })
   expect(server.state.value).toBe("syncing")
   expect(mocks.syncProject).toHaveBeenCalled()
-  expect(mocks.stopWatchers).toHaveBeenCalled()
+  expect(watchers[0].getSnapshot().value).toBe("waiting")
 
   server.send({ type: "APPLY" })
   expect(server.state.value).toBe("applying")

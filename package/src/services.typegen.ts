@@ -21,10 +21,8 @@ export interface Typegen0 {
       | "spawnWatchers"
       | "initialiseProject"
       | "applyPipeline"
-      | "stopWatchers"
       | "resetProject"
       | "openEditor"
-      | "startWatchers"
       | "syncProject"
     services: never
     guards: never
