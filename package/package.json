@@ -34,8 +34,10 @@
     "clipanion": "^3.2.0-rc.8",
     "execa": "^6.0.0",
     "picospec": "~0.4.0",
+    "rxjs": "^7.5.4",
     "tmp-promise": "^3.0.3",
     "ts-toolbelt": "^9.6.0",
-    "typanion": "^3.7.1"
+    "typanion": "^3.7.1",
+    "xstate": "^4.29.0"
   }
 }
