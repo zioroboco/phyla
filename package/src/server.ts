@@ -3,11 +3,11 @@ import { createMachine, createSchema } from "xstate"
 export type ServerContext = {}
 
 export type ServerEvent = {
-  type: "APPLY" | "CHANGES" | "READY" | "RESET" | "SYNC"
+  type: "APPLY" | "CHANGES" | "READY" | "SYNC"
 }
 
 export const serverMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEsB2OALjgIYA2Os+UAxAIIAKDAMgJqKgAOA9lcd3g4gAHogCMAJgAcWAGwBWKQGYAnBIAMUgOxSALFq0AaEAE9EAWjHr1WK7Nkr1SpVvXyxYgL6fjKDNhJOTjITahoAJQBROgARdiQQHj4cASFRBElZLAkXaQkDHIMDYzMM3RtFCXlnNTFZJWrZb180TFQsAHcSQgBjAAswgGVWADkAYSEkohTBBPTzKt05LVUtWS0xbXl1YtNECRUlLHVdWWU1XSUJOvlmkD82zu7+sLGACToRgHFIwcneaapOYWLQSLCueQSXRiSEaXQqSElcRSeRYJTqFQGbb2MQNJRNHz3VrYWAmPA9MKMFjxLgA-izUDzdZYSEKFTaApaU6yJEIHLZWS6A7VGGHWTSbyEvDcCBwIQPbD4abkSjUf7JIGMxBc2wGewaeTi+r6XkLaHg+Rc-TrYWyTZ3BXtQLBUJ4KDqwEMkTamyYqFKFHSU6bKSmsS2dQaTZC3RSNzrKQO4ntLq9AZuj30tKIM7glTwlQIjwnMT53k5I7rLSNKQI+GxpP+dqk8lqhJTLPAhDmdEyOwNTYQpQw00VSHqda4zbyFSSeS3QmOzMzbPd5xg-vubRuYfyU3DpagqRSCSFO3qDwE7xAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEMAOeANgJ4CWAdlAMQBKAogIIAiAmoqHgPaykAupncuxAAPRAEYATADYskgMwB2SQA5Ji5Uo2KANCGISALAAYsAVjVn58gJyTx0+VekBfF3pQZsAdxy8AxgAWFNQAyiwAcgDCwlw8-ILCYggAtJJmhljSiraK2eIqimbGGnoGCJI28ljGhtIqtpKG8vbSZm4eaJioWL4BwZRUUQASDBEA4nShsdx8AkJIoogpyliKxmZN4puStTabZRIqZljyxjYaxdLS4k7yru4gnt1YsMTk-iFUDAAKPwAybEWcTmiUWyRS2XMMjMNkKGnUdWkhwq1RkhkqVm2VWkqjcj3InAgcGEz2w+CIZEoM3i8ySiHWWAuTXkx1UdQKKhRKXEWHExl2BQxhhUG2yKg6Ty6Pj8QRCNNBC1AyXqaxshhsmrM4n5hnE6pRCmq2SK9xU+w1IslZJ6bw+8uBswSSqWqTOKj5xkc2sKG3k225pjMmy9iluBVhUmD1ulqAVzvpbpanu9BXWWLM3MUmRK1iqUkU+1D+JcQA */
   createMachine({
     context: {},
     tsTypes: {} as import("./server.typegen").Typegen0,
@@ -16,16 +16,8 @@ export const serverMachine =
       events: createSchema<ServerEvent>(),
     },
     id: "server",
-    initial: "initialising",
+    initial: "syncing",
     states: {
-      initialising: {
-        entry: "setupProject",
-        on: {
-          APPLY: {
-            target: "#server.applying",
-          },
-        },
-      },
       applying: {
         entry: "applyPipeline",
         on: {

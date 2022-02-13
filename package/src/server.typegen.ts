@@ -3,7 +3,6 @@
 export interface Typegen0 {
   "@@xstate/typegen": true
   eventsCausingActions: {
-    setupProject: "xstate.init"
     applyPipeline: "APPLY"
     stopWatching: "xstate.init"
     openEditor: "READY" | "CHANGES"
@@ -16,7 +15,6 @@ export interface Typegen0 {
   invokeSrcNameMap: {}
   missingImplementations: {
     actions:
-      | "setupProject"
       | "applyPipeline"
       | "stopWatching"
       | "openEditor"
@@ -29,6 +27,6 @@ export interface Typegen0 {
   eventsCausingServices: {}
   eventsCausingGuards: {}
   eventsCausingDelays: {}
-  matchesStates: "initialising" | "applying" | "watching" | "syncing"
+  matchesStates: "applying" | "watching" | "syncing"
   tags: never
 }
