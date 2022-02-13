@@ -5,9 +5,9 @@ export interface Typegen0 {
   eventsCausingActions: {
     setupProject: "xstate.init"
     applyPipeline: "APPLY"
-    stopWatcher: "xstate.init"
+    stopWatching: "xstate.init"
     openEditor: "READY"
-    startWatcher: "READY"
+    startWatching: "READY"
     syncProject: "SYNC"
   }
   internalEvents: {
@@ -18,9 +18,9 @@ export interface Typegen0 {
     actions:
       | "setupProject"
       | "applyPipeline"
-      | "stopWatcher"
+      | "stopWatching"
       | "openEditor"
-      | "startWatcher"
+      | "startWatching"
       | "syncProject"
     services: never
     guards: never
@@ -29,6 +29,6 @@ export interface Typegen0 {
   eventsCausingServices: {}
   eventsCausingGuards: {}
   eventsCausingDelays: {}
-  matchesStates: "setup" | "applying" | "watching" | "syncing"
+  matchesStates: "initialising" | "applying" | "watching" | "syncing"
   tags: never
 }
