@@ -1,7 +1,6 @@
 import { Options, license } from "./license"
 import { Volume, createFsFromVolume } from "memfs"
 import { expect, test } from "@jest/globals"
-import { fromPairs, toPairs } from "ramda"
 import { run } from "begat"
 
 const cwd = "/my-project"
