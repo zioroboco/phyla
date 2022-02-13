@@ -2,10 +2,12 @@ import { createMachine, createSchema } from "xstate"
 
 export type ServerContext = {}
 
-export type ServerEvent = { type: "APPLY" | "READY" | "RESET" | "SYNC" }
+export type ServerEvent = {
+  type: "APPLY" | "CHANGES" | "READY" | "RESET" | "SYNC"
+}
 
 export const serverMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEsB2OALjgIYA2Os+UAxAIIAKDAMgJqKgAOA9lcd3g4gAHogCMAJgAcWAGwBWKQGYAnBIAMUgOxSALFq0AaEAE9EAWjHr1WK7Nkr1SpVvXyxYgL6fjKDNhJOTjITahoAJQBROgARdiQQHj4cASFRBElZLAkXaQkDHIMDYzMM3RtFCXlnNTFZJWrZb180TFQsAHcSQgBjAAswgGVWADkAYSEkohTBBPTzKt05LVUtWS0xbXl1YtNECRUlLHVdWWU1XSUJOvlmkD82rFgTPB6wxhZ4rl5p1LmLdZYeQSBQqbQFLSnWQlfZHEG6A7VMTyQ6yaTeHwgPDcCBwIQPbD4abkSjUSY-fizUDpSG2Az2DTyNH1fQwhALXRiLBaeSQ-TrRGyTZ3AntQLBUJ4KDk5J-amIVxYFRaCSXKTAvRCqRSNmWWzqDSbBG6KRudZSEWtbBdXoDKUy35UkSIM7clS6FSe9xWTnutk5I7rHlKM4qeQek2W-ztZ6vMkJKaUtIWJSafX1dzaNxKZG6irA9TrMQ59UqSTyW6Y0UOpP-dnOCTphqbVxI+S6nNLFXaurKwvKvQYzxAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEsB2OALjgIYA2Os+UAxAIIAKDAMgJqKgAOA9lcd3g4gAHogCMAJgAcWAGwBWKQGYAnBIAMUgOxSALFq0AaEAE9EAWjHr1WK7Nkr1SpVvXyxYgL6fjKDNhJOTjITahoAJQBROgARdiQQHj4cASFRBElZLAkXaQkDHIMDYzMM3RtFCXlnNTFZJWrZb180TFQsAHcSQgBjAAswgGVWADkAYSEkohTBBPTzKt05LVUtWS0xbXl1YtNECRUlLHVdWWU1XSUJOvlmkD82zu7+sLGACToRgHFIwcneaapOYWLQSLCueQSXRiSEaXQqSElcRSeRYJTqFQGbb2MQNJRNHz3VrYWAmPA9MKMFjxLgA-izUDzdZYSEKFTaApaU6yJEIHLZWS6A7VGGHWTSbyEvDcCBwIQPbD4abkSjUf7JIGMxBc2wGewaeTi+r6XkLaHg+Rc-TrYWyTZ3BXtQLBUJ4KDqwEMkTamyYqFKFHSU6bKSmsS2dQaTZC3RSNzrKQO4ntLq9AZuj30tKIM7glTwlQIjwnMT53k5I7rLSNKQI+GxpP+dqk8lqhJTLPAhDmdEyOwNTYQpQw00VSHqda4zbyFSSeS3QmOzMzbPd5xg-vubRuYfyU3DpagqRSCSFO3qDwE7xAA */
   createMachine({
     context: {},
     tsTypes: {} as import("./server.typegen").Typegen0,
@@ -38,6 +40,9 @@ export const serverMachine =
         on: {
           SYNC: {
             target: "#server.syncing",
+          },
+          CHANGES: {
+            target: "#server.watching",
           },
         },
       },

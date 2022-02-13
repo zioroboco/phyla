@@ -6,8 +6,8 @@ export interface Typegen0 {
     setupProject: "xstate.init"
     applyPipeline: "APPLY"
     stopWatching: "xstate.init"
-    openEditor: "READY"
-    startWatching: "READY"
+    openEditor: "READY" | "CHANGES"
+    startWatching: "READY" | "CHANGES"
     syncProject: "SYNC"
   }
   internalEvents: {
