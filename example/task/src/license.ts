@@ -3,6 +3,7 @@ import * as sys_fs from "fs/promises"
 import { Task } from "begat"
 import { createRequire } from "module"
 import { dirname } from "path"
+import { fileURLToPath } from "url"
 import { join } from "path"
 import expect from "expect"
 
@@ -45,7 +46,7 @@ export const license: Task<Options> = options => ({
 
   run: async ctx => {
     const templateDir = join(
-      dirname(require.resolve(meta.name)),
+      dirname(fileURLToPath(import.meta.url)),
       "../templates"
     )
 

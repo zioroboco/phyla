@@ -21,8 +21,7 @@
   "bin": "./bin/begat.mjs",
   "files": [
     "dist",
-    "!**/*.map",
-    "!**/*.spec.*"
+    "!**/*.map"
   ],
   "devDependencies": {
     "@types/node": "^17.0.17",

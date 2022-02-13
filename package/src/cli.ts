@@ -1,4 +1,3 @@
-import * as fs from "fs/promises"
 import * as path from "path"
 import { Command } from "clipanion"
 import { Config, run } from "begat/core"

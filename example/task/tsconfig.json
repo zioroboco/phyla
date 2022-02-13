@@ -6,5 +6,6 @@
     "noEmit": false
   },
   "references": [{ "path": "../../package" }],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "node_modules"]
 }

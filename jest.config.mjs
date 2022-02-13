@@ -1,33 +1,31 @@
 import { createRequire } from "module"
-import { dirname, join } from "path"
-import { fileURLToPath } from "url"
+import { pathsToModuleNameMapper } from "ts-jest"
 
 const require = createRequire(import.meta.url)
+const { workspaces } = require("./package.json")
+const { compilerOptions } = require("./tsconfig.json")
 
 /**
  * @type {import("@jest/types").Config.InitialOptions}
  */
-export const common = url => ({
+export const config = {
   testMatch: ["**/*.spec.ts"],
   preset: "ts-jest/presets/default-esm",
   testEnvironment: "node",
+
+  roots: ["<rootDir>/package/src", "<rootDir>/example/task/src"],
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: "<rootDir>",
+  }),
 
   globals: {
     "ts-jest": {
       isolatedModules: true,
       diagnostics: { ignoreCodes: [151001] },
       useESM: true,
-      tsconfig: require(join(dirname(fileURLToPath(url)), "tsconfig.json"))
-        .compilerOptions,
+      tsconfig: compilerOptions,
     },
   },
-})
-
-/**
- * @type {import("@jest/types").Config.InitialOptions}
- */
-const config = {
-  projects: require("./package.json").workspaces,
 }
 
 export default config

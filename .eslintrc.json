@@ -50,7 +50,7 @@
     {
       "files": ["*.spec.ts"],
       "rules": {
-        "no-restricted-imports": "off"
+        "no-restricted-imports": ["warn", { "patterns": ["begat/*"] }]
       }
     }
   ]
