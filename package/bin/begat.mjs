@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as commands from "begat/cli"
+import * as commands from "begat/commands"
 import { Cli } from "clipanion"
 import { createRequire } from "module"
 
