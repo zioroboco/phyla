@@ -1,25 +1,26 @@
 import * as path from "path"
 import { Command, Option } from "clipanion"
-import { inspect } from "util"
 
 import * as core from "begat/core"
 import * as server from "begat/server"
 
 enum Category {
   Main = "main",
-  Util = "util",
 }
 
-const getPipelineConfig = async function (dir: string): Promise<core.Config> {
-  return import(path.join(dir, ".begatrc.mjs")).then(
-    module => module.default
+async function getTasks (dir: string): Promise<core.TaskInstance[]> {
+  const projectConfig = await import(path.join(dir, ".begatrc.mjs")).then(
+    module => module.default as core.Config
   )
+  const { pipeline, options: pipelineOptions } = projectConfig
+  return pipeline.map(task => task(pipelineOptions))
 }
 
 export class DevCommand extends Command {
   static paths = [["dev"]]
   static usage = Command.Usage({
     category: Category.Main,
+    description: `Start a development server`,
   })
 
   srcdir = Option.String({ name: "project", required: false })
@@ -31,16 +32,12 @@ export class DevCommand extends Command {
     this.watch = this.watch ?? []
     this.exclude = this.exclude ?? []
 
-    const { pipeline, options: pipelineOptions } = await getPipelineConfig(
-      this.srcdir
-    )
-
     const serverInstance = server
       .withConfig({
         srcdir: path.resolve(this.srcdir),
         watch: this.watch,
         exclude: this.exclude,
-        tasks: pipeline.map(task => task(pipelineOptions)),
+        getTasks: dir => getTasks(dir),
         io: this.context,
       })
       .start()
@@ -57,7 +54,7 @@ export class WriteCommand extends Command {
   static paths = [["write"]]
   static usage = Command.Usage({
     category: Category.Main,
-    description: `Run pipeline and write changes to disk`,
+    description: `Write changes to disk`,
   })
 
   srcdir = Option.String({ name: "project", required: false })
@@ -65,42 +62,15 @@ export class WriteCommand extends Command {
   async execute () {
     this.srcdir = path.resolve(this.srcdir ?? ".")
 
-    const config: core.Config = await getPipelineConfig(this.srcdir)
+    const [firstTask, ...nextTasks] = await getTasks(this.srcdir)
 
-    const [head, ...rest] = config.pipeline.map(task => task(config.options))
-
-    await core.run(head, {
+    await core.run(firstTask, {
       fs: await import("fs"),
-      cwd: process.cwd(),
+      cwd: this.srcdir,
       pipeline: {
         prev: [],
-        next: rest,
+        next: nextTasks,
       },
-    })
-  }
-}
-
-export class ConfigCommand extends Command {
-  static paths = [["config"]]
-  static usage = Command.Usage({
-    category: Category.Util,
-    description: `Write config to stdout`,
-  })
-
-  srcdir = Option.String({ name: "project", required: false })
-
-  async execute () {
-    this.srcdir = path.resolve(this.srcdir ?? ".")
-
-    await getPipelineConfig(this.srcdir).then(config => {
-      this.context.stdout.write(inspect({
-        project: this.srcdir,
-        ...config,
-      }))
-      process.exit(0)
-    }).catch(err => {
-      this.context.stderr.write(err.message)
-      process.exit(1)
     })
   }
 }

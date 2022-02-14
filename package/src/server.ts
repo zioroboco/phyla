@@ -16,10 +16,10 @@ export type ServerContext = {
 }
 
 export type ServerConfig = {
+  getTasks: (dir: string) => Promise<TaskInstance[]>
   srcdir: string
   watch: string[]
   exclude: string[]
-  tasks: TaskInstance[]
   io: {
     stdout: NodeJS.WritableStream
     stderr: NodeJS.WritableStream
@@ -28,7 +28,6 @@ export type ServerConfig = {
 
 export const withConfig = ({ io, ...config }: ServerConfig) => {
   const { stdout, stderr } = io
-  const [firstTask, ...nextTasks] = config.tasks
   const tmpdir = path.join(os.tmpdir(), "begat")
 
   const instance = interpret(
@@ -62,6 +61,7 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
         },
 
         applyPipeline: async () => {
+          const [firstTask, ...nextTasks] = await config.getTasks(config.srcdir)
           await run(firstTask, {
             fs: system_fs,
             cwd: tmpdir,
