@@ -18,7 +18,7 @@
     ".": "./dist/index.js",
     "./*": "./dist/*.js"
   },
-  "bin": "./bin/begat.mjs",
+  "bin": "./bin/cli.mjs",
   "files": [
     "dist",
     "!**/*.map"

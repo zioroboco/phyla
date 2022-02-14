@@ -1691,7 +1691,7 @@ __metadata:
     typanion: ^3.7.1
     xstate: ^4.30.0
   bin:
-    begat: ./bin/begat.mjs
+    begat: ./bin/cli.mjs
   languageName: unknown
   linkType: soft
 
