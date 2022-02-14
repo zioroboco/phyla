@@ -1,9 +1,60 @@
-import { createMachine, createSchema } from "xstate"
-
-export type ServerContext = {}
+import { TaskInstance, run } from "begat/core"
+import { createMachine, createSchema, interpret } from "xstate"
 
 export type ServerEvent = {
   type: "APPLY" | "CHANGES" | "READY" | "SYNC"
+}
+
+export type ServerContext = {}
+
+export type ServerConfig = {
+  srcdir: string
+  workdir: string
+  watch: string[]
+  excludes: string[]
+  tasks: TaskInstance[]
+}
+
+export const withConfig = (config: ServerConfig) => {
+  const excludeArgs = [".git/", "node_modules/"]
+    .concat(config.excludes ?? [])
+    .map(p => `--exclude ${p}`)
+    .join(" ")
+
+  const [firstTask, ...nextTasks] = config.tasks
+
+  return interpret(
+    serverMachine.withConfig({
+      actions: {
+        syncProject: async (context, event) => {
+          // spawn child process
+        },
+
+        applyPipeline: async (context, event) => {
+          await run(firstTask, {
+            fs: await import("fs"),
+            cwd: config.workdir,
+            pipeline: {
+              prev: [],
+              next: nextTasks,
+            },
+          })
+        },
+
+        openEditor: (context, event) => {
+          console.log(`Not implemented: openEditor`)
+        },
+
+        startWatching: (context, event) => {
+          console.log(`Not implemented: startWatching`)
+        },
+
+        stopWatching: (context, event) => {
+          console.log(`Not implemented: stopWatching`)
+        },
+      },
+    })
+  )
 }
 
 export const serverMachine =
