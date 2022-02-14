@@ -1,10 +1,11 @@
 import * as os from "os"
 import * as path from "path"
 import * as system_fs from "fs"
-import { ChildProcessWithoutNullStreams, spawn } from "child_process"
-import { TaskInstance, run } from "begat/core"
+import { ChildProcessWithoutNullStreams, fork, spawn } from "child_process"
+import { TaskInstance } from "begat/core"
 import { strict as assert } from "assert"
 import { createMachine, createSchema, interpret } from "xstate"
+import { fileURLToPath } from "url"
 
 export type ServerEvent = {
   type: "APPLY" | "CHANGES" | "READY" | "SYNC"
@@ -26,7 +27,7 @@ export type ServerConfig = {
   }
 }
 
-export const withConfig = ({ io, ...config }: ServerConfig) => {
+export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
   const { stdout, stderr } = io
   const tmpdir = path.join(os.tmpdir(), "begat")
 
@@ -40,7 +41,7 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
               "--checksum",
               "--delete",
               "--inplace",
-              `${config.srcdir}/`,
+              `${srcdir}/`,
               `${tmpdir}/`,
               ...[".git/", ...config.exclude].flatMap(p => ["--exclude", p]),
             ])
@@ -61,20 +62,28 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
         },
 
         applyPipeline: async () => {
-          const [firstTask, ...nextTasks] = await config.getTasks(config.srcdir)
-          await run(firstTask, {
-            fs: system_fs,
-            cwd: tmpdir,
-            pipeline: {
-              prev: [],
-              next: nextTasks,
-            },
+          await new Promise((res, rej) => {
+            const workerModule = path.join(
+              path.dirname(fileURLToPath(import.meta.url)),
+              "../bin/worker.mjs"
+            )
+
+            const child = fork(workerModule, {
+              env: { srcdir, tmpdir },
+            })
+
+            child.on("exit", (code: number) => {
+              assert(code != null)
+              code > 0 ? rej(code) : res(code)
+            })
+
+            child.on("error", rej)
           })
             .then(() => {
               instance.send("READY")
             })
-            .catch((err: unknown) => {
-              throw new Error(`pipeline error:\n\n${err}`)
+            .catch((code: unknown) => {
+              throw new Error(`worker exited ${code}`)
             })
         },
 
@@ -89,7 +98,7 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
 
         startWatching: context => {
           if (!context.watcher) {
-            context.watcher = system_fs.watch(config.srcdir, { recursive: true })
+            context.watcher = system_fs.watch(srcdir, { recursive: true })
           }
           context.watcher.addListener("change", () => instance.send("SYNC"))
         },
