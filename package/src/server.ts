@@ -8,12 +8,12 @@ import { createMachine, createSchema, interpret } from "xstate"
 import { fileURLToPath } from "url"
 
 export type ServerEvent = {
-  type: "APPLY" | "CHANGES" | "READY" | "SYNC"
+  type: "APPLY" | "READY" | "SYNC"
 }
 
 export type ServerContext = {
-  editor: ChildProcessWithoutNullStreams | null
-  watcher: system_fs.FSWatcher | null
+  editor?: ChildProcessWithoutNullStreams
+  watchers?: system_fs.FSWatcher[]
 }
 
 export type ServerConfig = {
@@ -97,15 +97,25 @@ export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
         },
 
         startWatching: context => {
-          if (!context.watcher) {
-            context.watcher = system_fs.watch(srcdir, { recursive: true })
+          if (!Array.isArray(context.watchers)) {
+            context.watchers = []
+            for (const dir of [srcdir, ...config.watch]) {
+              console.debug(`  - watching ${path.resolve(dir)}`)
+              context.watchers.push(
+                system_fs.watch(path.resolve(dir), { recursive: true })
+              )
+            }
           }
-          context.watcher.addListener("change", () => instance.send("SYNC"))
+          for (const watcher of context.watchers) {
+            watcher.addListener("change", () => instance.send("SYNC"))
+          }
         },
 
         stopWatching: context => {
-          assert(context.watcher)
-          context.watcher.removeAllListeners("change")
+          assert(Array.isArray(context.watchers))
+          for (const watcher of context.watchers) {
+            watcher.removeAllListeners()
+          }
         },
       },
     })
@@ -117,7 +127,7 @@ export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
 export const serverMachine =
   /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEMAOeANgJ4CWAdlAPp6l5iEVgDEASgKICCAIgJqKg8Ae1ikALqSHkBIAB6IAjACYAbFiUBmAOxKAHEq07thrQBoQxRQBYADFgCs++xo0BOJQpUbnKgL6-zFAxsAHccMQBjAAsKagAzIVQqaJxKOGYAZV4AOQBhGWFRCSkZeQQAWiV7KywVLTctOoVdLXsbQ3NLBCVXDSwbKxVdNyUrDQ8Ve39AtExULDDImMoqBKSUtNhmXIAJTmyAcXYMgpFxSWkkOURynSwtG3tRhSelAdcnzsVdeywNG1chjaKhUCm8Gj8ARAQTmWFgxHIEViNFQQgAVmAImJmJwAAq4gAy-CuhXOJSuZXKdQcqnsrhahgMgxUX26fVUVh6zhevRUen8UPIQggcBkMOw+CIZBWtHojHIYFORQupUQDywgNGGh+ekGzV0rPKCiwChsb2anKsukedV002hs1C4WiyLWySiqRg8BJZ2Kl1AZRUNUcWha9nsCjBoINFkQmj6Q3azQUHxsNiDdqh4vm8MRyLwqIxWKVZP91wq-10JvT3maD259kNdnDbyaGmadOU4ft2ZLftVFfG1a8EZaj3bjdjFS0NXaLlBVg+WkjHgFviAA */
   createMachine({
-    context: { editor: null, watcher: null },
+    context: {},
     tsTypes: {} as import("./server.typegen").Typegen0,
     schema: {
       context: createSchema<ServerContext>(),
@@ -140,9 +150,6 @@ export const serverMachine =
         on: {
           SYNC: {
             target: "#server.syncing_project",
-          },
-          CHANGES: {
-            target: "#server.watching_for_changes",
           },
         },
       },

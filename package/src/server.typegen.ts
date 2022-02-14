@@ -5,8 +5,8 @@ export interface Typegen0 {
   eventsCausingActions: {
     applyPipeline: "APPLY"
     stopWatching: "xstate.init"
-    openEditor: "READY" | "CHANGES"
-    startWatching: "READY" | "CHANGES"
+    openEditor: "READY"
+    startWatching: "READY"
     syncProject: "SYNC"
   }
   internalEvents: {
