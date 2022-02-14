@@ -1,5 +1,10 @@
+import * as os from "os"
+import * as path from "path"
+import * as sys_fs from "fs"
 import { TaskInstance, run } from "begat/core"
+import { strict as assert } from "assert"
 import { createMachine, createSchema, interpret } from "xstate"
+import { spawn } from "child_process"
 
 export type ServerEvent = {
   type: "APPLY" | "CHANGES" | "READY" | "SYNC"
@@ -9,36 +14,65 @@ export type ServerContext = {}
 
 export type ServerConfig = {
   srcdir: string
-  workdir: string
   watch: string[]
-  excludes: string[]
+  exclude: string[]
   tasks: TaskInstance[]
+  io: {
+    stdout: NodeJS.WritableStream
+    stderr: NodeJS.WritableStream
+  }
 }
 
-export const withConfig = (config: ServerConfig) => {
-  const excludeArgs = [".git/", "node_modules/"]
-    .concat(config.excludes ?? [])
-    .map(p => `--exclude ${p}`)
-    .join(" ")
-
+export const withConfig = ({ io, ...config }: ServerConfig) => {
+  const { stdout, stderr } = io
   const [firstTask, ...nextTasks] = config.tasks
+  const tmpdir = path.join(os.tmpdir(), "begat")
 
-  return interpret(
+  const instance = interpret(
     serverMachine.withConfig({
       actions: {
-        syncProject: async (context, event) => {
-          // spawn child process
+        syncProject: async () => {
+          await new Promise<number>((res, rej) => {
+            const rsync = spawn("rsync", [
+              "--archive",
+              "--checksum",
+              "--delete",
+              "--inplace",
+              `${config.srcdir}/`,
+              `${tmpdir}/`,
+              ...[".git/", ...config.exclude].flatMap(p => ["--exclude", p]),
+            ])
+            rsync.stdout.pipe(stdout),
+            rsync.stderr.pipe(stderr),
+            rsync.on("error", rej)
+            rsync.on("exit", code => {
+              assert(code != null)
+              code > 0 ? rej(code) : res(code)
+            })
+          })
+            .then(() => {
+              instance.send("APPLY")
+            })
+            .catch((code: unknown) => {
+              throw new Error(`rsync exited ${code}`)
+            })
         },
 
-        applyPipeline: async (context, event) => {
+        applyPipeline: async () => {
           await run(firstTask, {
-            fs: await import("fs"),
-            cwd: config.workdir,
+            fs: sys_fs,
+            cwd: tmpdir,
             pipeline: {
               prev: [],
               next: nextTasks,
             },
           })
+            .then(() => {
+              instance.send("READY")
+            })
+            .catch((err: unknown) => {
+              throw new Error(`pipeline error:\n\n${err}`)
+            })
         },
 
         openEditor: (context, event) => {
@@ -55,6 +89,8 @@ export const withConfig = (config: ServerConfig) => {
       },
     })
   )
+
+  return instance
 }
 
 export const serverMachine =

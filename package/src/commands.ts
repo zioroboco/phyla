@@ -1,4 +1,3 @@
-import * as os from "os"
 import * as path from "path"
 import { Command, Option } from "clipanion"
 import { inspect } from "util"
@@ -11,8 +10,8 @@ enum Category {
   Util = "util",
 }
 
-const getPipelineConfig = async function (): Promise<core.Config> {
-  return import(path.join(process.cwd(), ".begatrc.mjs")).then(
+const getPipelineConfig = async function (dir: string): Promise<core.Config> {
+  return import(path.join(dir, ".begatrc.mjs")).then(
     module => module.default
   )
 }
@@ -23,22 +22,26 @@ export class DevCommand extends Command {
     category: Category.Main,
   })
 
-  srcdir = Option.String("source-dir", { required: true }) ?? process.cwd()
-  workdir = os.tmpdir()
-
-  watch = Option.Array("--watch", { required: false }) ?? []
-  excludes = Option.Array("--exclude", { required: false }) ?? []
+  srcdir = Option.String({ name: "project", required: false })
+  watch = Option.Array("--watch", { required: false })
+  exclude = Option.Array("--exclude", { required: false })
 
   async execute () {
-    const { pipeline, options: pipelineOptions } = await getPipelineConfig()
+    this.srcdir = path.resolve(this.srcdir ?? ".")
+    this.watch = this.watch ?? []
+    this.exclude = this.exclude ?? []
+
+    const { pipeline, options: pipelineOptions } = await getPipelineConfig(
+      this.srcdir
+    )
 
     const serverInstance = server
       .withConfig({
-        srcdir: this.srcdir,
-        workdir: this.workdir,
+        srcdir: path.resolve(this.srcdir),
         watch: this.watch,
-        excludes: this.excludes,
+        exclude: this.exclude,
         tasks: pipeline.map(task => task(pipelineOptions)),
+        io: this.context,
       })
       .start()
 
@@ -59,8 +62,12 @@ export class WriteCommand extends Command {
     description: `Run pipeline and write changes to disk`,
   })
 
+  srcdir = Option.String({ name: "project", required: false })
+
   async execute () {
-    const config: core.Config = await getPipelineConfig()
+    this.srcdir = path.resolve(this.srcdir ?? ".")
+
+    const config: core.Config = await getPipelineConfig(this.srcdir)
 
     const [head, ...rest] = config.pipeline.map(task => task(config.options))
 
@@ -75,16 +82,27 @@ export class WriteCommand extends Command {
   }
 }
 
-export class ShowConfigCommand extends Command {
+export class ConfigCommand extends Command {
   static paths = [["config"]]
   static usage = Command.Usage({
     category: Category.Util,
     description: `Write config to stdout`,
   })
 
+  srcdir = Option.String({ name: "project", required: false })
+
   async execute () {
-    const config = await getPipelineConfig()
-    this.context.stdout.write(inspect(config))
-    process.exit(0)
+    this.srcdir = path.resolve(this.srcdir ?? ".")
+
+    await getPipelineConfig(this.srcdir).then(config => {
+      this.context.stdout.write(inspect({
+        project: this.srcdir,
+        ...config,
+      }))
+      process.exit(0)
+    }).catch(err => {
+      this.context.stderr.write(err.message)
+      process.exit(1)
+    })
   }
 }
