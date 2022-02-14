@@ -16,37 +16,55 @@ export type ServerContext = {
   watchers?: system_fs.FSWatcher[]
 }
 
+export type Logger = {
+  debug: (...args: any[]) => void
+  info: (...args: any[]) => void
+  warn: (...args: any[]) => void
+  header: (...args: any[]) => void
+  serverinfo: string
+  verbose: boolean
+}
+
 export type ServerConfig = {
   getTasks: (dir: string) => Promise<TaskInstance[]>
   srcdir: string
   watch: string[]
   exclude: string[]
+  log: Logger
   io: {
     stdout: NodeJS.WritableStream
     stderr: NodeJS.WritableStream
   }
 }
 
-export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
-  const { stdout, stderr } = io
+export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
+  log.debug("creating server instance")
+  log.header(log.serverinfo, "\n")
+
   const tmpdir = path.join(os.tmpdir(), "begat")
+
+  log.debug({ srcdir, tmpdir, config })
 
   const instance = interpret(
     serverMachine.withConfig({
       actions: {
         syncProject: async () => {
           await new Promise<number>((res, rej) => {
-            const rsync = spawn("rsync", [
-              "--archive",
-              "--checksum",
-              "--delete",
-              "--inplace",
-              `${srcdir}/`,
-              `${tmpdir}/`,
-              ...[".git/", ...config.exclude].flatMap(p => ["--exclude", p]),
-            ])
-            rsync.stdout.pipe(stdout),
-            rsync.stderr.pipe(stderr),
+            log.debug("spawning rsync process:\n")
+            const rsync = spawn(
+              "rsync",
+              [
+                "--archive",
+                "--checksum",
+                "--delete",
+                "--inplace",
+                `${srcdir}/`,
+                `${tmpdir}/`,
+                ...[".git/", ...config.exclude].flatMap(p => ["--exclude", p]),
+                ...(log.verbose ? ["--verbose"] : []),
+              ],
+              { stdio: "inherit" }
+            )
             rsync.on("error", rej)
             rsync.on("exit", code => {
               assert(code != null)
@@ -54,6 +72,7 @@ export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
             })
           })
             .then(() => {
+              log.debug("\nrsync finished")
               instance.send("APPLY")
             })
             .catch((code: unknown) => {
@@ -63,6 +82,7 @@ export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
 
         applyPipeline: async () => {
           await new Promise((res, rej) => {
+            log.debug("forking worker")
             const workerModule = path.join(
               path.dirname(fileURLToPath(import.meta.url)),
               "../bin/worker.mjs"
@@ -80,6 +100,7 @@ export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
             child.on("error", rej)
           })
             .then(() => {
+              log.debug("worker finished")
               instance.send("READY")
             })
             .catch((code: unknown) => {
@@ -89,6 +110,7 @@ export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
 
         openEditor: context => {
           if (context.editor) return
+          log.debug(`opening editor`)
           context.editor = spawn("code", ["--new-window", "--wait", tmpdir])
           context.editor.on("exit", () => process.exit(0))
           context.editor.on("error", err => {
@@ -98,20 +120,24 @@ export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
 
         startWatching: context => {
           if (!Array.isArray(context.watchers)) {
+            log.info(`creating watchers:`)
             context.watchers = []
             for (const dir of [srcdir, ...config.watch]) {
-              console.debug(`  - watching ${path.resolve(dir)}`)
+              log.info(`  - watching ${path.resolve(dir)}`)
               context.watchers.push(
                 system_fs.watch(path.resolve(dir), { recursive: true })
               )
             }
           }
+
+          log.debug(`subscribing watchers`)
           for (const watcher of context.watchers) {
             watcher.addListener("change", () => instance.send("SYNC"))
           }
         },
 
         stopWatching: context => {
+          log.debug(`unsubscribing watchers`)
           assert(Array.isArray(context.watchers))
           for (const watcher of context.watchers) {
             watcher.removeAllListeners()
@@ -120,6 +146,10 @@ export const withConfig = ({ io, srcdir, ...config }: ServerConfig) => {
       },
     })
   )
+
+  instance.subscribe(state => {
+    log.info(`${String(state.value).replaceAll("_", " ")}...`)
+  })
 
   return instance
 }

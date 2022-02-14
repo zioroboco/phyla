@@ -1,5 +1,7 @@
 import * as path from "path"
 import { Command, Option } from "clipanion"
+import { richFormat } from "clipanion/lib/format.js"
+import chalk from "chalk"
 
 import * as core from "begat/core"
 import * as server from "begat/server"
@@ -26,27 +28,35 @@ export class DevCommand extends Command {
   srcdir = Option.String({ name: "project", required: false })
   watch = Option.Array("--watch", { required: false })
   exclude = Option.Array("--exclude", { required: false })
+  verbose = Option.Boolean("--verbose", { required: false })
 
   async execute () {
     this.srcdir = path.resolve(this.srcdir ?? ".")
     this.watch = this.watch ?? []
     this.exclude = this.exclude ?? []
 
-    const serverInstance = server
+    const log: server.Logger = {
+      verbose: this.verbose ?? false,
+      info: console.info,
+      warn: console.warn,
+      debug: this.verbose
+        ? (args: any) =>
+          console.debug(typeof args == "string" ? chalk.dim(args) : args)
+        : () => {},
+      header: args => console.info(richFormat.header(args) + "\n"),
+      serverinfo: [this.cli.binaryLabel, this.cli.binaryVersion].join(" - "),
+    }
+
+    server
       .withConfig({
         srcdir: path.resolve(this.srcdir),
         watch: this.watch,
         exclude: this.exclude,
         getTasks: dir => getTasks(dir),
+        log: log,
         io: this.context,
       })
       .start()
-
-    serverInstance.subscribe(state => {
-      this.context.stdout.write(
-        `🧬 ${String(state.value).replaceAll("_", " ")}...\n`
-      )
-    })
   }
 }
 
