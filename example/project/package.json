@@ -4,7 +4,7 @@
   "author": "Ray",
   "private": true,
   "dependencies": {
-    "begat": "^0.2.0",
+    "begat": "*",
     "begat-example-task": "*"
   }
 }

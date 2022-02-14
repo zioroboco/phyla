@@ -1661,7 +1661,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "begat-example-project@workspace:example/project"
   dependencies:
-    begat: ^0.2.0
+    begat: "*"
     begat-example-task: "*"
   languageName: unknown
   linkType: soft
@@ -1679,7 +1679,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"begat@^0.2.0, begat@workspace:package":
+"begat@*, begat@workspace:package":
   version: 0.0.0-use.local
   resolution: "begat@workspace:package"
   dependencies:
@@ -5393,6 +5393,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.11.0
     "@typescript-eslint/parser": ^5.11.0
     "@zioroboco/changelog-github": "https://github.com/zioroboco/changelog-github#v0.1.1"
+    begat: "*"
     eslint: ^8.9.0
     eslint-import-resolver-typescript: ^2.5.0
     eslint-plugin-import: ^2.25.4
