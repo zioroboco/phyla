@@ -1,16 +1,18 @@
 import * as os from "os"
 import * as path from "path"
 import * as sys_fs from "fs"
+import { ChildProcessWithoutNullStreams, spawn } from "child_process"
 import { TaskInstance, run } from "begat/core"
 import { strict as assert } from "assert"
 import { createMachine, createSchema, interpret } from "xstate"
-import { spawn } from "child_process"
 
 export type ServerEvent = {
   type: "APPLY" | "CHANGES" | "READY" | "SYNC"
 }
 
-export type ServerContext = {}
+export type ServerContext = {
+  editor: ChildProcessWithoutNullStreams | null
+}
 
 export type ServerConfig = {
   srcdir: string
@@ -75,8 +77,13 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
             })
         },
 
-        openEditor: (context, event) => {
-          console.log(`Not implemented: openEditor`)
+        openEditor: ({ editor }) => {
+          if (editor) return
+          editor = spawn("code", ["--new-window", "--wait", tmpdir])
+          editor.on("exit", () => process.exit(0))
+          editor.on("error", err => {
+            throw new Error(`code exited with error: ${err}`)
+          })
         },
 
         startWatching: (context, event) => {
@@ -96,7 +103,9 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
 export const serverMachine =
   /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEMAOeANgJ4CWAdlAMQBKAogIIAiAmoqHgPaykAupncuxAAPRAEYATADYskgMwB2SQA5Ji5Uo2KANCGISALAAYsAVjVn58gJyTx0+VekBfF3pQZsAdxy8AxgAWFNQAyiwAcgDCwlw8-ILCYggAtJJmhljSiraK2eIqimbGGnoGCJI28ljGhtIqtpKG8vbSZm4eaJioWL4BwZRUUQASDBEA4nShsdx8AkJIoogpyliKxmZN4puStTabZRIqZljyxjYaxdLS4k7yru4gnt1YsMTk-iFUDAAKPwAybEWcTmiUWyRS2XMMjMNkKGnUdWkhwq1RkhkqVm2VWkqjcj3InAgcGEz2w+CIZEoM3i8ySiHWWAuTXkx1UdQKKhRKXEWHExl2BQxhhUG2yKg6Ty6Pj8QRCNNBC1AyXqaxshhsmrM4n5hnE6pRCmq2SK9xU+w1IslZJ6bw+8uBswSSqWqTOKj5xkc2sKG3k225pjMmy9iluBVhUmD1ulqAVzvpbpanu9BXWWLM3MUmRK1iqUkU+1D+JcQA */
   createMachine({
-    context: {},
+    context: {
+      editor: null,
+    },
     tsTypes: {} as import("./server.typegen").Typegen0,
     schema: {
       context: createSchema<ServerContext>(),
