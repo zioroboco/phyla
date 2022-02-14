@@ -1,6 +1,6 @@
 import * as os from "os"
 import * as path from "path"
-import * as sys_fs from "fs"
+import * as system_fs from "fs"
 import { ChildProcessWithoutNullStreams, spawn } from "child_process"
 import { TaskInstance, run } from "begat/core"
 import { strict as assert } from "assert"
@@ -12,7 +12,7 @@ export type ServerEvent = {
 
 export type ServerContext = {
   editor: ChildProcessWithoutNullStreams | null
-  watcher: sys_fs.FSWatcher | null
+  watcher: system_fs.FSWatcher | null
 }
 
 export type ServerConfig = {
@@ -63,7 +63,7 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
 
         applyPipeline: async () => {
           await run(firstTask, {
-            fs: sys_fs,
+            fs: system_fs,
             cwd: tmpdir,
             pipeline: {
               prev: [],
@@ -89,7 +89,7 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
 
         startWatching: context => {
           if (!context.watcher) {
-            context.watcher = sys_fs.watch(config.srcdir, { recursive: true })
+            context.watcher = system_fs.watch(config.srcdir, { recursive: true })
           }
           context.watcher.addListener("change", () => instance.send("SYNC"))
         },

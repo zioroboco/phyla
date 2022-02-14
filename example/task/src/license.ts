@@ -1,5 +1,5 @@
 import * as Eta from "eta"
-import * as sys_fs from "fs/promises"
+import * as system_fs from "fs/promises"
 import { Task } from "begat"
 import { createRequire } from "module"
 import { dirname } from "path"
@@ -61,7 +61,7 @@ export const license: Task<Options> = options => ({
       "../templates"
     )
 
-    const templateData = await sys_fs.readFile(
+    const templateData = await system_fs.readFile(
       join(templateDir, "LICENSE.eta"),
       "utf8"
     )
