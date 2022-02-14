@@ -27,6 +27,9 @@ export interface Typegen0 {
   eventsCausingServices: {}
   eventsCausingGuards: {}
   eventsCausingDelays: {}
-  matchesStates: "applying" | "watching" | "syncing"
+  matchesStates:
+    | "applying_pipeline"
+    | "watching_for_changes"
+    | "syncing_project"
   tags: never
 }

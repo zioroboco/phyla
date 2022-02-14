@@ -101,44 +101,42 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
 }
 
 export const serverMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEMAOeANgJ4CWAdlAMQBKAogIIAiAmoqHgPaykAupncuxAAPRAEYATADYskgMwB2SQA5Ji5Uo2KANCGISALAAYsAVjVn58gJyTx0+VekBfF3pQZsAdxy8AxgAWFNQAyiwAcgDCwlw8-ILCYggAtJJmhljSiraK2eIqimbGGnoGCJI28ljGhtIqtpKG8vbSZm4eaJioWL4BwZRUUQASDBEA4nShsdx8AkJIoogpyliKxmZN4puStTabZRIqZljyxjYaxdLS4k7yru4gnt1YsMTk-iFUDAAKPwAybEWcTmiUWyRS2XMMjMNkKGnUdWkhwq1RkhkqVm2VWkqjcj3InAgcGEz2w+CIZEoM3i8ySiHWWAuTXkx1UdQKKhRKXEWHExl2BQxhhUG2yKg6Ty6Pj8QRCNNBC1AyXqaxshhsmrM4n5hnE6pRCmq2SK9xU+w1IslZJ6bw+8uBswSSqWqTOKj5xkc2sKG3k225pjMmy9iluBVhUmD1ulqAVzvpbpanu9BXWWLM3MUmRK1iqUkU+1D+JcQA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEMAOeANgJ4CWAdlAPp6l5iEVgDEASgKICCAIgJqKg8Ae1ikALqSHkBIAB6IAjACYAbFiUBmAOxKAHEq07thrQBoQxRQBYADFgCs++xo0BOJQpUbnKgL6-zFAxsAHccMQBjAAsKagAzIVQqaJxKOGYAZV4AOQBhGWFRCSkZeQQAWiV7KywVLTctOoVdLXsbQ3NLBCVXDSwbKxVdNyUrDQ8Ve39AtExULDDImMoqBKSUtNhmXIAJTmyAcXYMgpFxSWkkOURynSwtG3tRhSelAdcnzsVdeywNG1chjaKhUCm8Gj8ARAQTmWFgxHIEViNFQQgAVmAImJmJwAAq4gAy-CuhXOJSuZXKdQcqnsrhahgMgxUX26fVUVh6zhevRUen8UPIQggcBkMOw+CIZBWtHojHIYFORQupUQDywgNGGh+ekGzV0rPKCiwChsb2anKsukedV002hs1C4WiyLWySiqRg8BJZ2Kl1AZRUNUcWha9nsCjBoINFkQmj6Q3azQUHxsNiDdqh4vm8MRyLwqIxWKVZP91wq-10JvT3maD259kNdnDbyaGmadOU4ft2ZLftVFfG1a8EZaj3bjdjFS0NXaLlBVg+WkjHgFviAA */
   createMachine({
-    context: {
-      editor: null,
-    },
+    context: { editor: null },
     tsTypes: {} as import("./server.typegen").Typegen0,
     schema: {
       context: createSchema<ServerContext>(),
       events: createSchema<ServerEvent>(),
     },
     id: "server",
-    initial: "syncing",
+    initial: "syncing_project",
     states: {
-      applying: {
+      applying_pipeline: {
         entry: "applyPipeline",
         on: {
           READY: {
-            target: "#server.watching",
+            target: "#server.watching_for_changes",
           },
         },
       },
-      watching: {
+      watching_for_changes: {
         entry: ["openEditor", "startWatching"],
         exit: "stopWatching",
         on: {
           SYNC: {
-            target: "#server.syncing",
+            target: "#server.syncing_project",
           },
           CHANGES: {
-            target: "#server.watching",
+            target: "#server.watching_for_changes",
           },
         },
       },
-      syncing: {
+      syncing_project: {
         entry: "syncProject",
         on: {
           APPLY: {
-            target: "#server.applying",
+            target: "#server.applying_pipeline",
           },
         },
       },

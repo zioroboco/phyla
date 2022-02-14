@@ -46,11 +46,9 @@ export class DevCommand extends Command {
       .start()
 
     serverInstance.subscribe(state => {
-      console.log({ state: state.value })
-    })
-
-    serverInstance.onDone(() => {
-      process.exit(0)
+      this.context.stdout.write(
+        `🧬 ${String(state.value).replaceAll("_", " ")}...\n`
+      )
     })
   }
 }

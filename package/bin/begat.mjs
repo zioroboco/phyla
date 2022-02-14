@@ -7,7 +7,7 @@ import { createRequire } from "module"
 const packageJson = createRequire(import.meta.url)("../package.json")
 
 const cli = new Cli({
-  binaryLabel: packageJson.name,
+  binaryLabel: `🧬 ${packageJson.name}`,
   binaryName: packageJson.name,
   binaryVersion: packageJson.version,
 })
