@@ -12,6 +12,7 @@ export type ServerEvent = {
 
 export type ServerContext = {
   editor: ChildProcessWithoutNullStreams | null
+  watcher: sys_fs.FSWatcher | null
 }
 
 export type ServerConfig = {
@@ -77,21 +78,25 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
             })
         },
 
-        openEditor: ({ editor }) => {
-          if (editor) return
-          editor = spawn("code", ["--new-window", "--wait", tmpdir])
-          editor.on("exit", () => process.exit(0))
-          editor.on("error", err => {
+        openEditor: context => {
+          if (context.editor) return
+          context.editor = spawn("code", ["--new-window", "--wait", tmpdir])
+          context.editor.on("exit", () => process.exit(0))
+          context.editor.on("error", err => {
             throw new Error(`code exited with error: ${err}`)
           })
         },
 
-        startWatching: (context, event) => {
-          console.log(`Not implemented: startWatching`)
+        startWatching: context => {
+          if (!context.watcher) {
+            context.watcher = sys_fs.watch(config.srcdir, { recursive: true })
+          }
+          context.watcher.addListener("change", () => instance.send("SYNC"))
         },
 
-        stopWatching: (context, event) => {
-          console.log(`Not implemented: stopWatching`)
+        stopWatching: context => {
+          assert(context.watcher)
+          context.watcher.removeAllListeners("change")
         },
       },
     })
@@ -103,7 +108,7 @@ export const withConfig = ({ io, ...config }: ServerConfig) => {
 export const serverMachine =
   /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEMAOeANgJ4CWAdlAPp6l5iEVgDEASgKICCAIgJqKg8Ae1ikALqSHkBIAB6IAjACYAbFiUBmAOxKAHEq07thrQBoQxRQBYADFgCs++xo0BOJQpUbnKgL6-zFAxsAHccMQBjAAsKagAzIVQqaJxKOGYAZV4AOQBhGWFRCSkZeQQAWiV7KywVLTctOoVdLXsbQ3NLBCVXDSwbKxVdNyUrDQ8Ve39AtExULDDImMoqBKSUtNhmXIAJTmyAcXYMgpFxSWkkOURynSwtG3tRhSelAdcnzsVdeywNG1chjaKhUCm8Gj8ARAQTmWFgxHIEViNFQQgAVmAImJmJwAAq4gAy-CuhXOJSuZXKdQcqnsrhahgMgxUX26fVUVh6zhevRUen8UPIQggcBkMOw+CIZBWtHojHIYFORQupUQDywgNGGh+ekGzV0rPKCiwChsb2anKsukedV002hs1C4WiyLWySiqRg8BJZ2Kl1AZRUNUcWha9nsCjBoINFkQmj6Q3azQUHxsNiDdqh4vm8MRyLwqIxWKVZP91wq-10JvT3maD259kNdnDbyaGmadOU4ft2ZLftVFfG1a8EZaj3bjdjFS0NXaLlBVg+WkjHgFviAA */
   createMachine({
-    context: { editor: null },
+    context: { editor: null, watcher: null },
     tsTypes: {} as import("./server.typegen").Typegen0,
     schema: {
       context: createSchema<ServerContext>(),
