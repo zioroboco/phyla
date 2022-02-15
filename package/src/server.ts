@@ -11,16 +11,16 @@ import { fileURLToPath } from "url"
  * Duration for which file watcher events will be buffered -- i.e. for any two
  * changes, if the second arrives within this period, the first is ignored.
  */
-const CHANGE_BUFFER_MS = 200
+const RESYNC_BUFFER_MILLIS = 200
 
 export type ServerEvent = {
-  type: "APPLY" | "READY" | "SYNC"
+  type: "APPLY" | "READY" | "RESYNC"
 }
 
 export type ServerContext = {
   editor?: ChildProcessWithoutNullStreams
   watchers?: system_fs.FSWatcher[]
-  stopwatch?: Date
+  timer?: Date
 }
 
 export type Logger = {
@@ -56,7 +56,7 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
     serverMachine.withConfig({
       actions: {
         syncProject: async context => {
-          context.stopwatch = new Date()
+          context.timer = new Date()
           await new Promise<number>((res, rej) => {
             log.debug("spawning rsync process:\n")
             const rsync = spawn(
@@ -110,11 +110,11 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
             .then(() => {
               log.debug("worker finished")
               instance.send("READY")
-              assert(context.stopwatch)
+              assert(context.timer)
               const buildtime =
-                new Date().getTime() - context.stopwatch.getTime()
-              log.info(`ready in ${(buildtime - CHANGE_BUFFER_MS) / 1000}s`)
-              log.debug(`${CHANGE_BUFFER_MS / 1000}s buffer`)
+                new Date().getTime() - context.timer.getTime()
+              log.info(`ready in ${(buildtime) / 1000}s`)
+              log.debug(`${RESYNC_BUFFER_MILLIS / 1000}s buffer`)
             })
             .catch((code: unknown) => {
               throw new Error(`worker exited ${code}`)
@@ -135,7 +135,10 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
           let timeout: NodeJS.Timeout | undefined
           function requestSync () {
             if (timeout) clearTimeout(timeout)
-            timeout = setTimeout(() => instance.send("SYNC"), CHANGE_BUFFER_MS)
+            timeout = setTimeout(() => {
+              log.info() // erate newline on resync
+              instance.send("RESYNC")
+            }, RESYNC_BUFFER_MILLIS)
           }
 
           if (!Array.isArray(context.watchers)) {
@@ -174,7 +177,7 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
 }
 
 export const serverMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEMAOeANgJ4CWAdlAPp6l5iEVgDEASgKICCAIgJqKg8Ae1ikALqSHkBIAB6IAjACYAbFiUBmAOxKAHEq07thrQBoQxRQBYADFgCs++xo0BOJQpUbnKgL6-zFAxsAHccMQBjAAsKagAzIVQqaJxKOGYAZV4AOQBhGWFRCSkZeQQAWiV7KywVLTctOoVdLXsbQ3NLBCVXDSwbKxVdNyUrDQ8Ve39AtExULDDImMoqBKSUtNhmXIAJTmyAcXYMgpFxSWkkOURynSwtG3tRhSelAdcnzsVdeywNG1chjaKhUCm8Gj8ARAQTmWFgxHIEViNFQQgAVmAImJmJwAAq4gAy-CuhXOJSuZXKdQcqnsrhahgMgxUX26fVUVh6zhevRUen8UPIQggcBkMOw+CIZBWtHojHIYFORQupUQDywgNGGh+ekGzV0rPKCiwChsb2anKsukedV002hs1C4WiyLWySiqRg8BJZ2Kl1AZRUNUcWha9nsCjBoINFkQmj6Q3azQUHxsNiDdqh4vm8MRyLwqIxWKVZP91wq-10JvT3maD259kNdnDbyaGmadOU4ft2ZLftVFfG1a8EZaj3bjdjFS0NXaLlBVg+WkjHgFviAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SzAJwG5oHQEMAOeANgJ4CWAdlAPp6l5iEVgDEASgKICCAIgJqKg8Ae1ikALqSHkBIAB6IALAHYlWAKwBGAMxaNGgExL9WgBxqTANgA0IYon16sChQE41a5wp1qXpgL5+NigY2ADuOGIAxgAWFNQAZkKoVDE4lHBs7ADKvAByAMIywqISUjLyCMqqmjp6hsZmljZ2CEpqWC4uCvq+DvomLgAMFhoBQWiYqFiwxOSRcTSoQgBWYJFizJwAClsAMvxIIMXiktKHFfqDg04agwZqSlr63RomJs32js5uHs7eviYAoEQOQhBA4DJgpNcAQSAtaPRGOQwEURCcyudELp2goLPp8QoTLiLINcR8EJctFgNAo1E8LCMtCNGWMQFCwhEYgtEslUul4IdjqUzqAKiSLFgTLcND4FNoTHdrLZEDKXFglC4lGYtLihkS3qz2VMZnN4UtVutUSVTuVFPpya81Z0tA9+ko7voLA9DRM0Fb0SK5Cr3sqEFTBviXBo3BYlLSXdoFEC-EA */
   createMachine({
     context: {},
     tsTypes: {} as import("./server.typegen").Typegen0,
@@ -197,7 +200,7 @@ export const serverMachine =
         entry: ["openEditor", "startWatching"],
         exit: "stopWatching",
         on: {
-          SYNC: {
+          RESYNC: {
             target: "#server.syncing_project",
           },
         },

@@ -7,7 +7,7 @@ export interface Typegen0 {
     stopWatching: "xstate.init"
     openEditor: "READY"
     startWatching: "READY"
-    syncProject: "SYNC"
+    syncProject: "RESYNC"
   }
   internalEvents: {
     "xstate.init": { type: "xstate.init" }

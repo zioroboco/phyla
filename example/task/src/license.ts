@@ -1,6 +1,7 @@
 import * as Eta from "eta"
 import * as system_fs from "fs/promises"
 import { Task } from "begat"
+import { strict as assert } from "assert"
 import { createRequire } from "module"
 import { dirname } from "path"
 import { fileURLToPath } from "url"
@@ -72,9 +73,8 @@ export const license: Task<Options> = options => ({
       rmWhitespace: false,
     })
 
-    if (rendered) {
-      await ctx.fs.promises.writeFile(join(ctx.cwd, "LICENSE"), rendered)
-    }
+    assert(rendered)
+    await ctx.fs.promises.writeFile(join(ctx.cwd, "LICENSE"), rendered)
 
     const packageJson = JSON.parse(
       await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
