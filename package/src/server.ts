@@ -7,6 +7,12 @@ import { strict as assert } from "assert"
 import { createMachine, createSchema, interpret } from "xstate"
 import { fileURLToPath } from "url"
 
+/**
+ * Duration for which file watcher events will be buffered -- i.e. for any two
+ * changes, if the second arrives within this period, the first is ignored.
+ */
+const CHANGE_BUFFER_MS = 200
+
 export type ServerEvent = {
   type: "APPLY" | "READY" | "SYNC"
 }
@@ -119,6 +125,12 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
         },
 
         startWatching: context => {
+          let timeout: NodeJS.Timeout | undefined
+          function requestSync () {
+            if (timeout) clearTimeout(timeout)
+            timeout = setTimeout(() => instance.send("SYNC"), CHANGE_BUFFER_MS)
+          }
+
           if (!Array.isArray(context.watchers)) {
             log.info(`creating watchers:`)
             context.watchers = []
@@ -132,7 +144,7 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
 
           log.debug(`subscribing watchers`)
           for (const watcher of context.watchers) {
-            watcher.addListener("change", () => instance.send("SYNC"))
+            watcher.addListener("change", requestSync)
           }
         },
 
