@@ -20,6 +20,7 @@ export type ServerEvent = {
 export type ServerContext = {
   editor?: ChildProcessWithoutNullStreams
   watchers?: system_fs.FSWatcher[]
+  stopwatch?: Date
 }
 
 export type Logger = {
@@ -54,7 +55,8 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
   const instance = interpret(
     serverMachine.withConfig({
       actions: {
-        syncProject: async () => {
+        syncProject: async context => {
+          context.stopwatch = new Date()
           await new Promise<number>((res, rej) => {
             log.debug("spawning rsync process:\n")
             const rsync = spawn(
@@ -86,7 +88,7 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
             })
         },
 
-        applyPipeline: async () => {
+        applyPipeline: async context => {
           await new Promise((res, rej) => {
             log.debug("forking worker")
             const workerModule = path.join(
@@ -108,6 +110,11 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
             .then(() => {
               log.debug("worker finished")
               instance.send("READY")
+              assert(context.stopwatch)
+              const buildtime =
+                new Date().getTime() - context.stopwatch.getTime()
+              log.info(`ready in ${(buildtime - CHANGE_BUFFER_MS) / 1000}s`)
+              log.debug(`${CHANGE_BUFFER_MS / 1000}s buffer`)
             })
             .catch((code: unknown) => {
               throw new Error(`worker exited ${code}`)
