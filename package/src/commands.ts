@@ -1,10 +1,10 @@
 import * as path from "path"
 import { Command, Option } from "clipanion"
 import { richFormat } from "clipanion/lib/format.js"
-import chalk from "chalk"
 
 import * as core from "begat/core"
 import * as server from "begat/server"
+import { dim } from "begat/reporting"
 
 enum Category {
   Main = "main",
@@ -41,7 +41,7 @@ export class DevCommand extends Command {
       warn: console.warn,
       debug: this.verbose
         ? (args: any) =>
-          console.debug(typeof args == "string" ? chalk.dim(args) : args)
+          console.debug(typeof args == "string" ? dim(args) : args)
         : () => {},
       header: args => console.info(richFormat.header(args) + "\n"),
       serverinfo: [this.cli.binaryLabel, this.cli.binaryVersion].join(" - "),

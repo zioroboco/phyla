@@ -1,5 +1,8 @@
 import * as pico from "picospec"
-import chalk from "chalk"
+
+export const boldred = (s: string) => `\x1b[1m\x1b[31m${s}\x1b[0m`
+export const inverse = (s: string) => `\x1b[7m${boldred(s)}\x1b[0m`
+export const dim = (s: string) => `\x1b[2m${s}\x1b[0m`
 
 export function check (
   report: pico.Report,
@@ -9,9 +12,6 @@ export function check (
   const failures = report.results.filter(r => r.outcome != pico.Pass)
 
   if (failures.length) {
-    const boldred = (s: string) => chalk.bold(chalk.red(s))
-    const inverse = (s: string) => chalk.inverse(boldred(s))
-
     failures.forEach(({ descriptions, outcome }, i) => {
       const body =
         outcome instanceof Error
@@ -22,7 +22,7 @@ export function check (
         [
           inverse(` ${phase.toUpperCase()} (${i + 1}/${failures.length}) `),
           meta.name && meta.name,
-          meta.version && chalk.dim(`v${meta.version}`),
+          meta.version && dim(`v${meta.version}`),
           "\n",
           boldred(`  ● ${boldred(descriptions.join(" → "))}`),
           "\n\n",
