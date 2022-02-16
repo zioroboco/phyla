@@ -1,6 +1,23 @@
 {
   "configurations": [
     {
+      "name": "cli: dev",
+      "program": "${workspaceFolder}/node_modules/.bin/begat",
+      "args": [
+        "dev",
+        "example/project",
+        "--watch",
+        "example/task",
+        "--verbose"
+      ],
+      "runtimeVersion": "16",
+      "runtimeArgs": ["--experimental-vm-modules"],
+      "skipFiles": ["<node_internals>/**"],
+      "request": "launch",
+      "console": "integratedTerminal",
+      "type": "pwa-node"
+    },
+    {
       "name": "test: file",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
       "args": ["--runInBand", "${fileBasenameNoExtension}"],
