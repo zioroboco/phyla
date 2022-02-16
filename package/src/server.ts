@@ -48,7 +48,7 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
   log.debug("creating server instance")
   log.header(log.serverinfo, "\n")
 
-  const tmpdir = path.join(os.tmpdir(), "begat")
+  const tmpdir = path.join(os.tmpdir(), "begat", path.basename(srcdir))
 
   log.debug({ srcdir, tmpdir, config })
 
