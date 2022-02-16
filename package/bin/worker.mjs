@@ -1,8 +1,14 @@
+#!/usr/bin/env node
+
 import * as path from "path"
 import * as system_fs from "fs"
 import * as core from "begat/core"
+import { strict as assert } from "assert"
 
-const { srcdir, tmpdir } = process.env
+const [node, bin, srcdir, tmpdir] = process.argv
+
+assert(srcdir)
+assert(tmpdir)
 
 import(path.join(srcdir, ".begatrc.mjs"))
   .then(({ default: config }) => {
@@ -17,8 +23,6 @@ import(path.join(srcdir, ".begatrc.mjs"))
         next: nextTasks,
       },
     })
-  })
-  .catch(err => {
-    console.error(err)
-    process.exit(1)
+  }).catch(() => {
+    process.exit(0)
   })

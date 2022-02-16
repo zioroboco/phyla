@@ -96,16 +96,16 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
               "../bin/worker.mjs"
             )
 
-            const child = fork(workerModule, {
-              env: { srcdir, tmpdir },
+            const worker = spawn(workerModule, [srcdir, tmpdir], {
+              stdio: "inherit",
             })
 
-            child.on("exit", (code: number) => {
+            worker.on("exit", (code: number) => {
               assert(code != null)
               code > 0 ? rej(code) : res(code)
             })
 
-            child.on("error", rej)
+            worker.on("error", rej)
           })
             .then(() => {
               log.debug("worker finished")

@@ -20,6 +20,7 @@ export function check (
 
       process.stderr.write(
         [
+          "\n",
           inverse(` ${phase.toUpperCase()} (${i + 1}/${failures.length}) `),
           meta.name && meta.name,
           meta.version && dim(`v${meta.version}`),
