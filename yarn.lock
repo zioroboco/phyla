@@ -1678,6 +1678,7 @@ __metadata:
   resolution: "begat-example-task@workspace:example/task"
   dependencies:
     "@types/ramda": ^0.27.64
+    begat: "*"
     eta: ^1.12.3
     memfs: ^3.4.1
     ramda: ^0.28.0

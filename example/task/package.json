@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@types/ramda": "^0.27.64",
+    "begat": "*",
     "memfs": "^3.4.1"
   },
   "dependencies": {
