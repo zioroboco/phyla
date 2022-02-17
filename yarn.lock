@@ -1685,7 +1685,7 @@ __metadata:
   dependencies:
     "@types/node": ^17.0.17
     clipanion: ^3.2.0-rc.8
-    picospec: "portal:../../picospec"
+    picospec: ~0.4.0
     ts-toolbelt: ^9.6.0
     typanion: ^3.7.1
     xstate: ^4.30.0
@@ -5064,11 +5064,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picospec@portal:../../picospec::locator=begat%40workspace%3Apackage":
-  version: 0.0.0-use.local
-  resolution: "picospec@portal:../../picospec::locator=begat%40workspace%3Apackage"
+"picospec@npm:~0.4.0":
+  version: 0.4.0
+  resolution: "picospec@npm:0.4.0"
+  checksum: f4982494fb3d2b2d21844942441bf2ea6208fdd1e40b722d18642a0b345e4b24b44811bd9814e65978795593fe0eae7ba2a9cd3ac721f2969f5299507bd84270
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "pify@npm:^4.0.1":
   version: 4.0.1

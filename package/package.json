@@ -26,8 +26,7 @@
     "!*.spec.*"
   ],
   "devDependencies": {
-    "@types/node": "^17.0.17",
-    "picospec": "portal:../../picospec"
+    "@types/node": "^17.0.17"
   },
   "dependencies": {
     "clipanion": "^3.2.0-rc.8",
