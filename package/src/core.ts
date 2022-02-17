@@ -30,7 +30,7 @@ export type TaskInstance = {
 
 export type AbstractOptions = any
 
-export type Task<Options extends AbstractOptions> = (options: Options) => TaskInstance
+export type Task<Options extends AbstractOptions = {}> = (options: Options) => TaskInstance
 
 export type AbstractTask = Task<AbstractOptions>
 
