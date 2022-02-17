@@ -1682,7 +1682,7 @@ __metadata:
     memfs: ^3.4.1
     ramda: ^0.28.0
   peerDependencies:
-    begat: ^0.2.0
+    begat: ^0.3.0
   languageName: unknown
   linkType: soft
 

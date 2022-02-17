@@ -1,5 +1,11 @@
 # begat
 
+## 0.3.0
+
+### Minor Changes
+
+- [`cea2063`](https://github.com/zioroboco/begat/commit/cea2063b94c2b865720b9e73e3182dc0eb9404aa) - First release with new config and task APIs, with the addition of pre- and post- task assertions using [picospec](https://github.com/zioroboco/picospec). Includes a new `begat dev` command for running a dev server for working on tasks and/or pipelines.
+
 ## 0.2.0
 
 ### Minor Changes
