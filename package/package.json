@@ -20,8 +20,10 @@
   },
   "bin": "./bin/cli.mjs",
   "files": [
+    "bin",
     "dist",
-    "!**/*.map"
+    "src",
+    "!*.spec.*"
   ],
   "devDependencies": {
     "@types/node": "^17.0.17",
