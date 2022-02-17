@@ -25,15 +25,6 @@ export const license: Task<Options> = options => ({
 
   pre: function ({ describe, it }, ctx) {
     return [
-      describe(`meta values`).assert(() => [
-        it(`includes the name`, () => {
-          expect(this.name).toBe("begat-example-task")
-        }),
-        it(`includes the name`, () => {
-          expect(this.version).toBe("0.0.0")
-        }),
-      ]),
-
       describe(`the options object`).assert(() => [
         it(`includes an author`, () => {
           expect(options.author).toMatch("")
