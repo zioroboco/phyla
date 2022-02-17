@@ -1,5 +1,21 @@
-import { Context, Task, TaskInstance, config, run } from "./core"
 import { describe, expect, it, jest } from "@jest/globals"
+
+import { Context, Task, TaskInstance, config, run } from "./core.js"
+
+it(`type errors when config doesn't match options`, () => {
+  type Options = { oddlySpecific: "value" }
+  const task: Task<Options> = options => ({
+    run: function (ctx: Context) {},
+  })
+
+  config({
+    pipeline: [task],
+    options: {
+      // @ts-expect-error
+      oddlySpecific: "woo, something else",
+    },
+  })
+})
 
 describe(config.name, () => {
   it(`returns its arguments intact`, () => {

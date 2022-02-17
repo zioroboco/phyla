@@ -1,10 +1,11 @@
 import * as path from "path"
+
 import { Command, Option } from "clipanion"
 import { richFormat } from "clipanion/lib/format.js"
 
-import * as core from "begat/core"
-import * as server from "begat/server"
-import { dim } from "begat/reporting"
+import * as core from "./core.js"
+import * as server from "./server.js"
+import { dim } from "./reporting.js"
 
 enum Category {
   Main = "main",

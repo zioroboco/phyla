@@ -1,11 +1,13 @@
 import * as os from "os"
 import * as path from "path"
 import * as system_fs from "fs"
-import { ChildProcessWithoutNullStreams, fork, spawn } from "child_process"
-import { TaskInstance } from "begat/core"
+import { ChildProcessWithoutNullStreams, spawn } from "child_process"
 import { strict as assert } from "assert"
-import { createMachine, createSchema, interpret } from "xstate"
 import { fileURLToPath } from "url"
+
+import { createMachine, createSchema, interpret } from "xstate"
+
+import { TaskInstance } from "./core.js"
 
 /**
  * Duration for which file watcher events will be buffered -- i.e. for any two

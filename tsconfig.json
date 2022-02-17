@@ -11,11 +11,6 @@
     "moduleResolution": "node",
     "types": ["node"],
 
-    "baseUrl": ".",
-    "paths": {
-      "begat/*": ["./package/src/*"]
-    },
-
     "noEmit": true
   },
   "references": [{ "path": "./package" }, { "path": "./example/task" }],

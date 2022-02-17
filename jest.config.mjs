@@ -1,8 +1,6 @@
 import { createRequire } from "module"
-import { pathsToModuleNameMapper } from "ts-jest"
 
 const require = createRequire(import.meta.url)
-const { workspaces } = require("./package.json")
 const { compilerOptions } = require("./tsconfig.json")
 
 /**
@@ -14,9 +12,7 @@ export const config = {
   testEnvironment: "node",
 
   roots: ["<rootDir>/package/src", "<rootDir>/example/task/src"],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-    prefix: "<rootDir>",
-  }),
+  resolver: "jest-ts-webcompat-resolver",
 
   globals: {
     "ts-jest": {

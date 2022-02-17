@@ -1,6 +1,7 @@
 import * as pico from "picospec"
-import * as reporting from "begat/reporting"
 import { Union } from "ts-toolbelt"
+
+import * as reporting from "./reporting.js"
 
 export type Context = {
   cwd: string

@@ -1,11 +1,12 @@
-import * as Eta from "eta"
 import * as system_fs from "fs/promises"
-import { Task } from "begat"
 import { strict as assert } from "assert"
 import { createRequire } from "module"
 import { dirname } from "path"
 import { fileURLToPath } from "url"
 import { join } from "path"
+
+import * as Eta from "eta"
+import { Task } from "begat"
 import expect from "expect"
 
 const require = createRequire(import.meta.url)

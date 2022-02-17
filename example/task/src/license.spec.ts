@@ -1,7 +1,8 @@
-import { Options, license } from "./license"
 import { Volume, createFsFromVolume } from "memfs"
 import { expect, test } from "@jest/globals"
 import { run } from "begat"
+
+import { Options, license } from "./license.js"
 
 const cwd = "/my-project"
 

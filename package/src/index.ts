@@ -3,4 +3,4 @@ export {
   Task,
   config,
   run,
-} from "begat/core"
+} from "./core.js"
