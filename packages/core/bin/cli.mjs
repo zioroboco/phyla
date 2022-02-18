@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-import * as commands from "begat/commands"
+import * as commands from "@phyla/core/commands"
 import { Cli } from "clipanion"
 import { createRequire } from "module"
 
 const packageJson = createRequire(import.meta.url)("../package.json")
 
 const cli = new Cli({
-  binaryLabel: `🧬 ${packageJson.name}`,
-  binaryName: packageJson.name,
+  binaryLabel: `🧬 @phyla/core`,
+  binaryName: `phyla`,
   binaryVersion: packageJson.version,
 })
 

@@ -6,7 +6,7 @@ import { fileURLToPath } from "url"
 import { join } from "path"
 
 import * as Eta from "eta"
-import { Task } from "begat"
+import { Task } from "@phyla/core"
 import expect from "expect"
 
 const require = createRequire(import.meta.url)

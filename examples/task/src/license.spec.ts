@@ -1,6 +1,6 @@
 import { Volume, createFsFromVolume } from "memfs"
 import { expect, test } from "@jest/globals"
-import { run } from "begat"
+import { run } from "@phyla/core"
 
 import { Options, license } from "./license.js"
 

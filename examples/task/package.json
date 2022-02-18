@@ -1,15 +1,15 @@
 {
-  "name": "begat-example-task",
+  "name": "@phyla/example-task",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "main": "./dist/license.js",
   "peerDependencies": {
-    "begat": "^0.3.0"
+    "@phyla/core": "^0.0.0"
   },
   "devDependencies": {
+    "@phyla/core": "*",
     "@types/ramda": "^0.27.64",
-    "begat": "*",
     "memfs": "^3.4.1"
   },
   "dependencies": {

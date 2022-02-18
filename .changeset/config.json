@@ -1,10 +1,10 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@1.6.1/schema.json",
-  "changelog": ["@zioroboco/changelog-github", { "repo": "zioroboco/begat" }],
+  "changelog": ["@zioroboco/changelog-github", { "repo": "zioroboco/phyla" }],
   "commit": false,
   "linked": [],
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": ["begat-example-*"]
+  "ignore": ["@phyla/example-*"]
 }

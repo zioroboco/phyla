@@ -5,7 +5,7 @@
     "rootDir": "src",
     "noEmit": false
   },
-  "references": [{ "path": "../../packages/begat" }],
+  "references": [{ "path": "../../packages/core" }],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.spec.ts", "node_modules"]
 }

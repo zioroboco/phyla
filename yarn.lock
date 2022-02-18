@@ -995,6 +995,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@phyla/core@*, @phyla/core@workspace:packages/core":
+  version: 0.0.0-use.local
+  resolution: "@phyla/core@workspace:packages/core"
+  dependencies:
+    "@types/node": ^17.0.18
+    clipanion: ^3.2.0-rc.9
+    picospec: ~0.4.0
+    ts-toolbelt: ^9.6.0
+    typanion: ^3.7.1
+    xstate: ^4.30.1
+  bin:
+    phyla: ./bin/cli.mjs
+  languageName: unknown
+  linkType: soft
+
+"@phyla/example-project@workspace:examples/project":
+  version: 0.0.0-use.local
+  resolution: "@phyla/example-project@workspace:examples/project"
+  dependencies:
+    "@phyla/core": "*"
+    "@phyla/example-task": "*"
+  languageName: unknown
+  linkType: soft
+
+"@phyla/example-task@*, @phyla/example-task@workspace:examples/task":
+  version: 0.0.0-use.local
+  resolution: "@phyla/example-task@workspace:examples/task"
+  dependencies:
+    "@phyla/core": "*"
+    "@types/ramda": ^0.27.64
+    eta: ^1.12.3
+    memfs: ^3.4.1
+    ramda: ^0.28.0
+  peerDependencies:
+    "@phyla/core": ^0.0.0
+  languageName: unknown
+  linkType: soft
+
 "@sinonjs/commons@npm:^1.7.0":
   version: 1.8.3
   resolution: "@sinonjs/commons@npm:1.8.3"
@@ -1663,44 +1701,6 @@ __metadata:
   checksum: 9706c088a283058a8a99e0bf91b0a2f75497f185980d9ffa8b304de1d9e58ebda7c72c07ebf01dadedaac5b2907b2c6f566f660d62bd336c3468e960403b9d65
   languageName: node
   linkType: hard
-
-"begat-example-project@workspace:examples/project":
-  version: 0.0.0-use.local
-  resolution: "begat-example-project@workspace:examples/project"
-  dependencies:
-    begat: "*"
-    begat-example-task: "*"
-  languageName: unknown
-  linkType: soft
-
-"begat-example-task@*, begat-example-task@workspace:examples/task":
-  version: 0.0.0-use.local
-  resolution: "begat-example-task@workspace:examples/task"
-  dependencies:
-    "@types/ramda": ^0.27.64
-    begat: "*"
-    eta: ^1.12.3
-    memfs: ^3.4.1
-    ramda: ^0.28.0
-  peerDependencies:
-    begat: ^0.3.0
-  languageName: unknown
-  linkType: soft
-
-"begat@*, begat@workspace:packages/begat":
-  version: 0.0.0-use.local
-  resolution: "begat@workspace:packages/begat"
-  dependencies:
-    "@types/node": ^17.0.18
-    clipanion: ^3.2.0-rc.9
-    picospec: ~0.4.0
-    ts-toolbelt: ^9.6.0
-    typanion: ^3.7.1
-    xstate: ^4.30.1
-  bin:
-    begat: ./bin/cli.mjs
-  languageName: unknown
-  linkType: soft
 
 "better-path-resolve@npm:1.0.0":
   version: 1.0.0
@@ -5403,13 +5403,13 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@changesets/cli": ^2.20.0
+    "@phyla/core": "*"
     "@tsconfig/node16": ^1.0.2
     "@types/jest": ^27.4.0
     "@types/node": ^17.0.18
     "@typescript-eslint/eslint-plugin": ^5.12.0
     "@typescript-eslint/parser": ^5.12.0
     "@zioroboco/changelog-github": "https://github.com/zioroboco/changelog-github#v0.1.1"
-    begat: "*"
     eslint: ^8.9.0
     eslint-import-resolver-typescript: ^2.5.0
     eslint-plugin-import: ^2.25.4

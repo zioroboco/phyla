@@ -1,5 +1,5 @@
-import { config } from "begat"
-import { license } from "begat-example-task"
+import { config } from "@phyla/core"
+import { license } from "@phyla/example-task"
 
 export default config({
   pipeline: [license],

@@ -1,10 +1,10 @@
 {
-  "name": "begat-example-project",
+  "name": "@phyla/example-project",
   "version": "0.0.0",
   "author": "Ray",
   "private": true,
   "dependencies": {
-    "begat": "*",
-    "begat-example-task": "*"
+    "@phyla/core": "*",
+    "@phyla/example-task": "*"
   }
 }

@@ -1,13 +1,13 @@
 {
-  "name": "begat",
-  "version": "0.3.0",
-  "description": "Build families of composable project (re-) generators 🧬",
+  "name": "@phyla/core",
+  "version": "0.0.0",
+  "description": "Create families of composable project (re-) generators 🧬",
   "author": "Louis Quinnell <_@ziorobo.co>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zioroboco/begat.git",
-    "directory": "packages/begat"
+    "url": "https://github.com/zioroboco/phyla.git",
+    "directory": "packages/core"
   },
   "engines": {
     "node": ">=16"
@@ -18,7 +18,9 @@
     ".": "./dist/index.js",
     "./*": "./dist/*.js"
   },
-  "bin": "./bin/cli.mjs",
+  "bin": {
+    "phyla": "./bin/cli.mjs"
+  },
   "files": [
     "bin",
     "dist",

@@ -2,7 +2,7 @@
   "configurations": [
     {
       "name": "command: dev",
-      "program": "${workspaceFolder}/node_modules/.bin/begat",
+      "program": "${workspaceFolder}/node_modules/.bin/phyla",
       "args": [
         "dev",
         "example/project",
@@ -18,7 +18,7 @@
     },
     {
       "name": "command: write",
-      "program": "${workspaceFolder}/node_modules/.bin/begat",
+      "program": "${workspaceFolder}/node_modules/.bin/phyla",
       "args": ["write", "example/project"],
       "runtimeVersion": "16",
       "runtimeArgs": ["--experimental-vm-modules"],
