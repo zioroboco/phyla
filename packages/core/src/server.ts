@@ -51,6 +51,7 @@ export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
   log.header(log.serverinfo, "\n")
 
   const tmpdir = path.join(os.tmpdir(), "phyla", path.basename(srcdir))
+  system_fs.mkdirSync(tmpdir, { recursive: true })
 
   log.debug({ srcdir, tmpdir, config })
 
