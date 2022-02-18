@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./dist/license.js",
   "peerDependencies": {
-    "@phyla/core": "^0.1.0"
+    "@phyla/core": "^0.1.1"
   },
   "devDependencies": {
     "@phyla/core": "*",
