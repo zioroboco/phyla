@@ -1,11 +1,4 @@
 {
-  "files.exclude": {
-    "**/*.js": false,
-    "**/*.d.ts": false,
-    "**/*.map": false,
-    "**/tsconfig.tsbuildinfo": false
-  },
-
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
