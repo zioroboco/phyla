@@ -1,4 +1,4 @@
-import * as pico from "picospec"
+import * as assert from "@phyla/assert"
 import { Union } from "ts-toolbelt"
 
 import * as reporting from "./reporting.js"
@@ -14,11 +14,11 @@ export type Context = {
 
 type Assertions = (
   { describe, it }: {
-    describe: typeof pico.describe
-    it: typeof pico.it
+    describe: typeof assert.describe
+    it: typeof assert.it
   },
   context: Context,
-) => Array<pico.Block | pico.Test>
+) => Array<assert.Block | assert.Test>
 
 export type TaskInstance = {
   name?: string
@@ -59,10 +59,10 @@ export const run = async function (
 
   if (instance.pre) {
     const suite = instance.pre(
-      { describe: pico.describe, it: pico.it },
+      { describe: assert.describe, it: assert.it },
       context
     )
-    const report = await pico.run(suite)
+    const report = await assert.run(suite)
     reporting.check(report, instance, "pre")
   }
 
@@ -70,10 +70,10 @@ export const run = async function (
 
   if (instance.post) {
     const suite = instance.post(
-      { describe: pico.describe, it: pico.it },
+      { describe: assert.describe, it: assert.it },
       context
     )
-    const report = await pico.run(suite)
+    const report = await assert.run(suite)
     reporting.check(report, instance, "post")
   }
 

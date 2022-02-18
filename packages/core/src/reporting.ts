@@ -1,15 +1,15 @@
-import * as pico from "picospec"
+import { Pass, Report } from "@phyla/assert"
 
 export const boldred = (s: string) => `\x1b[1m\x1b[31m${s}\x1b[0m`
 export const inverse = (s: string) => `\x1b[7m${boldred(s)}\x1b[0m`
 export const dim = (s: string) => `\x1b[2m${s}\x1b[0m`
 
 export function check (
-  report: pico.Report,
+  report: Report,
   meta: { name?: string, version?: string },
   phase: "pre" | "post"
 ) {
-  const failures = report.results.filter(r => r.outcome != pico.Pass)
+  const failures = report.results.filter(r => r.outcome != Pass)
 
   if (failures.length) {
     failures.forEach(({ descriptions, outcome }, i) => {

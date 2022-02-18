@@ -13,6 +13,10 @@
 
     "noEmit": true
   },
-  "references": [{ "path": "./packages/core" }, { "path": "./examples/task" }],
+  "references": [
+    { "path": "./packages/assert" },
+    { "path": "./packages/core" },
+    { "path": "./examples/task" }
+  ],
   "include": ["**/*.spec.ts"]
 }
