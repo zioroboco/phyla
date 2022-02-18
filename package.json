@@ -30,7 +30,7 @@
     "lint:eslint": "eslint . --ext .ts",
     "lint:prettier": "prettier '**/*[!.d].{json,yaml,yml}' --loglevel=warn",
     "log:done": "echo '✔ '",
-    "copy-docs": "cp README.md package && cp LICENSE package",
+    "copy-docs": "cp README.md packages/core && cp LICENSE packages/core",
     "release": "yarn build && yarn copy-docs && changeset publish",
     "version": "changeset version && yarn"
   },
