@@ -13,6 +13,6 @@
 
     "noEmit": true
   },
-  "references": [{ "path": "./package" }, { "path": "./example/task" }],
+  "references": [{ "path": "./packages/begat" }, { "path": "./examples/task" }],
   "include": ["**/*.spec.ts"]
 }

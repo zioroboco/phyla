@@ -1664,18 +1664,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"begat-example-project@workspace:example/project":
+"begat-example-project@workspace:examples/project":
   version: 0.0.0-use.local
-  resolution: "begat-example-project@workspace:example/project"
+  resolution: "begat-example-project@workspace:examples/project"
   dependencies:
     begat: "*"
     begat-example-task: "*"
   languageName: unknown
   linkType: soft
 
-"begat-example-task@*, begat-example-task@workspace:example/task":
+"begat-example-task@*, begat-example-task@workspace:examples/task":
   version: 0.0.0-use.local
-  resolution: "begat-example-task@workspace:example/task"
+  resolution: "begat-example-task@workspace:examples/task"
   dependencies:
     "@types/ramda": ^0.27.64
     begat: "*"
@@ -1687,9 +1687,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"begat@*, begat@workspace:package":
+"begat@*, begat@workspace:packages/begat":
   version: 0.0.0-use.local
-  resolution: "begat@workspace:package"
+  resolution: "begat@workspace:packages/begat"
   dependencies:
     "@types/node": ^17.0.18
     clipanion: ^3.2.0-rc.9

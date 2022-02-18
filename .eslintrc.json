@@ -13,8 +13,8 @@
   "parserOptions": {
     "project": [
       "./tsconfig.json",
-      "./package/tsconfig.json",
-      "./example/*/tsconfig.json"
+      "./packages/*/tsconfig.json",
+      "./examples/*/tsconfig.json"
     ],
     "sourceType": "module"
   },

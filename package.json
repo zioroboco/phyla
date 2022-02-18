@@ -2,8 +2,8 @@
   "packageManager": "yarn@3.1.0",
   "private": true,
   "workspaces": [
-    "example/*",
-    "package"
+    "examples/*",
+    "packages/*"
   ],
   "prettier": {
     "arrowParens": "avoid",
@@ -18,9 +18,9 @@
     }
   },
   "scripts": {
-    "example/task": "yarn workspace begat-example-task",
-    "example/project": "yarn workspace begat-example-project",
-    "package": "yarn workspace begat",
+    "task": "yarn workspace begat-example-task",
+    "project": "yarn workspace begat-example-project",
+    "begat": "yarn workspace begat",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest",

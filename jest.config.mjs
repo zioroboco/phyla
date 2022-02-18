@@ -11,7 +11,6 @@ export const config = {
   preset: "ts-jest/presets/default-esm",
   testEnvironment: "node",
 
-  roots: ["<rootDir>/package/src", "<rootDir>/example/task/src"],
   resolver: "jest-ts-webcompat-resolver",
 
   globals: {
