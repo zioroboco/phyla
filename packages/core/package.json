@@ -29,6 +29,7 @@
   ],
   "devDependencies": {
     "@jest/globals": "^27.5.1",
+    "@phyla/assert": "workspace:^0.1.0",
     "@types/node": "^17.0.18"
   },
   "dependencies": {

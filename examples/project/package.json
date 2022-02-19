@@ -4,7 +4,7 @@
   "author": "Ray",
   "private": true,
   "dependencies": {
-    "@phyla/core": "*",
-    "@phyla/example-task": "*"
+    "@phyla/core": "workspace:*",
+    "@phyla/example-task": "workspace:*"
   }
 }

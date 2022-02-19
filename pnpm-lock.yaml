@@ -5,13 +5,13 @@ importers:
   .:
     specifiers:
       '@changesets/cli': ^2.20.0
-      '@phyla/core': '*'
+      '@phyla/core': workspace:*
       '@tsconfig/node16': ^1.0.2
       '@types/jest': ^27.4.0
       '@types/node': ^17.0.18
       '@typescript-eslint/eslint-plugin': ^5.12.0
       '@typescript-eslint/parser': ^5.12.0
-      '@zioroboco/changelog-github': https://github.com/zioroboco/changelog-github#v0.1.1
+      '@zioroboco/changelog-github': github:zioroboco/changelog-github#v0.1.1
       eslint: ^8.9.0
       eslint-import-resolver-typescript: ^2.5.0
       eslint-plugin-import: ^2.25.4
@@ -46,8 +46,8 @@ importers:
 
   examples/project:
     specifiers:
-      '@phyla/core': '*'
-      '@phyla/example-task': '*'
+      '@phyla/core': workspace:*
+      '@phyla/example-task': workspace:*
     dependencies:
       '@phyla/core': link:../../packages/core
       '@phyla/example-task': link:../task
@@ -55,7 +55,7 @@ importers:
   examples/task:
     specifiers:
       '@jest/globals': ^27.5.1
-      '@phyla/core': '*'
+      '@phyla/core': workspace:*
       '@types/ramda': ^0.27.64
       eta: ^1.12.3
       expect: ^27.5.1
