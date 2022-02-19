@@ -4,6 +4,7 @@ importers:
 
   .:
     specifiers:
+      '@changesets/changelog-github': ^0.4.2
       '@changesets/cli': ^2.20.0
       '@phyla/core': workspace:*
       '@tsconfig/node16': ^1.0.2
@@ -11,7 +12,6 @@ importers:
       '@types/node': ^17.0.18
       '@typescript-eslint/eslint-plugin': ^5.12.0
       '@typescript-eslint/parser': ^5.12.0
-      '@zioroboco/changelog-github': github:zioroboco/changelog-github#v0.1.1
       eslint: ^8.9.0
       eslint-import-resolver-typescript: ^2.5.0
       eslint-plugin-import: ^2.25.4
@@ -24,6 +24,7 @@ importers:
       ts-jest: ^27.1.3
       typescript: ^4.5.5
     devDependencies:
+      '@changesets/changelog-github': 0.4.2
       '@changesets/cli': 2.20.0
       '@phyla/core': link:packages/core
       '@tsconfig/node16': 1.0.2
@@ -31,7 +32,6 @@ importers:
       '@types/node': 17.0.18
       '@typescript-eslint/eslint-plugin': 5.12.0_c467cf9bb49b295941e83ce479a578b7
       '@typescript-eslint/parser': 5.12.0_eslint@8.9.0+typescript@4.5.5
-      '@zioroboco/changelog-github': github.com/zioroboco/changelog-github/2af5e293045772d38f516e7196b5485aee05f295
       eslint: 8.9.0
       eslint-import-resolver-typescript: 2.5.0_1326372bbd2fe519ed5ba5fca843a914
       eslint-plugin-import: 2.25.4_eslint@8.9.0
@@ -459,6 +459,16 @@ packages:
       '@changesets/types': 4.0.2
       '@manypkg/get-packages': 1.1.3
       semver: 5.7.1
+    dev: true
+
+  /@changesets/changelog-github/0.4.2:
+    resolution: {integrity: sha512-qq8lJcq91ki7UT0fIfIcn5Yy7GJj19TmkLmGZ24/wEfxcD/nHHoTNRoi6nPt+Htf7qEudKxXLzQLi41B7Mt2vg==}
+    dependencies:
+      '@changesets/get-github-info': 0.5.0
+      '@changesets/types': 4.0.2
+      dotenv: 8.6.0
+    transitivePeerDependencies:
+      - encoding
     dev: true
 
   /@changesets/cli/2.20.0:
@@ -4644,16 +4654,4 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-    dev: true
-
-  github.com/zioroboco/changelog-github/2af5e293045772d38f516e7196b5485aee05f295:
-    resolution: {tarball: https://codeload.github.com/zioroboco/changelog-github/tar.gz/2af5e293045772d38f516e7196b5485aee05f295}
-    name: '@zioroboco/changelog-github'
-    version: 0.1.1
-    dependencies:
-      '@changesets/get-github-info': 0.5.0
-      '@changesets/types': 4.0.2
-      dotenv: 8.6.0
-    transitivePeerDependencies:
-      - encoding
     dev: true
