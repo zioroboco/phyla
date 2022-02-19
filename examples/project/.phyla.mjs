@@ -1,8 +1,9 @@
 import { config } from "@phyla/core"
-import { license } from "@phyla/example-task"
 
 export default config({
-  pipeline: [license],
+  pipeline: [
+    import("@phyla/example-task"),
+  ],
   options: {
     author: "Raymond Luxury-Yacht <rayly@example.com>",
     license: "MIT"

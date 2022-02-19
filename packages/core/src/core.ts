@@ -33,20 +33,28 @@ export type AbstractOptions = any
 export type Task<Options extends AbstractOptions = {}> = (options: Options) => TaskInstance
 
 export type AbstractTask = Task<AbstractOptions>
+export type TaskModule = Promise<{ default: Task<AbstractOptions> }>
 
-export type OptionsUnion<Tasks extends AbstractTask[]> =
-  Union.IntersectOf<Parameters<Tasks[number]>[0]>
+export type OptionsUnion<Tasks extends TaskModule[]> =
+  Union.IntersectOf<Parameters<Awaited<Tasks[number]>["default"]>[0]>
 
 export type Config = {
   pipeline: AbstractTask[]
   options: AbstractOptions
 }
 
-export const config = function <Tasks extends AbstractTask[]>(config: {
+export const config = async function <Tasks extends TaskModule[]>(config: {
   pipeline: Tasks
   options: OptionsUnion<Tasks>
-}): Config {
-  return config
+}): Promise<Config> {
+  return {
+    ...config,
+    pipeline: await Promise.all(
+      config.pipeline.map(module => module.then(m => m.default))
+    ).catch(e => {
+      throw e
+    }),
+  }
 }
 
 export const run = async function (

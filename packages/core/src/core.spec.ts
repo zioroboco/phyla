@@ -9,7 +9,7 @@ it(`type errors when config doesn't match options`, () => {
   })
 
   config({
-    pipeline: [task],
+    pipeline: [Promise.resolve({ default: task })],
     options: {
       // @ts-expect-error
       oddlySpecific: "woo, something else",
@@ -18,20 +18,9 @@ it(`type errors when config doesn't match options`, () => {
 })
 
 describe(config.name, () => {
-  it(`returns its arguments intact`, () => {
-    const args = Object.freeze({ pipeline: [], options: {} })
-    expect(config(args)).toEqual(args)
-  })
-
-  it(`type errors on missing top-level properties`, () => {
-    // @ts-expect-error
-    config({})
-
-    // @ts-expect-error
-    config({ pipeline: [] })
-
-    // @ts-expect-error
-    config({ options: {} })
+  it(`returns its options argument intact`, async () => {
+    const args = { pipeline: [], options: Object.freeze({ key: "value" }) }
+    expect((await config(args)).options).toEqual(args.options)
   })
 
   describe(`with tasks`, () => {
@@ -40,22 +29,22 @@ describe(config.name, () => {
 
     it(`type errors on specific missing options`, () => {
       // @ts-expect-error
-      config({ pipeline: [taskOne], options: {} })
+      config({ pipeline: [Promise.resolve({ default: taskOne })], options: {} })
     })
 
     it(`type errors on unexpected options`, () => {
       // @ts-expect-error
-      config({ pipeline: [taskOne], options: { one: 1, unexpected: "??" } })
+      config({ pipeline: [Promise.resolve({ default: taskOne })], options: { one: 1, unexpected: "??" } })
     })
 
     it(`expects a union of multiple task's options`, () => {
-      config({ pipeline: [taskOne, taskTwo], options: { one: 1, two: 2 } })
+      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], options: { one: 1, two: 2 } })
 
       // @ts-expect-error
-      config({ pipeline: [taskOne, taskTwo], options: { one: 1 } })
+      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], options: { one: 1 } })
 
       // @ts-expect-error
-      config({ pipeline: [taskOne, taskTwo], options: { two: 2 } })
+      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], options: { two: 2 } })
     })
   })
 })

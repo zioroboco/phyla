@@ -100,3 +100,5 @@ export const license: Task<Options> = options => ({
     ]
   },
 })
+
+export default license
