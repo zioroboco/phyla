@@ -14,5 +14,8 @@
     "!*.spec.*"
   ],
   "type": "module",
-  "main": "./dist/index.js"
+  "main": "./dist/index.js",
+  "devDependencies": {
+    "@jest/globals": "^27.5.1"
+  }
 }

@@ -7,20 +7,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@2270f39ef63c3edf50be34da68c039eca5e15c15
+        with:
+          version: 6.31.0
       - uses: actions/setup-node@v2
         with:
-          node-version: 16.x
-          cache: yarn
-      - run: yarn install --immutable
-      - run: yarn build
-      - run: yarn test --ci
+          cache: pnpm
+          node-version-file: .nvmrc
+      - run: pnpm install --ignore-scripts --frozen-lockfile
+      - run: pnpm run build
+      - run: pnpm run test-ci
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@2270f39ef63c3edf50be34da68c039eca5e15c15
+        with:
+          version: 6.31.0
       - uses: actions/setup-node@v2
         with:
-          node-version: 16.x
-          cache: yarn
-      - run: yarn install --immutable
-      - run: yarn lint-ci
+          cache: pnpm
+          node-version-file: .nvmrc
+      - run: pnpm install --ignore-scripts --frozen-lockfile
+      - run: pnpm run lint-ci
