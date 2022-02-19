@@ -1,18 +1,6 @@
 {
   "packageManager": "pnpm@6.31.0",
   "private": true,
-  "prettier": {
-    "arrowParens": "avoid",
-    "semi": false
-  },
-  "wallaby": {
-    "autoDetect": true,
-    "env": {
-      "params": {
-        "runner": "--no-warnings --experimental-vm-modules"
-      }
-    }
-  },
   "scripts": {
     "examples/project": "cd examples/project && pnpm",
     "examples/task": "cd examples/task && pnpm",
