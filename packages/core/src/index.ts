@@ -3,4 +3,5 @@ export {
   Task,
   config,
   run,
+  task,
 } from "./core.js"

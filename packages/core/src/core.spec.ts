@@ -1,6 +1,7 @@
+import { TypeOf, expectType } from "ts-expect"
 import { describe, expect, it, jest } from "@jest/globals"
 
-import { Context, Task, TaskInstance, config, run } from "./core.js"
+import { Context, Task, TaskInstance, config, run, task } from "./core.js"
 
 it(`type errors when config doesn't match options`, () => {
   type Options = { oddlySpecific: "value" }
@@ -91,5 +92,26 @@ describe(run.name, () => {
         next: [],
       },
     }))
+  })
+})
+
+describe(task.name, () => {
+  it(`returns task instances`, async () => {
+    const taskOne = task((opts: { one: 1 }) => ({ run: ctx => {} }))
+    const taskTwo = task<{ two: 2 }>(opts => ({ run: ctx => {} }))
+
+    config({
+      pipeline: [
+        Promise.resolve({ default: taskOne }),
+        Promise.resolve({ default: taskTwo }),
+      ],
+      options: {
+        one: 1,
+        two: 2,
+      },
+    })
+
+    expectType<TypeOf<Task<{ one: 1 }>, typeof taskOne>>(true)
+    expectType<TypeOf<Task<{ two: 2 }>, typeof taskTwo>>(true)
   })
 })

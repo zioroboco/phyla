@@ -57,6 +57,12 @@ export const config = async function <Tasks extends TaskModule[]>(config: {
   }
 }
 
+export const task = function <Options extends AbstractOptions> (
+  definition: (options: Options) => TaskInstance
+): Task<Options> {
+  return definition
+}
+
 export const run = async function (
   instance: TaskInstance | undefined,
   context: Context

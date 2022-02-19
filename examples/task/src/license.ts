@@ -6,7 +6,7 @@ import { fileURLToPath } from "url"
 import { join } from "path"
 
 import * as Eta from "eta"
-import { Task } from "@phyla/core"
+import { task } from "@phyla/core"
 import expect from "expect"
 
 const require = createRequire(import.meta.url)
@@ -19,7 +19,7 @@ export type Options = {
   author: string
 }
 
-export const license: Task<Options> = options => ({
+export default task((options: Options) => ({
   name: meta.name,
   version: meta.version,
 
@@ -99,6 +99,4 @@ export const license: Task<Options> = options => ({
         ]),
     ]
   },
-})
-
-export default license
+}))
