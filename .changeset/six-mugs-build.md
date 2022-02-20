@@ -8,7 +8,7 @@ Add task definition function.
 export type Parameters = { ... }
 
 export default task((params: Parameters) => ({
-  pre: ({ describe, it }) => ctx => [
+  pre: ({ describe, it }, ctx) => [
     ...
   ],
 
@@ -16,7 +16,7 @@ export default task((params: Parameters) => ({
     ...
   },
 
-  post: ({ describe, it }) => ctx => [
+  post: ({ describe, it }, ctx) => [
     ...
   ],
 }))
