@@ -22,8 +22,8 @@ export function check (
         [
           "\n",
           inverse(` ${phase.toUpperCase()} (${i + 1}/${failures.length}) `),
-          meta.name && meta.name,
-          meta.version && dim(`v${meta.version}`),
+          meta.name ?? "untitled task",
+          dim(meta.version ? `v${meta.version}` : "unversioned"),
           "\n",
           boldred(`  ● ${boldred(descriptions.join(" → "))}`),
           "\n\n",

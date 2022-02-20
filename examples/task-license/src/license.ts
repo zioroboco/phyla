@@ -1,6 +1,5 @@
 import * as system_fs from "fs/promises"
 import { strict as assert } from "assert"
-import { createRequire } from "module"
 import { dirname } from "path"
 import { fileURLToPath } from "url"
 import { join } from "path"
@@ -8,9 +7,6 @@ import { join } from "path"
 import * as Eta from "eta"
 import { task } from "@phyla/core"
 import expect from "expect"
-
-const require = createRequire(import.meta.url)
-const meta = require("../package.json")
 
 const supportedLicenses = ["MIT"] as const
 
@@ -20,9 +16,6 @@ export type Parameters = {
 }
 
 export default task((params: Parameters) => ({
-  name: meta.name,
-  version: meta.version,
-
   pre: ({ describe, it }, ctx) => [
     it(`specified a supported license`, () => {
       expect(supportedLicenses).toContain(params.license)

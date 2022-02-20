@@ -1,11 +1,15 @@
+import * as path from "path"
+import * as system_fs from "fs"
+
 import * as assertions from "@phyla/assert"
 import { Union } from "ts-toolbelt"
 
 import * as reporting from "./reporting.js"
+import { findupSync } from "./util.js"
 
 export type Context = {
   cwd: string
-  fs: typeof import("fs")
+  fs: typeof system_fs
   pipeline: {
     prev: TaskInstance[],
     next: TaskInstance[],
@@ -21,8 +25,11 @@ type Assertions = (
 ) => Array<assertions.Block | assertions.Test>
 
 export type TaskInstance = {
-  name?: string
-  version?: string
+  /** Defaults to the task's parent package name. */
+  name?: string,
+  /** Defaults to the task's parent package version. */
+  version?: string,
+
   run: (context: Context) => void | Promise<void>
   pre?: Assertions
   post?: Assertions
@@ -59,7 +66,28 @@ export const config = async function <Modules extends TaskModule<any>[]> (
 export const task = function <Parameters extends {}> (
   definition: (parameters: Parameters) => TaskInstance
 ): (parameters: Parameters) => TaskInstance {
-  return definition
+  let name: string | undefined
+  let version: string | undefined
+  let callsite: string | undefined
+
+  try {
+    const callsiteMatch = new Error().stack?.split("\n")[2].match(/file:\/\/(.*?):/)
+    if (callsiteMatch && callsiteMatch[1]) {
+      callsite = callsiteMatch[1]
+      const packageJsonPath = findupSync("package.json", path.dirname(callsite))
+      if (packageJsonPath) {
+        const packageJson = JSON.parse(system_fs.readFileSync(packageJsonPath, "utf8"))
+        name = packageJson.name
+        version = packageJson.version
+      }
+    }
+  } catch (e) {}
+
+  return parameters => ({
+    name: name ?? (callsite ? path.relative(process.cwd(), callsite!) : undefined),
+    version,
+    ...definition(parameters),
+  })
 }
 
 export const run = async function (

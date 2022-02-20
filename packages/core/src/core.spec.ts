@@ -1,4 +1,3 @@
-import { TypeOf, expectType } from "ts-expect"
 import { describe, expect, it, jest } from "@jest/globals"
 
 import { Context, TaskInstance, config, run, task } from "./core.js"
