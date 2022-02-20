@@ -35,6 +35,6 @@ export function check (
       )
     })
     const n = failures.length
-    throw `${n} failure${n > 1 ? "s" : ""} in ${phase}-assertion phase`
+    throw `${n} failure${n > 1 ? "s" : ""} in ${phase}-task assertion phase`
   }
 }
