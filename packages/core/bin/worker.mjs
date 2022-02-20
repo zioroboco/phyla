@@ -12,7 +12,8 @@ assert(srcdir)
 assert(tmpdir)
 
 import(path.join(srcdir, "phyla.mjs"))
-  .then(({ default: config }) => {
+  .then(async configModule => {
+    const config = await configModule.default
     const [firstTask, ...nextTasks] = config.pipeline.map(task =>
       task(config.parameters)
     )
@@ -24,6 +25,9 @@ import(path.join(srcdir, "phyla.mjs"))
         next: nextTasks,
       },
     })
-  }).catch(() => {
+  })
+  .catch(err => {
+    console.error(`worker reported error:`)
+    console.error("  " + String(err).replaceAll(/\n/g, "\n  "))
     process.exit(0)
   })
