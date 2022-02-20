@@ -1,16 +1,16 @@
 import { TypeOf, expectType } from "ts-expect"
 import { describe, expect, it, jest } from "@jest/globals"
 
-import { Context, Task, TaskInstance, config, run, task } from "./core.js"
+import { Context, TaskInstance, config, run, task } from "./core.js"
 
 it(`type errors when config doesn't match parameters`, () => {
   type Parameters = { oddlySpecific: "value" }
-  const task: Task<Parameters> = parameters => ({
+  const someTask = task((parameters: Parameters) => ({
     run: function (ctx: Context) {},
-  })
+  }))
 
   config({
-    pipeline: [Promise.resolve({ default: task })],
+    pipeline: [Promise.resolve({ default: someTask })],
     parameters: {
       // @ts-expect-error
       oddlySpecific: "woo, something else",
@@ -25,8 +25,8 @@ describe(config.name, () => {
   })
 
   describe(`with tasks`, () => {
-    const taskOne: Task<{ one: 1 }> = params => ({ run: ctx => {} })
-    const taskTwo: Task<{ two: 2 }> = params => ({ run: ctx => {} })
+    const taskOne = task((params: { one: 1 }) => ({ run: ctx => {} }))
+    const taskTwo = task((params: { two: 2 }) => ({ run: ctx => {} }))
 
     it(`type errors on specific missing parameters`, () => {
       // @ts-expect-error
@@ -110,8 +110,5 @@ describe(task.name, () => {
         two: 2,
       },
     })
-
-    expectType<TypeOf<Task<{ one: 1 }>, typeof taskOne>>(true)
-    expectType<TypeOf<Task<{ two: 2 }>, typeof taskTwo>>(true)
   })
 })

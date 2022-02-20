@@ -1,4 +1,4 @@
-import * as assert from "@phyla/assert"
+import * as assertions from "@phyla/assert"
 import { Union } from "ts-toolbelt"
 
 import * as reporting from "./reporting.js"
@@ -14,11 +14,11 @@ export type Context = {
 
 type Assertions = (
   { describe, it }: {
-    describe: typeof assert.describe
-    it: typeof assert.it
+    describe: typeof assertions.describe
+    it: typeof assertions.it
   },
   context: Context,
-) => Array<assert.Block | assert.Test>
+) => Array<assertions.Block | assertions.Test>
 
 export type TaskInstance = {
   name?: string
@@ -28,27 +28,24 @@ export type TaskInstance = {
   post?: Assertions
 }
 
-export type AbstractParameters = any
+export type TaskModule<Parameters extends {}> = Promise<{
+  default: (parameters: Parameters) => TaskInstance
+}>
 
-export type Task<Parameters extends AbstractParameters = {}> = (
-  parameters: Parameters
-) => TaskInstance
-
-export type AbstractTask = Task<AbstractParameters>
-export type TaskModule = Promise<{ default: Task<AbstractParameters> }>
-
-export type ParametersUnion<Tasks extends TaskModule[]> =
-  Union.IntersectOf<Parameters<Awaited<Tasks[number]>["default"]>[0]>
+export type ParametersUnion<Modules extends TaskModule<any>[]> =
+  Union.IntersectOf<Parameters<Awaited<Modules[number]>["default"]>[0]>
 
 export type Config = {
-  pipeline: AbstractTask[]
-  parameters: AbstractParameters
+  pipeline: ((parameters: any) => TaskInstance)[]
+  parameters: any
 }
 
-export const config = async function <Tasks extends TaskModule[]>(config: {
-  pipeline: Tasks
-  parameters: ParametersUnion<Tasks>
-}): Promise<Config> {
+export const config = async function <Modules extends TaskModule<any>[]> (
+  config: {
+    pipeline: Modules,
+    parameters: ParametersUnion<Modules>
+  }
+): Promise<Config> {
   return {
     ...config,
     pipeline: await Promise.all(
@@ -59,9 +56,9 @@ export const config = async function <Tasks extends TaskModule[]>(config: {
   }
 }
 
-export const task = function <Parameters extends AbstractParameters> (
+export const task = function <Parameters extends {}> (
   definition: (parameters: Parameters) => TaskInstance
-): Task<Parameters> {
+): (parameters: Parameters) => TaskInstance {
   return definition
 }
 
@@ -75,10 +72,10 @@ export const run = async function (
 
   if (instance.pre) {
     const suite = instance.pre(
-      { describe: assert.describe, it: assert.it },
+      { describe: assertions.describe, it: assertions.it },
       context
     )
-    const report = await assert.run(suite)
+    const report = await assertions.run(suite)
     reporting.check(report, instance, "pre")
   }
 
@@ -86,10 +83,10 @@ export const run = async function (
 
   if (instance.post) {
     const suite = instance.post(
-      { describe: assert.describe, it: assert.it },
+      { describe: assertions.describe, it: assertions.it },
       context
     )
-    const report = await assert.run(suite)
+    const report = await assertions.run(suite)
     reporting.check(report, instance, "post")
   }
 
