@@ -45,9 +45,11 @@ importers:
   examples/project:
     specifiers:
       '@phyla/core': workspace:*
+      '@phyla/example-task-install': workspace:*
       '@phyla/example-task-license': workspace:*
     dependencies:
       '@phyla/core': link:../../packages/core
+      '@phyla/example-task-install': link:../task-install
       '@phyla/example-task-license': link:../task-license
 
   examples/task-install:
