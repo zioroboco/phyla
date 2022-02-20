@@ -12,7 +12,7 @@ enum Category {
 }
 
 async function getTasks (dir: string): Promise<core.TaskInstance[]> {
-  const projectConfig = await import(path.join(dir, ".phyla.mjs")).then(
+  const projectConfig = await import(path.join(dir, "phyla.mjs")).then(
     module => module.default as core.Config
   )
   const { pipeline, parameters } = projectConfig

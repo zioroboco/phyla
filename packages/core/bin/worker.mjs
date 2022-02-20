@@ -11,7 +11,7 @@ const [node, bin, srcdir, tmpdir] = process.argv
 assert(srcdir)
 assert(tmpdir)
 
-import(path.join(srcdir, ".phyla.mjs"))
+import(path.join(srcdir, "phyla.mjs"))
   .then(({ default: config }) => {
     const [firstTask, ...nextTasks] = config.pipeline.map(task =>
       task(config.parameters)
