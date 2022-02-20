@@ -5,9 +5,9 @@
 Add task definition function.
 
 ```ts
-export type Options = { ... }
+export type Parameters = { ... }
 
-export default task((options: Options) => ({
+export default task((params: Parameters) => ({
   pre: ({ describe, it }) => ctx => [
     ...
   ],

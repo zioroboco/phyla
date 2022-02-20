@@ -14,7 +14,7 @@ assert(tmpdir)
 import(path.join(srcdir, ".phyla.mjs"))
   .then(({ default: config }) => {
     const [firstTask, ...nextTasks] = config.pipeline.map(task =>
-      task(config.options)
+      task(config.parameters)
     )
     return phyla.run(firstTask, {
       fs: system_fs,

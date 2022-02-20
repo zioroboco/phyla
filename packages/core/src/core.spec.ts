@@ -3,15 +3,15 @@ import { describe, expect, it, jest } from "@jest/globals"
 
 import { Context, Task, TaskInstance, config, run, task } from "./core.js"
 
-it(`type errors when config doesn't match options`, () => {
-  type Options = { oddlySpecific: "value" }
-  const task: Task<Options> = options => ({
+it(`type errors when config doesn't match parameters`, () => {
+  type Parameters = { oddlySpecific: "value" }
+  const task: Task<Parameters> = parameters => ({
     run: function (ctx: Context) {},
   })
 
   config({
     pipeline: [Promise.resolve({ default: task })],
-    options: {
+    parameters: {
       // @ts-expect-error
       oddlySpecific: "woo, something else",
     },
@@ -19,33 +19,33 @@ it(`type errors when config doesn't match options`, () => {
 })
 
 describe(config.name, () => {
-  it(`returns its options argument intact`, async () => {
-    const args = { pipeline: [], options: Object.freeze({ key: "value" }) }
-    expect((await config(args)).options).toEqual(args.options)
+  it(`returns its parameters intact`, async () => {
+    const args = { pipeline: [], parameters: Object.freeze({ key: "value" }) }
+    expect((await config(args)).parameters).toEqual(args.parameters)
   })
 
   describe(`with tasks`, () => {
-    const taskOne: Task<{ one: 1 }> = opts => ({ run: ctx => {} })
-    const taskTwo: Task<{ two: 2 }> = opts => ({ run: ctx => {} })
+    const taskOne: Task<{ one: 1 }> = params => ({ run: ctx => {} })
+    const taskTwo: Task<{ two: 2 }> = params => ({ run: ctx => {} })
 
-    it(`type errors on specific missing options`, () => {
+    it(`type errors on specific missing parameters`, () => {
       // @ts-expect-error
-      config({ pipeline: [Promise.resolve({ default: taskOne })], options: {} })
+      config({ pipeline: [Promise.resolve({ default: taskOne })], parameters: {} })
     })
 
-    it(`type errors on unexpected options`, () => {
+    it(`type errors on unexpected parameters`, () => {
       // @ts-expect-error
-      config({ pipeline: [Promise.resolve({ default: taskOne })], options: { one: 1, unexpected: "??" } })
+      config({ pipeline: [Promise.resolve({ default: taskOne })], parameters: { one: 1, unexpected: "??" } })
     })
 
-    it(`expects a union of multiple task's options`, () => {
-      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], options: { one: 1, two: 2 } })
+    it(`expects a union of multiple task's parameters`, () => {
+      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], parameters: { one: 1, two: 2 } })
 
       // @ts-expect-error
-      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], options: { one: 1 } })
+      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], parameters: { one: 1 } })
 
       // @ts-expect-error
-      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], options: { two: 2 } })
+      config({ pipeline: [Promise.resolve({ default: taskOne }), Promise.resolve({ default: taskTwo })], parameters: { two: 2 } })
     })
   })
 })
@@ -97,15 +97,15 @@ describe(run.name, () => {
 
 describe(task.name, () => {
   it(`returns task instances`, async () => {
-    const taskOne = task((opts: { one: 1 }) => ({ run: ctx => {} }))
-    const taskTwo = task<{ two: 2 }>(opts => ({ run: ctx => {} }))
+    const taskOne = task((parameters: { one: 1 }) => ({ run: ctx => {} }))
+    const taskTwo = task<{ two: 2 }>(parameters => ({ run: ctx => {} }))
 
     config({
       pipeline: [
         Promise.resolve({ default: taskOne }),
         Promise.resolve({ default: taskTwo }),
       ],
-      options: {
+      parameters: {
         one: 1,
         two: 2,
       },

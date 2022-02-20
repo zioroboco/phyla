@@ -15,8 +15,8 @@ async function getTasks (dir: string): Promise<core.TaskInstance[]> {
   const projectConfig = await import(path.join(dir, ".phyla.mjs")).then(
     module => module.default as core.Config
   )
-  const { pipeline, options: pipelineOptions } = projectConfig
-  return pipeline.map(task => task(pipelineOptions))
+  const { pipeline, parameters } = projectConfig
+  return pipeline.map(task => task(parameters))
 }
 
 export class DevCommand extends Command {

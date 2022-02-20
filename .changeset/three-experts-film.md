@@ -9,7 +9,7 @@ export default config({
   pipeline: [
     import("some-task-module"),
   ],
-  options: {
+  parameters: {
     // ...
   },
 })

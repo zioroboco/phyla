@@ -28,24 +28,26 @@ export type TaskInstance = {
   post?: Assertions
 }
 
-export type AbstractOptions = any
+export type AbstractParameters = any
 
-export type Task<Options extends AbstractOptions = {}> = (options: Options) => TaskInstance
+export type Task<Parameters extends AbstractParameters = {}> = (
+  parameters: Parameters
+) => TaskInstance
 
-export type AbstractTask = Task<AbstractOptions>
-export type TaskModule = Promise<{ default: Task<AbstractOptions> }>
+export type AbstractTask = Task<AbstractParameters>
+export type TaskModule = Promise<{ default: Task<AbstractParameters> }>
 
-export type OptionsUnion<Tasks extends TaskModule[]> =
+export type ParametersUnion<Tasks extends TaskModule[]> =
   Union.IntersectOf<Parameters<Awaited<Tasks[number]>["default"]>[0]>
 
 export type Config = {
   pipeline: AbstractTask[]
-  options: AbstractOptions
+  parameters: AbstractParameters
 }
 
 export const config = async function <Tasks extends TaskModule[]>(config: {
   pipeline: Tasks
-  options: OptionsUnion<Tasks>
+  parameters: ParametersUnion<Tasks>
 }): Promise<Config> {
   return {
     ...config,
@@ -57,9 +59,9 @@ export const config = async function <Tasks extends TaskModule[]>(config: {
   }
 }
 
-export const task = function <Options extends AbstractOptions> (
-  definition: (options: Options) => TaskInstance
-): Task<Options> {
+export const task = function <Parameters extends AbstractParameters> (
+  definition: (parameters: Parameters) => TaskInstance
+): Task<Parameters> {
   return definition
 }
 

@@ -14,18 +14,18 @@ const meta = require("../package.json")
 
 const supportedLicenses = ["MIT"] as const
 
-export type Options = {
+export type Parameters = {
   license: typeof supportedLicenses[number]
   author: string
 }
 
-export default task((options: Options) => ({
+export default task((params: Parameters) => ({
   name: meta.name,
   version: meta.version,
 
   pre: ({ describe, it }, ctx) => [
     it(`specified a supported license`, () => {
-      expect(supportedLicenses).toContain(options.license)
+      expect(supportedLicenses).toContain(params.license)
     }),
 
     describe(`the package.json file`)
@@ -52,7 +52,7 @@ export default task((options: Options) => ({
       "utf8"
     )
 
-    const rendered = await Eta.render(templateData, options, {
+    const rendered = await Eta.render(templateData, params, {
       autoEscape: false,
       autoTrim: false,
       rmWhitespace: false,
@@ -65,8 +65,8 @@ export default task((options: Options) => ({
       await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
     )
 
-    packageJson.author = options.author
-    packageJson.license = options.license
+    packageJson.author = params.author
+    packageJson.license = params.license
 
     await ctx.fs.promises.writeFile(
       join(ctx.cwd, "package.json"),
@@ -83,10 +83,10 @@ export default task((options: Options) => ({
       }))
       .assert(({ packageJson }) => [
         it(`records the expected author`, async () => {
-          expect(packageJson.author).toBe(options.author)
+          expect(packageJson.author).toBe(params.author)
         }),
         it(`records the expected license`, async () => {
-          expect(packageJson.license).toBe(options.license)
+          expect(packageJson.license).toBe(params.license)
         }),
       ]),
   ],

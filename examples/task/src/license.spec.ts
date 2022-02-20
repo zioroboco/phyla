@@ -2,7 +2,7 @@ import { Volume, createFsFromVolume } from "memfs"
 import { expect, test } from "@jest/globals"
 import { run } from "@phyla/core"
 
-import { Options, license } from "./license.js"
+import license, { Parameters } from "./license.js"
 
 const cwd = "/my-project"
 
@@ -18,12 +18,12 @@ test(`the happy path`, async () => {
     cwd
   )
 
-  const options: Options = {
+  const params: Parameters = {
     author: "Blep B. Leppington",
     license: "MIT",
   }
 
-  await run(license(options), {
+  await run(license(params), {
     // @ts-ignore
     fs: createFsFromVolume(volume),
     cwd,
