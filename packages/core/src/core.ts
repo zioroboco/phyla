@@ -42,9 +42,9 @@ export type TaskModule<Parameters extends {}> = Promise<{
 export type ParametersUnion<Modules extends TaskModule<any>[]> =
   Union.IntersectOf<Parameters<Awaited<Modules[number]>["default"]>[0]>
 
-export type Config = {
+export type Config<Parameters = any> = {
   pipeline: ((parameters: any) => TaskInstance)[]
-  parameters: any
+  parameters: Parameters
 }
 
 export const config = async function <Modules extends TaskModule<any>[]> (
@@ -52,7 +52,7 @@ export const config = async function <Modules extends TaskModule<any>[]> (
     pipeline: Modules,
     parameters: ParametersUnion<Modules>
   }
-): Promise<Config> {
+): Promise<Config<ParametersUnion<Modules>>> {
   return {
     ...config,
     pipeline: await Promise.all(
