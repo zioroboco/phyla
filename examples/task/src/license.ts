@@ -23,32 +23,25 @@ export default task((options: Options) => ({
   name: meta.name,
   version: meta.version,
 
-  pre: function ({ describe, it }, ctx) {
-    return [
-      describe(`the options object`).assert(() => [
-        it(`includes an author`, () => {
-          expect(options.author).toMatch("")
-        }),
-        it(`includes a supported license`, () => {
-          expect(supportedLicenses).toContain(options.license)
+  pre: ({ describe, it }, ctx) => [
+    it(`specified a supported license`, () => {
+      expect(supportedLicenses).toContain(options.license)
+    }),
+
+    describe(`the package.json file`)
+      .setup(async () => ({
+        packageJson: JSON.parse(
+          await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
+        ),
+      }))
+      .assert(({ packageJson }) => [
+        it(`exists`, async () => {
+          expect(packageJson).toMatchObject({})
         }),
       ]),
+  ],
 
-      describe(`the package.json file`)
-        .setup(async () => ({
-          packageJson: JSON.parse(
-            await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
-          ),
-        }))
-        .assert(({ packageJson }) => [
-          it(`exists`, async () => {
-            expect(packageJson).toMatchObject({})
-          }),
-        ]),
-    ]
-  },
-
-  run: async function (ctx) {
+  run: async ctx => {
     const templateDir = join(
       dirname(fileURLToPath(import.meta.url)),
       "../templates"
@@ -81,22 +74,20 @@ export default task((options: Options) => ({
     )
   },
 
-  post: function ({ describe, it }, ctx) {
-    return [
-      describe(`the package.json file`)
-        .setup(async () => ({
-          packageJson: JSON.parse(
-            await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
-          ),
-        }))
-        .assert(({ packageJson }) => [
-          it(`records the expected author`, async () => {
-            expect(packageJson.author).toBe(options.author)
-          }),
-          it(`records the expected license`, async () => {
-            expect(packageJson.license).toBe(options.license)
-          }),
-        ]),
-    ]
-  },
+  post: ({ describe, it }, ctx) => [
+    describe(`the package.json file`)
+      .setup(async () => ({
+        packageJson: JSON.parse(
+          await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
+        ),
+      }))
+      .assert(({ packageJson }) => [
+        it(`records the expected author`, async () => {
+          expect(packageJson.author).toBe(options.author)
+        }),
+        it(`records the expected license`, async () => {
+          expect(packageJson.license).toBe(options.license)
+        }),
+      ]),
+  ],
 }))
