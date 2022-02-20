@@ -7,7 +7,9 @@
         "dev",
         "example/project",
         "--watch",
-        "example/task",
+        "example/task-license",
+        "--watch",
+        "example/task-install",
         "--verbose"
       ],
       "runtimeVersion": "16",

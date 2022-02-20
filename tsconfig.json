@@ -16,7 +16,8 @@
   "references": [
     { "path": "./packages/assert" },
     { "path": "./packages/core" },
-    { "path": "./examples/task" }
+    { "path": "./examples/task-install" },
+    { "path": "./examples/task-license" }
   ],
   "include": ["**/*.spec.ts"]
 }
