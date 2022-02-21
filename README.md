@@ -18,7 +18,7 @@ Phyla is a framework for distributed project templating and maintenance.
 
 It is designed to allow groups of people to create families of related tasks which build upon each other and their well-typed common config.
 
-Pipelines are intended to be run _continuously_ as updates are pushed to task packages, and as a check against unexpected changes which could have be contributed to the wider ecosystem.
+Pipelines are intended to be run _continuously_ as updates are pushed to task packages, and as a check against unexpected changes which could have been contributed to the wider ecosystem.
 
 It's WIP and subject to breaking changes, but it's definitely useable.
 
