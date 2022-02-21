@@ -62,6 +62,7 @@ describe(execute.name, () => {
   const context: Context = {
     cwd: "/somewhere",
     fs: {} as typeof import("fs"),
+    io: {} as Context["io"],
     tasks: {
       prev: [],
       next: [second, third],

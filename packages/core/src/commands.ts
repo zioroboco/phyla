@@ -98,6 +98,7 @@ export class DiffCommand extends Command {
       tmpdir,
       tasks: await getTasks(this.srcdir),
       ci: this.ci ?? false,
+      io: this.context,
     }).catch(err => {
       process.exit(1)
     })
@@ -119,8 +120,9 @@ export class WriteCommand extends Command {
     const [firstTask, ...nextTasks] = await getTasks(this.srcdir)
 
     await execute(firstTask, {
-      fs: await import("fs"),
       cwd: this.srcdir,
+      fs: await import("fs"),
+      io: this.context,
       tasks: {
         prev: [],
         next: nextTasks,

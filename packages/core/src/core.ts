@@ -10,6 +10,11 @@ import { findupSync } from "./util.js"
 export type Context = {
   cwd: string
   fs: typeof system_fs
+  io: {
+    stdin: NodeJS.ReadableStream
+    stdout: NodeJS.WritableStream
+    stderr: NodeJS.WritableStream
+  }
   tasks: {
     prev: TaskInstance[],
     next: TaskInstance[],

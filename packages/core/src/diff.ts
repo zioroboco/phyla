@@ -7,6 +7,11 @@ export type DiffConfig = {
   srcdir: string
   tmpdir: string
   tasks: TaskInstance[]
+  io: {
+    stdin: NodeJS.ReadableStream
+    stdout: NodeJS.WritableStream
+    stderr: NodeJS.WritableStream
+  },
   ci: boolean
 }
 
@@ -39,8 +44,9 @@ export async function diff (config: DiffConfig): Promise<number> {
   const [firstTask, ...nextTasks] = config.tasks
 
   await execute(firstTask, {
-    fs: await import("fs"),
     cwd: tmpdir,
+    fs: await import("fs"),
+    io: config.io,
     tasks: {
       prev: [],
       next: nextTasks,

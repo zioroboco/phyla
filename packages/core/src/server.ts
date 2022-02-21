@@ -42,6 +42,7 @@ export type ServerConfig = {
   exclude: string[]
   log: Logger
   io: {
+    stdin: NodeJS.ReadableStream
     stdout: NodeJS.WritableStream
     stderr: NodeJS.WritableStream
   }
