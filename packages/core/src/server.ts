@@ -37,6 +37,7 @@ export type Logger = {
 export type ServerConfig = {
   getTasks: (dir: string) => Promise<TaskInstance[]>
   srcdir: string
+  tmpdir: string
   watch: string[]
   exclude: string[]
   log: Logger
@@ -46,14 +47,18 @@ export type ServerConfig = {
   }
 }
 
-export const withConfig = ({ io, log, srcdir, ...config }: ServerConfig) => {
-  log.debug("creating server instance")
+export const withConfig = (config: ServerConfig) => {
+  const { log, srcdir, tmpdir } = config
+
+  log.debug("creating server instance with config:")
+  log.debug({
+    srcdir,
+    tmpdir,
+    exclude: config.exclude,
+    watch: config.watch,
+  })
+
   log.header(log.serverinfo, "\n")
-
-  const tmpdir = path.join(os.tmpdir(), "phyla", path.basename(srcdir))
-  system_fs.mkdirSync(tmpdir, { recursive: true })
-
-  log.debug({ srcdir, tmpdir, config })
 
   const instance = interpret(
     serverMachine.withConfig({
