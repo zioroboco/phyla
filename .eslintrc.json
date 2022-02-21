@@ -40,7 +40,6 @@
     "key-spacing": ["warn"],
     "linebreak-style": ["warn", "unix"],
     "import/extensions": ["warn", "always"],
-    "import/order": ["warn", { "groups": ["builtin", "external", "internal"], "newlines-between": "always"}],
     "no-trailing-spaces": ["warn"],
     "sort-imports-es6-autofix/sort-imports-es6": "warn",
     "space-before-blocks": ["warn", "always"],
