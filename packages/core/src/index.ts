@@ -1,5 +1,5 @@
 export {
-  config,
-  run,
+  execute,
+  pipeline,
   task,
 } from "./core.js"

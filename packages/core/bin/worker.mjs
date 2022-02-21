@@ -12,15 +12,15 @@ assert(srcdir)
 assert(tmpdir)
 
 import(path.join(srcdir, "phyla.mjs"))
-  .then(async configModule => {
-    const config = await configModule.default
-    const [firstTask, ...nextTasks] = config.pipeline.map(task =>
-      task(config.parameters)
+  .then(async pipelineModule => {
+    const pipeline = await pipelineModule.default
+    const [firstTask, ...nextTasks] = pipeline.tasks.map(task =>
+      task(pipeline.parameters)
     )
-    return phyla.run(firstTask, {
+    return phyla.execute(firstTask, {
       fs: system_fs,
       cwd: tmpdir,
-      pipeline: {
+      tasks: {
         prev: [],
         next: nextTasks,
       },

@@ -10,7 +10,7 @@ import { findupSync } from "./util.js"
 export type Context = {
   cwd: string
   fs: typeof system_fs
-  pipeline: {
+  tasks: {
     prev: TaskInstance[],
     next: TaskInstance[],
   }
@@ -42,21 +42,21 @@ export type TaskModule<Parameters extends {}> = Promise<{
 export type ParametersUnion<Modules extends TaskModule<any>[]> =
   Union.IntersectOf<Parameters<Awaited<Modules[number]>["default"]>[0]>
 
-export type Config<Parameters = any> = {
-  pipeline: ((parameters: any) => TaskInstance)[]
+export type PipelineConfig<Parameters = any> = {
+  tasks: ((parameters: any) => TaskInstance)[]
   parameters: Parameters
 }
 
-export const config = async function <Modules extends TaskModule<any>[]> (
+export const pipeline = async function <Modules extends TaskModule<any>[]> (
   config: {
-    pipeline: Modules,
+    tasks: Modules,
     parameters: ParametersUnion<Modules>
   }
-): Promise<Config<ParametersUnion<Modules>>> {
+): Promise<PipelineConfig<ParametersUnion<Modules>>> {
   return {
     ...config,
-    pipeline: await Promise.all(
-      config.pipeline.map(module => module.then(m => m.default))
+    tasks: await Promise.all(
+      config.tasks.map(taskModule => taskModule.then(module => module.default))
     ).catch(e => {
       throw e
     }),
@@ -90,7 +90,7 @@ export const task = function <Parameters extends {}> (
   })
 }
 
-export const run = async function (
+export const execute = async function (
   instance: TaskInstance | undefined,
   context: Context
 ): Promise<void> {
@@ -118,12 +118,12 @@ export const run = async function (
     reporting.check(report, instance, "post")
   }
 
-  const [head, ...rest] = context.pipeline.next
+  const [head, ...rest] = context.tasks.next
 
-  await run(head, {
+  await execute(head, {
     ...context,
-    pipeline: {
-      prev: [...context.pipeline.prev, instance],
+    tasks: {
+      prev: [...context.tasks.prev, instance],
       next: rest,
     },
   })

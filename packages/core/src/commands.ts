@@ -4,7 +4,7 @@ import { Command, Option } from "clipanion"
 import { richFormat } from "clipanion/lib/format.js"
 
 import * as server from "./server.js"
-import { Config, TaskInstance, run } from "./core.js"
+import { PipelineConfig, TaskInstance, execute } from "./core.js"
 import { dim } from "./reporting.js"
 
 enum Category {
@@ -13,9 +13,9 @@ enum Category {
 
 async function getTasks (dir: string): Promise<TaskInstance[]> {
   const projectConfig = await import(path.join(dir, "phyla.mjs")).then(
-    module => module.default as Config
+    module => module.default as PipelineConfig
   )
-  const { pipeline, parameters } = projectConfig
+  const { tasks: pipeline, parameters } = projectConfig
   return pipeline.map(task => task(parameters))
 }
 
@@ -75,10 +75,10 @@ export class WriteCommand extends Command {
 
     const [firstTask, ...nextTasks] = await getTasks(this.srcdir)
 
-    await run(firstTask, {
+    await execute(firstTask, {
       fs: await import("fs"),
       cwd: this.srcdir,
-      pipeline: {
+      tasks: {
         prev: [],
         next: nextTasks,
       },

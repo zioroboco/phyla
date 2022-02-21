@@ -1,6 +1,6 @@
 import { Volume, createFsFromVolume } from "memfs"
+import { execute } from "@phyla/core"
 import { expect, test } from "@jest/globals"
-import { run } from "@phyla/core"
 
 import license, { Parameters } from "./license.js"
 
@@ -23,11 +23,11 @@ test(`the happy path`, async () => {
     license: "MIT",
   }
 
-  await run(license(params), {
+  await execute(license(params), {
     // @ts-ignore
     fs: createFsFromVolume(volume),
     cwd,
-    pipeline: { next: [], prev: [] },
+    tasks: { next: [], prev: [] },
   })
 
   const output = volume.toJSON()

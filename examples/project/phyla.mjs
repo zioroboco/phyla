@@ -1,7 +1,7 @@
-import { config } from "@phyla/core"
+import { pipeline } from "@phyla/core"
 
-export default config({
-  pipeline: [
+export default pipeline({
+  tasks: [
     import("@phyla/example-task-install"),
     import("@phyla/example-task-license"),
   ],
