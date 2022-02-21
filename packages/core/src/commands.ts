@@ -11,12 +11,15 @@ enum Category {
   Main = "main",
 }
 
-async function getTasks (dir: string): Promise<TaskInstance[]> {
-  const projectConfig = await import(path.join(dir, "phyla.mjs")).then(
+function getPipelineConfig (dir: string): Promise<PipelineConfig> {
+  return import(path.join(dir, "phyla.mjs")).then(
     module => module.default as PipelineConfig
   )
-  const { tasks: pipeline, parameters } = projectConfig
-  return pipeline.map(task => task(parameters))
+}
+
+async function getTasks (dir: string): Promise<TaskInstance[]> {
+  const { tasks, parameters } = await getPipelineConfig(dir)
+  return tasks.map(task => task(parameters))
 }
 
 export class DevCommand extends Command {
@@ -33,8 +36,10 @@ export class DevCommand extends Command {
 
   async execute () {
     this.srcdir = path.resolve(this.srcdir ?? ".")
-    this.watch = this.watch ?? []
-    this.exclude = this.exclude ?? []
+
+    const { server: options } = await getPipelineConfig(this.srcdir)
+    this.watch = [...(options?.watch ?? []), ...(this.watch ?? [])]
+    this.exclude = [...(options?.exclude ?? []), ...(this.exclude ?? [])]
 
     const log: server.Logger = {
       verbose: this.verbose ?? false,

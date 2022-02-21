@@ -42,15 +42,22 @@ export type TaskModule<Parameters extends {}> = Promise<{
 export type ParametersUnion<Modules extends TaskModule<any>[]> =
   Union.IntersectOf<Parameters<Awaited<Modules[number]>["default"]>[0]>
 
+type ServerOptions = {
+  exclude?: string[]
+  watch?: string[]
+}
+
 export type PipelineConfig<Parameters = any> = {
   tasks: ((parameters: any) => TaskInstance)[]
   parameters: Parameters
+  server?: ServerOptions
 }
 
 export const pipeline = async function <Modules extends TaskModule<any>[]> (
   config: {
     tasks: Modules,
     parameters: ParametersUnion<Modules>
+    server?: ServerOptions
   }
 ): Promise<PipelineConfig<ParametersUnion<Modules>>> {
   return {
