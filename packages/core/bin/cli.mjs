@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as commands from "@phyla/core/commands"
+import * as commands from "../dist/commands.js"
 import { Cli } from "clipanion"
 import { createRequire } from "module"
 

@@ -14,10 +14,6 @@
   },
   "type": "module",
   "main": "./dist/index.js",
-  "exports": {
-    ".": "./dist/index.js",
-    "./*": "./dist/*.js"
-  },
   "bin": {
     "phyla": "./bin/cli.mjs"
   },
