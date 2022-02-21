@@ -2,7 +2,7 @@ import { Volume, createFsFromVolume } from "memfs"
 import { execute } from "@phyla/core"
 import { expect, test } from "@jest/globals"
 
-import license, { Parameters } from "./license.js"
+import licenseTask, { LicenseTaskParameters } from "./license.js"
 
 const cwd = "/my-project"
 
@@ -18,12 +18,12 @@ test(`the happy path`, async () => {
     cwd
   )
 
-  const params: Parameters = {
+  const params: LicenseTaskParameters = {
     author: "Blep B. Leppington",
     license: "MIT",
   }
 
-  await execute(license(params), {
+  await execute(licenseTask(params), {
     // @ts-ignore
     fs: createFsFromVolume(volume),
     cwd,

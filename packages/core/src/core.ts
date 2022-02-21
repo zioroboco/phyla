@@ -35,11 +35,11 @@ export type TaskInstance = {
   post?: Assertions
 }
 
-export type TaskModule<Parameters extends {}> = Promise<{
-  default: (parameters: Parameters) => TaskInstance
+export type TaskModule<P extends unknown = {}> = Promise<{
+  default: (parameters: P) => TaskInstance
 }>
 
-export type ParametersUnion<Modules extends TaskModule<any>[]> =
+export type ParametersUnion<Modules extends TaskModule[]> =
   Union.IntersectOf<Parameters<Awaited<Modules[number]>["default"]>[0]>
 
 type ServerOptions = {
@@ -47,9 +47,9 @@ type ServerOptions = {
   watch?: string[]
 }
 
-export type PipelineConfig<Parameters = any> = {
-  tasks: ((parameters: any) => TaskInstance)[]
-  parameters: Parameters
+export type PipelineConfig<P = unknown> = {
+  tasks: ((parameters: unknown) => TaskInstance)[]
+  parameters: P
   server?: ServerOptions
 }
 
@@ -70,9 +70,9 @@ export const pipeline = async function <Modules extends TaskModule<any>[]> (
   }
 }
 
-export const task = function <Parameters extends {}> (
-  definition: (parameters: Parameters) => TaskInstance
-): (parameters: Parameters) => TaskInstance {
+export const task = function <P extends {}> (
+  definition: (parameters: P) => TaskInstance
+): (parameters: P) => TaskInstance {
   let name: string | undefined
   let version: string | undefined
   let callsite: string | undefined

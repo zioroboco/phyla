@@ -10,12 +10,12 @@ import expect from "expect"
 
 const supportedLicenses = ["MIT"] as const
 
-export type Parameters = {
+export type LicenseTaskParameters = {
   license: typeof supportedLicenses[number]
   author: string
 }
 
-export default task((params: Parameters) => ({
+export default task((params: LicenseTaskParameters) => ({
   pre: ({ describe, it }, ctx) => [
     it(`specified a supported license`, () => {
       expect(supportedLicenses).toContain(params.license)
