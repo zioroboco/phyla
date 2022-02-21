@@ -7,6 +7,6 @@ export default pipeline({
   ],
   parameters: {
     author: "Raymond Luxury-Yacht <rayly@example.com>",
-    license: "MIT"
+    license: "MIT",
   },
 })
