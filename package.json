@@ -8,6 +8,7 @@
     "packages/core": "cd packages/core && pnpm",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
+    "test:watch": "JEST_HIDE_USAGE=1 && pnpm run test -- --watch",
     "test": "NODE_OPTIONS='--no-warnings --experimental-vm-modules' jest",
     "test-ci": "pnpm test -- --ci",
     "lint": "pnpm lint:prettier -- --write && pnpm lint:eslint -- --fix",

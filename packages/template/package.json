@@ -16,6 +16,11 @@
   "type": "module",
   "main": "./dist/index.js",
   "devDependencies": {
-    "@jest/globals": "^27.5.1"
+    "@jest/globals": "^27.5.1",
+    "memfs": "^3.4.1"
+  },
+  "dependencies": {
+    "eta": "^1.12.3",
+    "fast-glob": "^3.2.11"
   }
 }

@@ -1,1 +1,1 @@
-export default {}
+export { template } from "./template.js"
