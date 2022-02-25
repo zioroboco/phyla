@@ -1,0 +1,21 @@
+{
+  "name": "@phyla/template",
+  "version": "0.0.0",
+  "author": "Louis Quinnell <_@ziorobo.co>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zioroboco/phyla.git",
+    "directory": "packages/template"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!*.spec.*"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "devDependencies": {
+    "@jest/globals": "^27.5.1"
+  }
+}
