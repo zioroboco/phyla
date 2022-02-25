@@ -10,12 +10,10 @@
   "devDependencies": {
     "@jest/globals": "^27.5.1",
     "@phyla/core": "workspace:*",
-    "@types/ramda": "^0.27.65",
     "memfs": "^3.4.1"
   },
   "dependencies": {
-    "eta": "^1.12.3",
-    "expect": "^27.5.1",
-    "ramda": "^0.28.0"
+    "@phyla/template": "workspace:*",
+    "expect": "^27.5.1"
   }
 }

@@ -69,19 +69,15 @@ importers:
     specifiers:
       '@jest/globals': ^27.5.1
       '@phyla/core': workspace:*
-      '@types/ramda': ^0.27.65
-      eta: ^1.12.3
+      '@phyla/template': workspace:*
       expect: ^27.5.1
       memfs: ^3.4.1
-      ramda: ^0.28.0
     dependencies:
-      eta: 1.12.3
+      '@phyla/template': link:../../packages/template
       expect: 27.5.1
-      ramda: 0.28.0
     devDependencies:
       '@jest/globals': 27.5.1
       '@phyla/core': link:../../packages/core
-      '@types/ramda': 0.27.65
       memfs: 3.4.1
 
   packages/assert:
@@ -1060,12 +1056,6 @@ packages:
 
   /@types/prettier/2.4.4:
     resolution: {integrity: sha512-ReVR2rLTV1kvtlWFyuot+d1pkpG2Fw/XKE3PDAdj57rbM97ttSp9JZ2UsP+2EHTylra9cUf6JA7tGwW1INzUrA==}
-    dev: true
-
-  /@types/ramda/0.27.65:
-    resolution: {integrity: sha512-JVX1qgW9xxKUraEbiftgrREtf8A2m+2IAl32oh9pHCrNj0nwPRnOhuvghn1ELTCjTq66slejsePafMXjbHpPAA==}
-    dependencies:
-      ts-toolbelt: 6.15.5
     dev: true
 
   /@types/semver/6.2.3:
@@ -3927,10 +3917,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /ramda/0.28.0:
-    resolution: {integrity: sha512-9QnLuG/kPVgWvMQ4aODhsBUFKOUmnbUnsSXACv+NCQZcHbeb+v8Lodp8OVxtRULN1/xOyYLLaL6npE6dMq5QTA==}
-    dev: false
-
   /react-is/17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
@@ -4431,10 +4417,6 @@ packages:
       semver: 7.3.5
       typescript: 4.5.5
       yargs-parser: 20.2.9
-    dev: true
-
-  /ts-toolbelt/6.15.5:
-    resolution: {integrity: sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==}
     dev: true
 
   /ts-toolbelt/9.6.0:

@@ -1,11 +1,9 @@
-import * as system_fs from "fs/promises"
-import { strict as assert } from "assert"
 import { dirname } from "path"
 import { fileURLToPath } from "url"
 import { join } from "path"
 
-import * as Eta from "eta"
 import { task } from "@phyla/core"
+import { template } from "@phyla/template"
 import expect from "expect"
 
 const supportedLicenses = ["MIT"] as const
@@ -17,7 +15,7 @@ export type LicenseTaskParameters = {
 
 export default task((params: LicenseTaskParameters) => ({
   pre: ({ describe, it }, ctx) => [
-    it(`specified a supported license`, () => {
+    it(`requested a supported license`, () => {
       expect(supportedLicenses).toContain(params.license)
     }),
 
@@ -40,19 +38,13 @@ export default task((params: LicenseTaskParameters) => ({
       "../templates"
     )
 
-    const templateData = await system_fs.readFile(
-      join(templateDir, "LICENSE.eta"),
-      "utf8"
-    )
-
-    const rendered = await Eta.render(templateData, params, {
-      autoEscape: false,
-      autoTrim: false,
-      rmWhitespace: false,
+    await template(ctx, {
+      directory: templateDir,
+      variables: {
+        ...params,
+        year: String(new Date().getFullYear()),
+      },
     })
-
-    assert(rendered)
-    await ctx.fs.promises.writeFile(join(ctx.cwd, "LICENSE"), rendered)
 
     const packageJson = JSON.parse(
       await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
@@ -68,6 +60,21 @@ export default task((params: LicenseTaskParameters) => ({
   },
 
   post: ({ describe, it }, ctx) => [
+    describe(`the LICENSE file`)
+      .setup(async () => ({
+        licenseFile: await ctx.fs.promises.readFile(
+          join(ctx.cwd, "LICENSE"),
+          "utf8"
+        ),
+      }))
+      .assert(({ licenseFile }) => [
+        it(`includes the author`, async () => {
+          expect(licenseFile).toMatch(params.author)
+        }),
+        it(`includes the current year`, async () => {
+          expect(licenseFile).toMatch(String(new Date().getFullYear()))
+        }),
+      ]),
     describe(`the package.json file`)
       .setup(async () => ({
         packageJson: JSON.parse(
