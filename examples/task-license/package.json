@@ -10,7 +10,7 @@
   "devDependencies": {
     "@jest/globals": "^27.5.1",
     "@phyla/core": "workspace:*",
-    "@types/ramda": "^0.27.64",
+    "@types/ramda": "^0.27.65",
     "memfs": "^3.4.1"
   },
   "dependencies": {
