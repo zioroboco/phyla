@@ -50,7 +50,7 @@ export async function template (context: Context, options: Options) {
       }
 
       return {
-        templatePath,
+        templatePath: templatePath.replace(/\.template$/, ""),
         rendered,
       }
     })
