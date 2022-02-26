@@ -5,7 +5,7 @@ import glob from "fast-glob"
 
 type Options = {
   directory: string
-  variables: { [key: string]: string }
+  variables: object
 }
 
 type Context = {
