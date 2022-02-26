@@ -2,10 +2,11 @@
   "packageManager": "pnpm@6.31.0",
   "private": true,
   "scripts": {
-    "examples/project": "cd examples/project && pnpm",
-    "examples/task": "cd examples/task && pnpm",
-    "packages/assert": "cd packages/assert && pnpm",
-    "packages/core": "cd packages/core && pnpm",
+    "examples/project": "pnpm --dir examples/project",
+    "examples/task": "pnpm --dir examples/task",
+    "packages/assert": "pnpm --dir packages/assert",
+    "packages/core": "pnpm --dir packages/core",
+    "packages/template": "pnpm --dir packages/template",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "test:watch": "JEST_HIDE_USAGE=1 && pnpm run test -- --watch",
@@ -18,6 +19,9 @@
     "copy-docs": "cp README.md packages/core && cp LICENSE packages/core",
     "release": "pnpm build && pnpm copy-docs && changeset publish",
     "version": "changeset version && pnpm install",
+    "docgen:assert": "typedoc --entryPoints packages/assert/src/index.ts --tsconfig packages/assert/tsconfig.json --watch",
+    "docgen:core": "typedoc --entryPoints packages/core/src/index.ts --tsconfig packages/core/tsconfig.json --watch",
+    "docgen:template": "typedoc --entryPoints packages/template/src/index.ts --tsconfig packages/template/tsconfig.json --watch",
     "docgen": "typedoc --entryPointStrategy packages 'packages/*'"
   },
   "devDependencies": {
