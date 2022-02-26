@@ -18,7 +18,10 @@ jobs:
           cache: pnpm
           node-version-file: .nvmrc
       - run: pnpm install --ignore-scripts --frozen-lockfile
-      - uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
+
+      - name: Release packages
+        id: changesets
+        uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
         with:
           title: Release
           commit: Release
@@ -27,3 +30,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Update docs
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          pnpm docgen
+          echo "phyla.ziorobo.co" > docs/CNAME
+          git add --force docs
+          git commit -m "Update docs"
+          git subtree push --prefix docs origin gh-pages

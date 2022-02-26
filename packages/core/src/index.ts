@@ -1,3 +1,7 @@
+/**
+ * @module core
+ */
+
 export {
   execute,
   pipeline,

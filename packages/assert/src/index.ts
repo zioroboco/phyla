@@ -1,3 +1,7 @@
+/**
+ * @module assert
+ */
+
 export const Pass = Symbol("Pass")
 
 export type TestOutcome = typeof Pass | Error
