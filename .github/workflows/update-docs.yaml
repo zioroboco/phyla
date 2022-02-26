@@ -1,0 +1,25 @@
+name: update-docs
+
+on: workflow_dispatch
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@2270f39ef63c3edf50be34da68c039eca5e15c15
+        with:
+          version: 6.31.0
+      - uses: actions/setup-node@v2
+        with:
+          cache: pnpm
+          node-version-file: .nvmrc
+      - run: pnpm install --ignore-scripts --frozen-lockfile
+
+      - name: Update docs
+        run: |
+          pnpm docgen
+          echo "phyla.ziorobo.co" > docs/CNAME
+          git add --force docs
+          git commit -m "Update docs"
+          git subtree push --prefix docs origin gh-pages
