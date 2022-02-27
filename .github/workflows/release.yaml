@@ -17,11 +17,11 @@ jobs:
         with:
           cache: pnpm
           node-version-file: .nvmrc
+
       - run: pnpm install --ignore-scripts --frozen-lockfile
 
-      - name: Release packages
+      - uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
         id: changesets
-        uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
         with:
           title: Release
           commit: Release
@@ -31,11 +31,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Update docs
+      - uses: peaceiris/actions-gh-pages@068dc23d9710f1ba62e86896f84735d869951305
         if: steps.changesets.outputs.published == 'true'
-        run: |
-          pnpm docgen
-          echo "phyla.ziorobo.co" > docs/CNAME
-          git add --force docs
-          git commit -m "Update docs"
-          git subtree push --prefix docs origin gh-pages
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          cname: phyla.ziorobo.co
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com

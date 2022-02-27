@@ -14,12 +14,15 @@ jobs:
         with:
           cache: pnpm
           node-version-file: .nvmrc
-      - run: pnpm install --ignore-scripts --frozen-lockfile
 
-      - name: Update docs
-        run: |
-          pnpm docgen
-          echo "phyla.ziorobo.co" > docs/CNAME
-          git add --force docs
-          git commit -m "Update docs"
-          git subtree push --prefix docs origin gh-pages
+      - run: pnpm install --ignore-scripts --frozen-lockfile
+      - run: pnpm run build
+      - run: pnpm docgen
+
+      - uses: peaceiris/actions-gh-pages@068dc23d9710f1ba62e86896f84735d869951305
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          cname: phyla.ziorobo.co
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
