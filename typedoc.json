@@ -1,5 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "name": "🧬 @phyla",
+  "customTitle": "🧬 phyla",
+  "favicon": "https://phyla-assets.s3.amazonaws.com/icon.png",
+  "name": "@phyla",
   "exclude": "*.spec.ts"
 }
