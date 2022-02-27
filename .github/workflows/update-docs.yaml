@@ -3,7 +3,7 @@ name: update-docs
 on: workflow_dispatch
 
 jobs:
-  release:
+  update-docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
