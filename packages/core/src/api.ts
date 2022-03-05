@@ -1,10 +1,11 @@
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
+import { Union } from "ts-toolbelt"
 
 /**
  * State passed down through pipelines of tasks.
  */
-export type Context = {
+export interface Context {
   /** The target project directory. */
   cwd: string
   /** Stack trace, for errors and other output. */
@@ -58,4 +59,20 @@ export function task<P> (
 
 function toError (stack: string[]) {
   return (e: unknown) => E.toError(`${e} (from: ${stack.join(" -> ")})`)
+}
+
+export interface TaskModule<P extends unknown = any> {
+  default: (parameters: P) => Chainable
+}
+
+type ParametersUnion<Modules extends readonly Promise<TaskModule>[]> =
+  Union.IntersectOf<Parameters<Awaited<Modules[number]>["default"]>[0]>
+
+export function pipeline<Modules extends readonly Promise<TaskModule>[]> (
+  init: {
+    tasks: Modules
+    parameters: ParametersUnion<Modules>
+  }
+) {
+  return init
 }
