@@ -19,6 +19,7 @@
     "copy-docs": "cp README.md packages/core && cp LICENSE packages/core",
     "release": "pnpm build && pnpm copy-docs && changeset publish",
     "version": "changeset version && pnpm install",
+    "docgen:api": "typedoc --entryPoints packages/core/src/api.ts --tsconfig packages/core/tsconfig.json --watch",
     "docgen:assert": "typedoc --entryPoints packages/assert/src/index.ts --tsconfig packages/assert/tsconfig.json --watch",
     "docgen:core": "typedoc --entryPoints packages/core/src/index.ts --tsconfig packages/core/tsconfig.json --watch",
     "docgen:template": "typedoc --entryPoints packages/template/src/index.ts --tsconfig packages/template/tsconfig.json --watch",
