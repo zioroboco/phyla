@@ -32,11 +32,11 @@
   "dependencies": {
     "@phyla/assert": "workspace:^0.1.0",
     "@types/ramda": "^0.28.0",
-    "clipanion": "^3.2.0-rc.9",
+    "clipanion": "^3.2.0-rc.10",
     "fp-ts": "^2.11.8",
     "ramda": "^0.28.0",
     "ts-toolbelt": "^9.6.0",
     "typanion": "^3.7.1",
-    "xstate": "^4.30.2"
+    "xstate": "^4.30.5"
   }
 }
