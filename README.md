@@ -98,7 +98,7 @@ export default phyla.pipeline({
   parameters: {
     project: "event-log-stream-dispatch-agent-mk2",
     channel: "#glitter-and-chaos",
-    environments: ["production", "extra-production"]
+    environments: ["production", "extra-production"],
     tags: ["wildly-important"],
   },
 })
