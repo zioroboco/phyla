@@ -4,7 +4,7 @@
       <p>🧬</p>
       <p>phyla</p>
     </h1>
-    <p>Create families of composable project (re-) generators.</p>
+    <p>A framework for distributed project generation and maintenance</p>
     <a href="https://www.npmjs.com/package/@phyla/core">
       <img src="https://img.shields.io/npm/v/@phyla/core?style=flat-square">
     </a>
@@ -14,87 +14,161 @@
 
 ## Overview
 
-Phyla is a framework for distributed project templating and maintenance.
+Project templating is easy. Maintaining a distributed codebase is hard. 
 
-It is designed to allow groups of people to create families of related tasks which build upon each other and their well-typed common config.
-
-Pipelines are intended to be run _continuously_ as updates are pushed to task packages, and as a check against unexpected changes which could have been contributed to the wider ecosystem.
-
-It's WIP and subject to breaking changes, but it's definitely useable.
+Phyla is a framework for developing, testing and continuously re-applying hierarchies of project generators, which build upon each other and your ever-evolving type-safe common config.
 
 ## Principles
 
-  - optimise for writing, testing and scalably composing tasks
-  - make use of npm packages / package registries
-  - use only minimal dependencies
-  - 100% ESM
+  - templating and maintenance deserves a better developer experience
+  - generator outcomes should be testable and compose scalably
+  - package registries can be used to asynchronously push updates to projects
+  - supply-chain vulnerabilities exist, needless dependencies are a liability
+  - node, typescript and esm are the right tools for this job
 
-## Running pipelines
+## Concepts
 
-```sh
-# show commands and their options
-npm run phyla
+Phyla is designed around composable **pipelines** and **tasks**, which can optionally include **suites of assertions**.
 
-# write changes directly to the filesystem
-npm run phyla write ./path/to/project
+Note that phyla tasks and pipelines are **always the default export of an es-module**. This narrows the API to make breaking changes harder (and maintenance of pipelines via package updates therefore easier).
 
-# diff the filesystem and exit non-zero on changes
-npm run phyla diff ./path/to/project
+### Tasks
 
-# start a development server (requires vscode)
-npm run phyla dev ./path/to/project --watch ./path/to/task
+Phyla tasks are discrete pipeline steps which do useful work.
+
+Tasks are as strict or as lax as you like. They can operate entirely on an injected in-memory `fs` module, or go wild and fire ze missiles with shell scripts written with [google/zx](https://github.com/google/zx) or whatever else.
+
+```ts
+import * as phyla from "@phyla/core"
+
+type TaskParams = { /* inputs to the tasks */ }
+
+export default phyla.task((params: TaskParams) => ({
+  pre: ({ describe, it }, { cwd, fs }) => [
+    // check assumptions and pre-conditions...
+  ],
+  run: async function ({ cwd, fs }) {
+    // do the actual work...
+  },
+  post: ({ describe, it }, { cwd, fs }) => [
+    // verify that the work was successful...
+  ],
+}))
 ```
 
-## Configuring pipelines
+### Assertions
 
-```js
-// ./phyla.mjs
+Tasks can also host detailed pre- and post- execution assertion suites, to validate both the expectations that the task has of a project, and to verify that the expected outcomes of the task have been achieved.
 
-import { pipeline } from "@phyla/core"
+The assertions API is structured to achieve the greatest possible concurrency, with IO-bound setup steps able to block only the particular tests which depend on that data.
 
-export default pipeline({
+```ts
+  post: ({ describe, it }, { cwd, fs }) => [
+    describe(`the package.json file`)
+      .setup(async () => ({
+        packageJson: await readJson(join(cwd, "package.json")),
+      })
+      .assert(({ packageJson }) => [
+        it(`includes the repository details`, () => {
+          expect(packageJson).toMatchObject({
+            repository: {
+              type: `git`,
+              url: `https://github.com/${params.org}/${params.project}.git`,
+              directory: `packages/${params.package}`,
+            }
+          })
+        })
+      ]),
+  ],
+```
+
+### Pipelines
+
+Pipelines are phyla's unit of composition. Not only can they be used to chain sequences of tasks, but even other pipelines.
+
+```ts
+import * as phyla from "@phyla/core"
+
+export default phyla.pipeline({
   tasks: [
-    import("@phyla/some-contributed-task"),
-    import("./tasks/my-local-task.mjs"),
+    import("@org/some-task"),
+    import("@org/an-entire-pipeline"),
+    import("@org/pipelines-of-pipelines/oh-my"),
   ],
   parameters: {
-    author: {
-      name: "Raymond Luxury-Yacht",
-      email: "rayly@example.com",
-    },
+    project: "event-log-stream-dispatch-agent-mk2",
+    channel: "#glitter-and-chaos",
+    environments: ["production", "extra-production"]
+    tags: ["wildly-important"],
   },
 })
 ```
 
-## Authoring tasks
+The type of a pipeline's parameters is inferred from the union of the parameters of all the pipeline's constituent tasks.
+
+Like tasks, pipelines can also be defined as a function of exposed parameters, which can then be used to create new abstractions by encapsulating other tasks or pipelines.
 
 ```ts
-// ./tasks/my-local-task.mjs
+import * as phyla from "@phyla/core"
 
-import { task } from "@phyla/core"
-import expect from "expect"
-
-type MyTaskParameters = {
-  // ...
+type ExposedParams = {
+  materials: Array<"cardboard" | "string" | "cellophane-tape">
 }
 
-export default task((params: MyTaskParameters) => ({
-
-  pre: ({ describe, it }, { cwd, fs }) => [
-    it(`meets the pre-conditions of the task`, () => {
-      expect(...)
-    }),
+export default phyla.pipeline((params: ExposedParams) => ({
+  tasks: [
+    import("@org/important-business"),
   ],
-
-  run: async function ({ cwd, fs }) {
-    // do useful work with the provided fs module...
+  parameters: {
+    materials: ["paddle-pop-sticks", "pva", ...params.components],
   },
-
-  post: ({ describe, it }, { cwd, fs }) => [
-    it(`has been completed successfully`, () => {
-      expect(...)
-    }),
-  ],
-
 }))
 ```
+
+## Commands
+
+While pipelines can also be run programmatically, a CLI client is included in the `@phyla/core` package. Run `phyla --help` for commands and options.
+
+All commands expect a path to a directory with a pipeline exported as the default export of a `phyla.mjs` module (defaulting to the current working directory if no path is provided).
+
+### `phyla write [project]`
+
+Run the pipeline in-place and write changes immediately to disk. This can be destructive, so you want to have a clean work tree, and maybe run `phyla diff` first.
+
+### `phyla diff [project]`
+
+Diff the pipeline against the current state of the filesystem, exiting non-zero on any required changes, or on failing pre- or post-task assertions.
+
+Uses your git pager by default. Add the `--ci` flag for use in CI environments.
+
+```patch
+--- a/.../project/package.json
++++ b/.../project/package.json
+@@ -1,11 +1,12 @@
+ {
+   "name": "@phyla/example-project",
+   "version": "0.0.0",
+-  "author": "Ray",
++  "author": "Raymond Luxury-Yacht <rayly@example.com>",
+   "private": true,
+   "dependencies": {
+     ...
+   }
+ }
+```
+
+### `phyla dev [project]`
+
+Play with the pipeline output via a hot-reloading dev server (oh yes!)
+
+Automatically watches the project directory, but you can add (multiple) `--watch [path]` arguments to watch task directories as well, and `--exclude [path]` directories to prevent syncing heavy directories like `node_modules`.
+
+WIP and experimental, but it works well.
+
+## Where to next?
+
+There's a working example project in the [`./examples/`](./examples/) directory.
+
+## Contributing
+
+Contributions and ideas are sincerely welcome! ❤️
