@@ -3,7 +3,7 @@ import * as path from "path"
 import { describe, expect, it, jest } from "@jest/globals"
 import { flow } from "fp-ts/lib/function"
 
-import { Context, Definition, pipeline, task } from "./api.js"
+import { Context, TaskDefinition, pipeline, task } from "./api.js"
 
 const simple = task((params: { dir: string }) => ({
   name: "my-task",
@@ -105,10 +105,10 @@ describe(`the ${pipeline.name} factory`, () => {
       name: "pipeline",
       tasks: [
         Promise.resolve({
-          default: task((p: { one: string }) => ({} as Definition)),
+          default: task((p: { one: string }) => ({} as TaskDefinition)),
         }),
         Promise.resolve({
-          default: task((p: { two: string }) => ({} as Definition)),
+          default: task((p: { two: string }) => ({} as TaskDefinition)),
         }),
       ],
       parameters: {
