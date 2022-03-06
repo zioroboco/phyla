@@ -5,6 +5,8 @@ import { task } from "@phyla/core"
 import expect from "expect"
 
 export default task(() => ({
+  name: "@phyla/example-install",
+
   run: async ctx => {
     await cd(ctx.cwd)
     await $`echo "# replace me with a real install!" > pnpm-lock.yaml`

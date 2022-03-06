@@ -36,7 +36,7 @@ describe(`the ${pipeline.name} factory`, () => {
   describe(`initialised with a simple task module`, () => {
     const simpleTaskModule = Promise.resolve({ default: simple })
     const simplePipeline = pipeline({
-      meta: { name: "simple-pipeline" },
+      name: "simple-pipeline",
       tasks: [simpleTaskModule],
       parameters: {
         dir: "blep",
@@ -65,7 +65,7 @@ describe(`the ${pipeline.name} factory`, () => {
   describe(`initialised with multiple simple task module`, () => {
     const simpleTaskModule = Promise.resolve({ default: simple })
     const simplePipelineComposingTasks = pipeline({
-      meta: { name: "simple-pipeline-composing" },
+      name: "simple-pipeline-composing",
       tasks: [simpleTaskModule, simpleTaskModule],
       parameters: {
         dir: "blep",
@@ -86,7 +86,7 @@ describe(`the ${pipeline.name} factory`, () => {
     describe(`initialised with a factory function`, () => {
       const simpleTaskModule = Promise.resolve({ default: simple })
       const simplePipeline = pipeline((params: { fancyPath: string }) => ({
-        meta: { name: "simple-pipeline-from-factory" },
+        name: "simple-pipeline-from-factory",
         tasks: [simpleTaskModule],
         parameters: {
           dir: params.fancyPath,
@@ -103,7 +103,7 @@ describe(`the ${pipeline.name} factory`, () => {
 
   it(`merges parameter types`, () => {
     pipeline(() => ({
-      meta: { name: "pipeline" },
+      name: "pipeline",
       tasks: [
         Promise.resolve({
           default: task((p: { one: string }) => ({} as TaskDefinition)),
@@ -130,7 +130,7 @@ describe(`the ${pipeline.name} factory`, () => {
 
 describe(`the task call stack`, () => {
   const checkStack = task((params: { examine: Function }) => ({
-    meta: { name: "check-stack" },
+    name: "check-stack",
     run: async ctx => {
       params.examine([...ctx.stack])
     },
@@ -149,7 +149,7 @@ describe(`the task call stack`, () => {
 
   describe(`when tasks are composed within a pipeline`, () => {
     const checkPipeline = pipeline((params: { examine: Function }) => ({
-      meta: { name: "check-pipeline" },
+      name: "check-pipeline",
       tasks: [Promise.resolve({ default: checkStack })],
       parameters: {
         ...params,

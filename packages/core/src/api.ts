@@ -3,7 +3,6 @@ import * as TE from "fp-ts/TaskEither"
 import * as assertions from "@phyla/assert"
 import * as reporting from "./reporting.js"
 import { Union } from "ts-toolbelt"
-import { getMeta } from "./util.js"
 import { pipe } from "fp-ts/function"
 
 export function run (task: Chainable, ctx: Context) {
@@ -47,12 +46,11 @@ export interface Context {
 /**
  * Object describing the behavior of a task or pipeline.
  */
-export interface TaskDefinition {
+export interface TaskDefinition extends Meta {
   /**
    * Run implementation of the task or pipeline.
    */
   run: (context: Context) => Promise<void | Context>
-  meta?: Meta
   pre?: Assertions
   post?: Assertions
 }
@@ -80,11 +78,10 @@ export function task<P> (
 ): (parameters: P) => Chainable {
   return parameters => {
     const definition = init(parameters)
-    const meta = getMeta(definition.meta)
     return TE.chain(
       (ctx: Context) =>
         TE.tryCatch(async () => {
-          ctx.stack.push(meta)
+          ctx.stack.push({ name: definition.name, version: definition.version })
 
           if (definition.pre) {
             const suite = definition.pre(
@@ -92,7 +89,7 @@ export function task<P> (
               ctx
             )
             const report = await assertions.run(suite)
-            reporting.check(report, definition.meta!, "pre")
+            reporting.check(report, definition, "pre")
           }
 
           const rv = await definition.run(ctx)
@@ -103,7 +100,7 @@ export function task<P> (
               ctx
             )
             const report = await assertions.run(suite)
-            reporting.check(report, definition.meta!, "post")
+            reporting.check(report, definition, "post")
           }
 
           ctx.stack.pop()
@@ -141,8 +138,7 @@ type ParametersUnion<Modules extends readonly Promise<TaskModule>[]> =
  *
  * @typeParam Modules See {@link TaskModule}.
  */
-export interface PipelineDefinition<Modules, ModuleParameters> {
-  meta?: Meta
+export interface PipelineDefinition<Modules, ModuleParameters> extends Meta {
   /**
    * A list of (unresolved) async {@link TaskModule} imports.
    *
@@ -180,11 +176,13 @@ export interface PipelineDefinition<Modules, ModuleParameters> {
  */
 export function pipeline<Modules extends readonly Promise<TaskModule>[], P> (
   init: ((parameters: P) => {
-    meta?: Meta
+    name?: string
+    version?: string
     tasks: Modules
     parameters: ParametersUnion<Modules>
   }) | {
-    meta?: Meta
+    name?: string
+    version?: string
     tasks: Modules
     parameters: ParametersUnion<Modules>
   }
@@ -197,7 +195,8 @@ export function pipeline<Modules extends readonly Promise<TaskModule>[], P> (
     )
 
     return task((inner: ParametersUnion<Modules>) => ({
-      meta: getMeta(definition.meta),
+      name: definition.name,
+      version: definition.version,
       // @ts-ignore: can't infer argument types from a tasks array
       run: async ctx => pipe(TE.of(ctx), ...tasks.map(t => t(inner)))().then(
         // @ts-ignore: expects a context, but we deliberately throw

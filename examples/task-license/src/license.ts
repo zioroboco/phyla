@@ -14,6 +14,8 @@ export type LicenseTaskParameters = {
 }
 
 export default phyla.task((params: LicenseTaskParameters) => ({
+  name: "@phyla/example-license",
+
   pre: ({ describe, it }, ctx) => [
     it(`requested a supported license`, () => {
       expect(supportedLicenses).toContain(params.license)
