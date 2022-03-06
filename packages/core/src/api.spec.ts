@@ -49,8 +49,78 @@ describe(`the ${Phyla.task.name} factory`, () => {
 })
 
 describe(`the ${Phyla.pipeline.name} factory`, () => {
+  describe(`initialised with a simple task module`, () => {
+    const simpleTaskModule = Promise.resolve({ default: simple })
+    const simplePipeline = Phyla.pipeline({
+      name: "simple-pipeline",
+      tasks: [simpleTaskModule],
+      parameters: {
+        dir: "blep",
+      },
+    })
+
+    it(`can be run`, async () => {
+      const chainable = await simplePipeline({})
+      const result = await chainable(TE.of({ cwd: "/", stack: [] }))()
+      expect(result).toMatchObject({ right: { cwd: "/blep" } })
+    })
+
+    it(`can be chained`, async () => {
+      const chainable = await simplePipeline({})
+
+      const result = await flow(
+        chainable,
+        chainable,
+        chainable,
+      )(TE.of({ cwd: "/", stack: [] }))()
+
+      expect(result).toMatchObject({ right: { cwd: "/blep/blep/blep" } })
+    })
+  })
+
+  describe(`initialised with multiple simple task module`, () => {
+    const simpleTaskModule = Promise.resolve({ default: simple })
+    const simplePipelineComposingTasks = Phyla.pipeline({
+      name: "simple-pipeline-composing",
+      tasks: [simpleTaskModule, simpleTaskModule],
+      parameters: {
+        dir: "blep",
+      },
+    })
+
+    it(`can be run`, async () => {
+      const chainable = await simplePipelineComposingTasks({})
+
+      const result = await flow(
+        chainable,
+        chainable,
+      )(TE.of({ cwd: "/", stack: [] }))()
+
+      expect(result).toMatchObject({ right: { cwd: "/blep/blep/blep/blep" } })
+    })
+
+    describe(`initialised with a factory function`, () => {
+      const simpleTaskModule = Promise.resolve({ default: simple })
+      const simplePipeline = Phyla.pipeline((params: { fancyPath: string }) => ({
+        name: "simple-pipeline-from-factory",
+        tasks: [simpleTaskModule],
+        parameters: {
+          dir: params.fancyPath,
+        },
+      }))
+
+      it(`can be run`, async () => {
+        const chainable = await simplePipeline({ fancyPath: "bork" })
+        const result = await chainable(TE.of({ cwd: "/", stack: [] }))()
+        expect(result).toMatchObject({ right: { cwd: "/bork" } })
+      })
+    })
+
+  })
+
   it(`merges parameter types`, () => {
-    Phyla.pipeline({
+    Phyla.pipeline(() => ({
+      name: "pipeline",
       tasks: [
         Promise.resolve({
           default: Phyla.task((p: { one: string }) => ({} as Phyla.Definition)),
@@ -63,7 +133,7 @@ describe(`the ${Phyla.pipeline.name} factory`, () => {
         one: "",
         two: "",
       },
-    })
+    }))
   })
 
   it(`type errors when initialised with a missing parameter`, () => {

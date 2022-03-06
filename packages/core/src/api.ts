@@ -1,6 +1,7 @@
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
 import { Union } from "ts-toolbelt"
+import { flow, pipe } from "fp-ts/function"
 
 /**
  * State passed down through pipelines of tasks.
@@ -68,11 +69,42 @@ export interface TaskModule<P extends unknown = any> {
 type ParametersUnion<Modules extends readonly Promise<TaskModule>[]> =
   Union.IntersectOf<Parameters<Awaited<Modules[number]>["default"]>[0]>
 
-export function pipeline<Modules extends readonly Promise<TaskModule>[]> (
-  init: {
+/**
+ * Object describing the behavior of a task or pipeline.
+ */
+export type PipelineDefinition<Modules, ModuleParameters> = {
+  name: string
+  tasks: Modules
+  parameters: ModuleParameters
+}
+
+export function pipeline<Modules extends readonly Promise<TaskModule>[], P> (
+  init: ((parameters: P) => {
+    name: string
+    tasks: Modules
+    parameters: ParametersUnion<Modules>
+  }) | {
+    name: string
     tasks: Modules
     parameters: ParametersUnion<Modules>
   }
-) {
-  return init
+): (parameters: P) => Promise<Chainable> {
+  return async (outer: P) => {
+    const definition = typeof init === "function" ? init(outer) : init
+
+    const tasks = await Promise.all(definition.tasks).then(allResolved =>
+      allResolved.map(module => module.default)
+    )
+
+    return task((inner: ParametersUnion<Modules>) => ({
+      name: definition.name,
+      // @ts-ignore
+      run: async ctx => pipe(TE.of(ctx), ...tasks.map(t => t(inner)))().then(
+        // @ts-ignore
+        E.getOrElse(e => {
+          throw e
+        })
+      ),
+    }))(definition.parameters)
+  }
 }
