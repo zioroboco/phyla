@@ -9,7 +9,11 @@ export function run (task: Chainable, ctx: Context) {
   return task(TE.of(ctx))()
 }
 
-type Assertions = (
+/**
+ * Test suites for validating the conditions of a project before or after
+ * running a pipeline.
+ */
+export type Assertions = (
   { describe, it }: {
     describe: typeof assertions.describe
     it: typeof assertions.it
@@ -28,7 +32,7 @@ export type Meta = {
 /**
  * State passed down through pipelines of tasks.
  */
-export interface Context {
+export type Context = {
   /**
    * The target project directory.
    */
@@ -46,7 +50,7 @@ export interface Context {
 /**
  * Object describing the behavior of a task or pipeline.
  */
-export interface TaskDefinition extends Meta {
+export type TaskDefinition = Meta & {
   /**
    * Run implementation of the task or pipeline.
    */
@@ -126,7 +130,7 @@ function toError (stack: Meta[]) {
  * }))
  * ```
  */
-export interface TaskModule<P extends unknown = any> {
+export type TaskModule<P extends unknown = any> = {
   default: (parameters: P) => Chainable
 }
 
@@ -138,7 +142,7 @@ type ParametersUnion<Modules extends readonly Promise<TaskModule>[]> =
  *
  * @typeParam Modules See {@link TaskModule}.
  */
-export interface PipelineDefinition<Modules, ModuleParameters> extends Meta {
+export type PipelineDefinition<Modules, ModuleParameters> = Meta & {
   /**
    * A list of (unresolved) async {@link TaskModule} imports.
    *
