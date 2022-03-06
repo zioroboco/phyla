@@ -1,6 +1,6 @@
 import * as TE from "fp-ts/TaskEither"
 import * as path from "path"
-import { describe, expect, it } from "@jest/globals"
+import { describe, expect, it, jest } from "@jest/globals"
 import { flow } from "fp-ts/lib/function"
 
 import { Context, Definition, pipeline, task } from "./api.js"
@@ -27,23 +27,6 @@ describe(`the ${task.name} factory`, () => {
       const pipeline = flow(instance, instance)
       const result = await pipeline(TE.of(context))()
       expect(result).toMatchObject({ right: { cwd: "/blep/blep" } })
-    })
-  })
-
-  describe(`initialised with a task which examines the stack`, () => {
-    it(`sees its own name`, async () => {
-      const context: Context = { cwd: "/", stack: [] }
-
-      const checkStack = task(() => ({
-        name: "check-stack",
-        run: async ctx => {
-          expect(ctx.stack).toEqual(["check-stack"])
-        },
-      }))
-
-      const pipeline = flow(checkStack({}))
-      await pipeline(TE.of(context))()
-      expect.assertions(1)
     })
   })
 })
@@ -140,6 +123,45 @@ describe(`the ${pipeline.name} factory`, () => {
       tasks: [Promise.resolve({ default: simple })],
       // @ts-expect-error
       parameters: {},
+    })
+  })
+})
+
+describe(`the task call stack`, () => {
+  const checkStack = task((params: { examine: Function }) => ({
+    name: "check-stack",
+    run: async ctx => {
+      params.examine([...ctx.stack])
+    },
+  }))
+
+  it(`reports task names`, async () => {
+    const examine = jest.fn()
+    const context: Context = { cwd: "/", stack: [] }
+
+    await checkStack({ examine })(TE.of(context))()
+
+    expect(examine).toHaveBeenCalledWith(["check-stack"])
+  })
+
+  describe(`when tasks are composed within a pipeline`, () => {
+    const checkPipeline = pipeline((params: { examine: Function }) => ({
+      name: "check-pipeline",
+      tasks: [Promise.resolve({ default: checkStack })],
+      parameters: {
+        ...params,
+      },
+    }))
+
+    it(`reports its the task and pipeline names`, async () => {
+      const examine = jest.fn()
+      const context: Context = { cwd: "/", stack: [] }
+
+      await checkPipeline({ examine })
+        .then(p => p(TE.of(context)))
+        .then(p => p())
+
+      expect(examine).toHaveBeenCalledWith(["check-pipeline", "check-stack"])
     })
   })
 })
