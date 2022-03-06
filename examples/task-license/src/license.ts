@@ -2,7 +2,7 @@ import { dirname } from "path"
 import { fileURLToPath } from "url"
 import { join } from "path"
 
-import { task } from "@phyla/core"
+import * as phyla from "@phyla/core"
 import { template } from "@phyla/template"
 import expect from "expect"
 
@@ -13,7 +13,7 @@ export type LicenseTaskParameters = {
   author: string
 }
 
-export default task((params: LicenseTaskParameters) => ({
+export default phyla.task((params: LicenseTaskParameters) => ({
   pre: ({ describe, it }, ctx) => [
     it(`requested a supported license`, () => {
       expect(supportedLicenses).toContain(params.license)

@@ -5,6 +5,8 @@ import { flow } from "fp-ts/lib/function"
 
 import { Context, TaskDefinition, pipeline, task } from "./api.js"
 
+const fs = {} as typeof import("fs")
+
 const simple = task((params: { dir: string }) => ({
   run: async ctx => {
     ctx.cwd = path.join(ctx.cwd, params.dir)
@@ -16,13 +18,13 @@ describe(`the ${task.name} factory`, () => {
     const instance = simple({ dir: "blep" })
 
     it(`can be run`, async () => {
-      const context: Context = { cwd: "/", stack: [] }
+      const context = { cwd: "/", fs, stack: [] } as Context
       const result = await instance(TE.of(context))()
       expect(result).toMatchObject({ right: { cwd: "/blep" } })
     })
 
     it(`can be chained`, async () => {
-      const context: Context = { cwd: "/", stack: [] }
+      const context: Context = { cwd: "/", fs, stack: [] }
       const pipeline = flow(instance, instance)
       const result = await pipeline(TE.of(context))()
       expect(result).toMatchObject({ right: { cwd: "/blep/blep" } })
@@ -43,7 +45,7 @@ describe(`the ${pipeline.name} factory`, () => {
 
     it(`can be run`, async () => {
       const chainable = await simplePipeline({})
-      const result = await chainable(TE.of({ cwd: "/", stack: [] }))()
+      const result = await chainable(TE.of({ cwd: "/", fs, stack: [] }))()
       expect(result).toMatchObject({ right: { cwd: "/blep" } })
     })
 
@@ -54,7 +56,7 @@ describe(`the ${pipeline.name} factory`, () => {
         chainable,
         chainable,
         chainable
-      )(TE.of({ cwd: "/", stack: [] }))()
+      )(TE.of({ cwd: "/", fs, stack: [] }))()
 
       expect(result).toMatchObject({ right: { cwd: "/blep/blep/blep" } })
     })
@@ -76,7 +78,7 @@ describe(`the ${pipeline.name} factory`, () => {
       const result = await flow(
         chainable,
         chainable
-      )(TE.of({ cwd: "/", stack: [] }))()
+      )(TE.of({ cwd: "/", fs, stack: [] }))()
 
       expect(result).toMatchObject({ right: { cwd: "/blep/blep/blep/blep" } })
     })
@@ -93,7 +95,7 @@ describe(`the ${pipeline.name} factory`, () => {
 
       it(`can be run`, async () => {
         const chainable = await simplePipeline({ fancyPath: "bork" })
-        const result = await chainable(TE.of({ cwd: "/", stack: [] }))()
+        const result = await chainable(TE.of({ cwd: "/", fs, stack: [] }))()
         expect(result).toMatchObject({ right: { cwd: "/bork" } })
       })
     })
@@ -136,7 +138,7 @@ describe(`the task call stack`, () => {
 
   it(`reports task names`, async () => {
     const examine = jest.fn()
-    const context: Context = { cwd: "/", stack: [] }
+    const context: Context = { cwd: "/", fs, stack: [] }
 
     await checkStack({ examine })(TE.of(context))()
 
@@ -156,7 +158,7 @@ describe(`the task call stack`, () => {
 
     it(`reports its the task and pipeline names`, async () => {
       const examine = jest.fn()
-      const context: Context = { cwd: "/", stack: [] }
+      const context: Context = { cwd: "/", fs, stack: [] }
 
       await checkPipeline({ examine })
         .then(p => p(TE.of(context)))

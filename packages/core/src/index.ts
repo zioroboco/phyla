@@ -3,7 +3,7 @@
  */
 
 export {
-  execute,
   pipeline,
+  run,
   task,
-} from "./core.js"
+} from "./api.js"

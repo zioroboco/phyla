@@ -1,8 +1,22 @@
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
+import * as assertions from "@phyla/assert"
+import * as reporting from "./reporting.js"
 import { Union } from "ts-toolbelt"
 import { getMeta } from "./util.js"
 import { pipe } from "fp-ts/function"
+
+export function run (task: Chainable, ctx: Context) {
+  return task(TE.of(ctx))()
+}
+
+type Assertions = (
+  { describe, it }: {
+    describe: typeof assertions.describe
+    it: typeof assertions.it
+  },
+  context: Context,
+) => Array<assertions.Block | assertions.Test>
 
 /**
  * Details about the task or pipeline, used in stack traces and reporting.
@@ -21,6 +35,10 @@ export interface Context {
    */
   cwd: string
   /**
+   * The filesystem module to be used.
+   */
+  fs: typeof import("fs")
+  /**
    * Stack trace, for errors and other output.
    */
   stack: Meta[]
@@ -35,6 +53,8 @@ export interface TaskDefinition {
    */
   run: (context: Context) => Promise<void | Context>
   meta?: Meta
+  pre?: Assertions
+  post?: Assertions
 }
 
 /**
@@ -65,7 +85,27 @@ export function task<P> (
       (ctx: Context) =>
         TE.tryCatch(async () => {
           ctx.stack.push(meta)
+
+          if (definition.pre) {
+            const suite = definition.pre(
+              { describe: assertions.describe, it: assertions.it },
+              ctx
+            )
+            const report = await assertions.run(suite)
+            reporting.check(report, definition.meta!, "pre")
+          }
+
           const rv = await definition.run(ctx)
+
+          if (definition.post) {
+            const suite = definition.post(
+              { describe: assertions.describe, it: assertions.it },
+              ctx
+            )
+            const report = await assertions.run(suite)
+            reporting.check(report, definition.meta!, "post")
+          }
+
           ctx.stack.pop()
           return rv ?? ctx
         }, toError(ctx.stack))

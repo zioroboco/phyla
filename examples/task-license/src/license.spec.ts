@@ -1,7 +1,6 @@
+import * as phyla from "@phyla/core"
 import { Volume, createFsFromVolume } from "memfs"
-import { execute } from "@phyla/core"
 import { expect, test } from "@jest/globals"
-
 import licenseTask, { LicenseTaskParameters } from "./license.js"
 
 const cwd = "/my-project"
@@ -23,11 +22,11 @@ test(`the happy path`, async () => {
     license: "MIT",
   }
 
-  await execute(licenseTask(params), {
+  await phyla.run(licenseTask(params), {
     // @ts-ignore
     fs: createFsFromVolume(volume),
     cwd,
-    tasks: { next: [], prev: [] },
+    stack: [],
   })
 
   const output = volume.toJSON()
