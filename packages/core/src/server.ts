@@ -1,4 +1,3 @@
-import * as os from "os"
 import * as path from "path"
 import * as system_fs from "fs"
 import { ChildProcessWithoutNullStreams, spawn } from "child_process"
@@ -7,7 +6,7 @@ import { fileURLToPath } from "url"
 
 import { createMachine, createSchema, interpret } from "xstate"
 
-import { TaskInstance } from "./core.js"
+import { Chainable } from "./api.js"
 
 /**
  * Duration for which file watcher events will be buffered -- i.e. for any two
@@ -35,7 +34,7 @@ export type Logger = {
 }
 
 export type ServerConfig = {
-  getTasks: (dir: string) => Promise<TaskInstance[]>
+  getTask: (dir: string) => Promise<Chainable>
   srcdir: string
   tmpdir: string
   watch: string[]

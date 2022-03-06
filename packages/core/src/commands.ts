@@ -7,7 +7,7 @@ import { Command, Option } from "clipanion"
 import { richFormat } from "clipanion/lib/format.js"
 
 import * as server from "./server.js"
-import { PipelineConfig, TaskInstance, execute } from "./core.js"
+import { Chainable, run } from "./api.js"
 import { diff } from "./diff.js"
 import { dim } from "./reporting.js"
 
@@ -15,15 +15,8 @@ enum Category {
   Main = "main",
 }
 
-function getPipelineConfig (dir: string): Promise<PipelineConfig> {
-  return import(path.join(dir, "phyla.mjs")).then(
-    module => module.default as PipelineConfig
-  )
-}
-
-async function getTasks (dir: string): Promise<TaskInstance[]> {
-  const { tasks, parameters } = await getPipelineConfig(dir)
-  return tasks.map(task => task(parameters))
+function getTask (dir: string, parameters = {}): Promise<Chainable> {
+  return import(path.join(dir, "phyla.mjs")).then(m => m.default(parameters))
 }
 
 function tmpdirSync (srcdir: string): string {
@@ -49,9 +42,8 @@ export class DevCommand extends Command {
   async execute () {
     this.srcdir = path.resolve(this.srcdir ?? ".")
 
-    const { server: options } = await getPipelineConfig(this.srcdir)
-    this.watch = [...(options?.watch ?? []), ...(this.watch ?? [])]
-    this.exclude = [...(options?.exclude ?? []), ...(this.exclude ?? [])]
+    this.watch = this.watch ?? []
+    this.exclude = this.exclude ?? []
 
     const log: server.Logger = {
       verbose: this.verbose ?? false,
@@ -71,7 +63,7 @@ export class DevCommand extends Command {
         tmpdir: tmpdirSync(this.srcdir),
         watch: this.watch,
         exclude: this.exclude,
-        getTasks: dir => getTasks(dir),
+        getTask,
         log: log,
         io: this.context,
       })
@@ -96,7 +88,7 @@ export class DiffCommand extends Command {
     await diff({
       srcdir: this.srcdir,
       tmpdir,
-      tasks: await getTasks(this.srcdir),
+      task: await getTask(this.srcdir),
       ci: this.ci ?? false,
       io: this.context,
     }).catch(err => {
@@ -117,16 +109,12 @@ export class WriteCommand extends Command {
   async execute () {
     this.srcdir = path.resolve(this.srcdir ?? ".")
 
-    const [firstTask, ...nextTasks] = await getTasks(this.srcdir)
+    const task = await getTask(this.srcdir)
 
-    await execute(firstTask, {
+    const result = await run(task, {
       cwd: this.srcdir,
       fs: await import("fs"),
-      io: this.context,
-      tasks: {
-        prev: [],
-        next: nextTasks,
-      },
+      stack: [],
     })
   }
 }

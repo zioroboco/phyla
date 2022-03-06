@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --experimental-specifier-resolution=node
 
 import * as path from "path"
 import * as system_fs from "fs"
@@ -13,17 +13,11 @@ assert(tmpdir)
 
 import(path.join(srcdir, "phyla.mjs"))
   .then(async pipelineModule => {
-    const pipeline = await pipelineModule.default
-    const [firstTask, ...nextTasks] = pipeline.tasks.map(task =>
-      task(pipeline.parameters)
-    )
-    return phyla.execute(firstTask, {
+    const task = await pipelineModule.default({})
+    return phyla.run(task, {
       fs: system_fs,
       cwd: tmpdir,
-      tasks: {
-        prev: [],
-        next: nextTasks,
-      },
+      stack: [],
     })
   })
   .catch(err => {

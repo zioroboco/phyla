@@ -1,12 +1,11 @@
+import { Chainable, run } from "./api.js"
 import { strict as assert } from "assert"
 import { spawn } from "child_process"
-
-import { TaskInstance, execute } from "./core.js"
 
 export type DiffConfig = {
   srcdir: string
   tmpdir: string
-  tasks: TaskInstance[]
+  task: Chainable
   io: {
     stdin: NodeJS.ReadableStream
     stdout: NodeJS.WritableStream
@@ -41,16 +40,10 @@ export async function diff (config: DiffConfig): Promise<number> {
     throw new Error(`rsync failed: ${err}`)
   })
 
-  const [firstTask, ...nextTasks] = config.tasks
-
-  await execute(firstTask, {
+  await run(config.task, {
     cwd: tmpdir,
     fs: await import("fs"),
-    io: config.io,
-    tasks: {
-      prev: [],
-      next: nextTasks,
-    },
+    stack: [],
   }).catch(err => {
     throw new Error(`pipeline failed: ${err}`)
   })
