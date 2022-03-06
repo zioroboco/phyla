@@ -21,7 +21,8 @@ export function check (
       process.stderr.write(
         [
           "\n",
-          inverse(` ${phase.toUpperCase()} (${i + 1}/${failures.length}) `),
+          inverse(` ${phase.toUpperCase()}-TASK `),
+          boldred(`(${i + 1}/${failures.length})`),
           meta.name ?? "untitled task",
           dim(meta.version ? `v${meta.version}` : "unversioned"),
           "\n",
