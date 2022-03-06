@@ -3,27 +3,27 @@ import * as path from "path"
 import { describe, expect, it } from "@jest/globals"
 import { flow } from "fp-ts/lib/function"
 
-import * as Phyla from "./api.js"
+import { Context, Definition, pipeline, task } from "./api.js"
 
-const simple = Phyla.task((params: { dir: string }) => ({
+const simple = task((params: { dir: string }) => ({
   name: "my-task",
   run: async ctx => {
     ctx.cwd = path.join(ctx.cwd, params.dir)
   },
 }))
 
-describe(`the ${Phyla.task.name} factory`, () => {
+describe(`the ${task.name} factory`, () => {
   describe(`initialised with a simple task`, () => {
     const instance = simple({ dir: "blep" })
 
     it(`can be run`, async () => {
-      const context: Phyla.Context = { cwd: "/", stack: [] }
+      const context: Context = { cwd: "/", stack: [] }
       const result = await instance(TE.of(context))()
       expect(result).toMatchObject({ right: { cwd: "/blep" } })
     })
 
     it(`can be chained`, async () => {
-      const context: Phyla.Context = { cwd: "/", stack: [] }
+      const context: Context = { cwd: "/", stack: [] }
       const pipeline = flow(instance, instance)
       const result = await pipeline(TE.of(context))()
       expect(result).toMatchObject({ right: { cwd: "/blep/blep" } })
@@ -32,9 +32,9 @@ describe(`the ${Phyla.task.name} factory`, () => {
 
   describe(`initialised with a task which examines the stack`, () => {
     it(`sees its own name`, async () => {
-      const context: Phyla.Context = { cwd: "/", stack: [] }
+      const context: Context = { cwd: "/", stack: [] }
 
-      const checkStack = Phyla.task(() => ({
+      const checkStack = task(() => ({
         name: "check-stack",
         run: async ctx => {
           expect(ctx.stack).toEqual(["check-stack"])
@@ -48,10 +48,10 @@ describe(`the ${Phyla.task.name} factory`, () => {
   })
 })
 
-describe(`the ${Phyla.pipeline.name} factory`, () => {
+describe(`the ${pipeline.name} factory`, () => {
   describe(`initialised with a simple task module`, () => {
     const simpleTaskModule = Promise.resolve({ default: simple })
-    const simplePipeline = Phyla.pipeline({
+    const simplePipeline = pipeline({
       name: "simple-pipeline",
       tasks: [simpleTaskModule],
       parameters: {
@@ -71,7 +71,7 @@ describe(`the ${Phyla.pipeline.name} factory`, () => {
       const result = await flow(
         chainable,
         chainable,
-        chainable,
+        chainable
       )(TE.of({ cwd: "/", stack: [] }))()
 
       expect(result).toMatchObject({ right: { cwd: "/blep/blep/blep" } })
@@ -80,7 +80,7 @@ describe(`the ${Phyla.pipeline.name} factory`, () => {
 
   describe(`initialised with multiple simple task module`, () => {
     const simpleTaskModule = Promise.resolve({ default: simple })
-    const simplePipelineComposingTasks = Phyla.pipeline({
+    const simplePipelineComposingTasks = pipeline({
       name: "simple-pipeline-composing",
       tasks: [simpleTaskModule, simpleTaskModule],
       parameters: {
@@ -93,7 +93,7 @@ describe(`the ${Phyla.pipeline.name} factory`, () => {
 
       const result = await flow(
         chainable,
-        chainable,
+        chainable
       )(TE.of({ cwd: "/", stack: [] }))()
 
       expect(result).toMatchObject({ right: { cwd: "/blep/blep/blep/blep" } })
@@ -101,7 +101,7 @@ describe(`the ${Phyla.pipeline.name} factory`, () => {
 
     describe(`initialised with a factory function`, () => {
       const simpleTaskModule = Promise.resolve({ default: simple })
-      const simplePipeline = Phyla.pipeline((params: { fancyPath: string }) => ({
+      const simplePipeline = pipeline((params: { fancyPath: string }) => ({
         name: "simple-pipeline-from-factory",
         tasks: [simpleTaskModule],
         parameters: {
@@ -115,18 +115,17 @@ describe(`the ${Phyla.pipeline.name} factory`, () => {
         expect(result).toMatchObject({ right: { cwd: "/bork" } })
       })
     })
-
   })
 
   it(`merges parameter types`, () => {
-    Phyla.pipeline(() => ({
+    pipeline(() => ({
       name: "pipeline",
       tasks: [
         Promise.resolve({
-          default: Phyla.task((p: { one: string }) => ({} as Phyla.Definition)),
+          default: task((p: { one: string }) => ({} as Definition)),
         }),
         Promise.resolve({
-          default: Phyla.task((p: { two: string }) => ({} as Phyla.Definition)),
+          default: task((p: { two: string }) => ({} as Definition)),
         }),
       ],
       parameters: {
@@ -137,7 +136,7 @@ describe(`the ${Phyla.pipeline.name} factory`, () => {
   })
 
   it(`type errors when initialised with a missing parameter`, () => {
-    Phyla.pipeline({
+    pipeline({
       tasks: [Promise.resolve({ default: simple })],
       // @ts-expect-error
       parameters: {},
