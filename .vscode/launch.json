@@ -2,49 +2,63 @@
   "configurations": [
     {
       "name": "command: dev",
-      "program": "${workspaceFolder}/node_modules/.bin/phyla",
+      "program": "${workspaceFolder}/node_modules/@phyla/bin/cli.mjs",
       "args": [
         "dev",
-        "example/project",
+        "examples/project",
         "--watch",
-        "example/task-license",
+        "examples/task-license",
         "--watch",
-        "example/task-install",
+        "examples/task-install",
         "--verbose"
       ],
       "runtimeVersion": "16",
-      "runtimeArgs": ["--experimental-vm-modules"],
+      "runtimeArgs": [
+        "--experimental-vm-modules",
+        "--experimental-specifier-resolution=node"
+      ],
       "skipFiles": ["<node_internals>/**"],
       "request": "launch",
       "type": "pwa-node"
     },
     {
       "name": "command: write",
-      "program": "${workspaceFolder}/node_modules/.bin/phyla",
-      "args": ["write", "example/project"],
+      "program": "${workspaceFolder}/node_modules/@phyla/core/bin/cli.mjs",
+      "args": ["write", "examples/project"],
       "runtimeVersion": "16",
-      "runtimeArgs": ["--experimental-vm-modules"],
+      "runtimeArgs": [
+        "--experimental-vm-modules",
+        "--experimental-specifier-resolution=node"
+      ],
       "skipFiles": ["<node_internals>/**"],
       "request": "launch",
-      "type": "pwa-node"
+      "type": "node"
     },
     {
       "name": "test: file",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": ["--runInBand", "${fileBasenameNoExtension}"],
-      "runtimeArgs": ["--experimental-vm-modules"],
+      "runtimeVersion": "16",
+      "runtimeArgs": [
+        "--experimental-vm-modules",
+        "--experimental-specifier-resolution=node"
+      ],
       "skipFiles": ["*jest*", "<node_internals>/**"],
       "request": "launch",
-      "type": "pwa-node"
+      "type": "node"
     },
     {
       "name": "test: all",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": ["--runInBand"],
-      "runtimeArgs": ["--experimental-vm-modules"],
+      "runtimeVersion": "16",
+      "runtimeArgs": [
+        "--experimental-vm-modules",
+        "--experimental-specifier-resolution=node"
+      ],
       "skipFiles": ["*jest*", "<node_internals>/**"],
       "request": "launch",
-      "type": "pwa-node"
+      "type": "node"
     }
   ]
 }
