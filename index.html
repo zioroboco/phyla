@@ -1,0 +1,114 @@
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@phyla</title><meta name="description" content="Documentation for @phyla"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script>	<link rel="icon" href="https://phyla-assets.s3.amazonaws.com/icon.png" />
+</head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">🧬 phyla</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> @phyla</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><header>
+  <div align="center">
+    <h1>
+      <p>🧬</p>
+      <p>phyla</p>
+    </h1>
+    <p>A framework for distributed project generation and maintenance</p>
+    <a href="https://www.npmjs.com/package/@phyla/core">
+      <img src="https://img.shields.io/npm/v/@phyla/core?style=flat-square">
+    </a>
+  </div>
+  <br/>
+</header>
+
+
+<a href="#overview" id="overview" style="color: inherit; text-decoration: none;">
+  <h2>Overview</h2>
+</a>
+<p>Project templating is easy. Maintaining a distributed codebase is hard. </p>
+<p>Phyla is a framework for developing, testing and continuously re-applying hierarchies of project generators, which build upon each other and your ever-evolving type-safe common config.</p>
+
+<a href="#principles" id="principles" style="color: inherit; text-decoration: none;">
+  <h2>Principles</h2>
+</a>
+<ul>
+<li>templating and maintenance deserves a better developer experience</li>
+<li>generator outcomes should be testable and compose scalably</li>
+<li>package registries can be used to asynchronously push updates to projects</li>
+<li>supply-chain vulnerabilities exist, needless dependencies are a liability</li>
+<li>node, typescript and esm are the right tools for this job</li>
+</ul>
+
+<a href="#concepts" id="concepts" style="color: inherit; text-decoration: none;">
+  <h2>Concepts</h2>
+</a>
+<p>Phyla is designed around composable <strong>pipelines</strong> and <strong>tasks</strong>, which can optionally include <strong>suites of assertions</strong>.</p>
+<p>Note that phyla tasks and pipelines are <strong>always the default export of an es-module</strong>. This narrows the API to make breaking changes harder (and maintenance of pipelines via package updates therefore easier).</p>
+
+<a href="#tasks" id="tasks" style="color: inherit; text-decoration: none;">
+  <h3>Tasks</h3>
+</a>
+<p>Phyla tasks are discrete pipeline steps which do useful work.</p>
+<p>Tasks are as strict or as lax as you like. They can operate entirely on an injected in-memory <code>fs</code> module, or go wild and fire ze missiles with shell scripts written with <a href="https://github.com/google/zx">google/zx</a> or whatever else.</p>
+<pre><code class="language-ts"><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">*</span><span class="hl-1"> </span><span class="hl-0">as</span><span class="hl-1"> </span><span class="hl-3">phyla</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-4">&quot;@phyla/core&quot;</span><br/><br/><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-5">TaskParams</span><span class="hl-1"> = { </span><span class="hl-6">/* inputs to the tasks */</span><span class="hl-1"> }</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-0">default</span><span class="hl-1"> </span><span class="hl-3">phyla</span><span class="hl-1">.</span><span class="hl-7">task</span><span class="hl-1">((</span><span class="hl-3">params</span><span class="hl-1">: </span><span class="hl-5">TaskParams</span><span class="hl-1">) </span><span class="hl-2">=&gt;</span><span class="hl-1"> ({</span><br/><span class="hl-1">  </span><span class="hl-7">pre</span><span class="hl-3">:</span><span class="hl-1"> ({ </span><span class="hl-3">describe</span><span class="hl-1">, </span><span class="hl-3">it</span><span class="hl-1"> }, { </span><span class="hl-3">cwd</span><span class="hl-1">, </span><span class="hl-3">fs</span><span class="hl-1"> }) </span><span class="hl-2">=&gt;</span><span class="hl-1"> [</span><br/><span class="hl-1">    </span><span class="hl-6">// check assumptions and pre-conditions...</span><br/><span class="hl-1">  ],</span><br/><span class="hl-1">  </span><span class="hl-7">run</span><span class="hl-3">:</span><span class="hl-1"> </span><span class="hl-2">async</span><span class="hl-1"> </span><span class="hl-2">function</span><span class="hl-1"> ({ </span><span class="hl-3">cwd</span><span class="hl-1">, </span><span class="hl-3">fs</span><span class="hl-1"> }) {</span><br/><span class="hl-1">    </span><span class="hl-6">// do the actual work...</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">  </span><span class="hl-7">post</span><span class="hl-3">:</span><span class="hl-1"> ({ </span><span class="hl-3">describe</span><span class="hl-1">, </span><span class="hl-3">it</span><span class="hl-1"> }, { </span><span class="hl-3">cwd</span><span class="hl-1">, </span><span class="hl-3">fs</span><span class="hl-1"> }) </span><span class="hl-2">=&gt;</span><span class="hl-1"> [</span><br/><span class="hl-1">    </span><span class="hl-6">// verify that the work was successful...</span><br/><span class="hl-1">  ],</span><br/><span class="hl-1">}))</span>
+</code></pre>
+
+<a href="#assertions" id="assertions" style="color: inherit; text-decoration: none;">
+  <h3>Assertions</h3>
+</a>
+<p>Tasks can also host detailed pre- and post- execution assertion suites, to validate both the expectations that the task has of a project, and to verify that the expected outcomes of the task have been achieved.</p>
+<p>The assertions API is structured to achieve the greatest possible concurrency, with IO-bound setup steps able to block only the particular tests which depend on that data.</p>
+<pre><code class="language-ts"><span class="hl-1">  </span><span class="hl-8">post</span><span class="hl-1">: ({ </span><span class="hl-3">describe</span><span class="hl-1">, </span><span class="hl-3">it</span><span class="hl-1"> }, { </span><span class="hl-3">cwd</span><span class="hl-1">, </span><span class="hl-3">fs</span><span class="hl-1"> }) </span><span class="hl-2">=&gt;</span><span class="hl-1"> [</span><br/><span class="hl-1">    </span><span class="hl-7">describe</span><span class="hl-1">(</span><span class="hl-4">`the package.json file`</span><span class="hl-1">)</span><br/><span class="hl-1">      .</span><span class="hl-7">setup</span><span class="hl-1">(</span><span class="hl-2">async</span><span class="hl-1"> () </span><span class="hl-2">=&gt;</span><span class="hl-1"> ({</span><br/><span class="hl-1">        </span><span class="hl-3">packageJson:</span><span class="hl-1"> </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-7">readJson</span><span class="hl-1">(</span><span class="hl-7">join</span><span class="hl-1">(</span><span class="hl-3">cwd</span><span class="hl-1">, </span><span class="hl-4">&quot;package.json&quot;</span><span class="hl-1">)),</span><br/><span class="hl-1">      })</span><br/><span class="hl-1">      .</span><span class="hl-7">assert</span><span class="hl-1">(({ </span><span class="hl-3">packageJson</span><span class="hl-1"> }) </span><span class="hl-2">=&gt;</span><span class="hl-1"> [</span><br/><span class="hl-1">        </span><span class="hl-7">it</span><span class="hl-1">(</span><span class="hl-4">`includes the repository details`</span><span class="hl-1">, () </span><span class="hl-2">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">          </span><span class="hl-7">expect</span><span class="hl-1">(</span><span class="hl-3">packageJson</span><span class="hl-1">).</span><span class="hl-7">toMatchObject</span><span class="hl-1">({</span><br/><span class="hl-1">            </span><span class="hl-3">repository:</span><span class="hl-1"> {</span><br/><span class="hl-1">              </span><span class="hl-3">type:</span><span class="hl-1"> </span><span class="hl-4">`git`</span><span class="hl-1">,</span><br/><span class="hl-1">              </span><span class="hl-3">url:</span><span class="hl-1"> </span><span class="hl-4">`https://github.com/</span><span class="hl-2">${</span><span class="hl-3">params</span><span class="hl-9">.</span><span class="hl-3">org</span><span class="hl-2">}</span><span class="hl-4">/</span><span class="hl-2">${</span><span class="hl-3">params</span><span class="hl-9">.</span><span class="hl-3">project</span><span class="hl-2">}</span><span class="hl-4">.git`</span><span class="hl-1">,</span><br/><span class="hl-1">              </span><span class="hl-3">directory:</span><span class="hl-1"> </span><span class="hl-4">`packages/</span><span class="hl-2">${</span><span class="hl-3">params</span><span class="hl-9">.</span><span class="hl-3">package</span><span class="hl-2">}</span><span class="hl-4">`</span><span class="hl-1">,</span><br/><span class="hl-1">            }</span><br/><span class="hl-1">          })</span><br/><span class="hl-1">        })</span><br/><span class="hl-1">      ]),</span><br/><span class="hl-1">  ],</span>
+</code></pre>
+
+<a href="#pipelines" id="pipelines" style="color: inherit; text-decoration: none;">
+  <h3>Pipelines</h3>
+</a>
+<p>Pipelines are phyla&#39;s unit of composition. Not only can they be used to chain sequences of tasks, but even other pipelines.</p>
+<pre><code class="language-ts"><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">*</span><span class="hl-1"> </span><span class="hl-0">as</span><span class="hl-1"> </span><span class="hl-3">phyla</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-4">&quot;@phyla/core&quot;</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-0">default</span><span class="hl-1"> </span><span class="hl-3">phyla</span><span class="hl-1">.</span><span class="hl-7">pipeline</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-3">tasks:</span><span class="hl-1"> [</span><br/><span class="hl-1">    </span><span class="hl-2">import</span><span class="hl-1">(</span><span class="hl-4">&quot;@org/some-task&quot;</span><span class="hl-1">),</span><br/><span class="hl-1">    </span><span class="hl-2">import</span><span class="hl-1">(</span><span class="hl-4">&quot;@org/an-entire-pipeline&quot;</span><span class="hl-1">),</span><br/><span class="hl-1">    </span><span class="hl-2">import</span><span class="hl-1">(</span><span class="hl-4">&quot;@org/pipelines-of-pipelines/oh-my&quot;</span><span class="hl-1">),</span><br/><span class="hl-1">  ],</span><br/><span class="hl-1">  </span><span class="hl-3">parameters:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-3">project:</span><span class="hl-1"> </span><span class="hl-4">&quot;event-log-stream-dispatch-agent-mk2&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-3">channel:</span><span class="hl-1"> </span><span class="hl-4">&quot;#glitter-and-chaos&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-3">environments:</span><span class="hl-1"> [</span><span class="hl-4">&quot;production&quot;</span><span class="hl-1">, </span><span class="hl-4">&quot;extra-production&quot;</span><span class="hl-1">]</span><br/><span class="hl-1">    </span><span class="hl-3">tags</span><span class="hl-1">: [</span><span class="hl-4">&quot;wildly-important&quot;</span><span class="hl-1">],</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">})</span>
+</code></pre>
+<p>The type of a pipeline&#39;s parameters is inferred from the union of the parameters of all the pipeline&#39;s constituent tasks.</p>
+<p>Like tasks, pipelines can also be defined as a function of exposed parameters, which can then be used to create new abstractions by encapsulating other tasks or pipelines.</p>
+<pre><code class="language-ts"><span class="hl-0">import</span><span class="hl-1"> </span><span class="hl-2">*</span><span class="hl-1"> </span><span class="hl-0">as</span><span class="hl-1"> </span><span class="hl-3">phyla</span><span class="hl-1"> </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-4">&quot;@phyla/core&quot;</span><br/><br/><span class="hl-2">type</span><span class="hl-1"> </span><span class="hl-5">ExposedParams</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-3">materials</span><span class="hl-1">: </span><span class="hl-5">Array</span><span class="hl-1">&lt;</span><span class="hl-4">&quot;cardboard&quot;</span><span class="hl-1"> | </span><span class="hl-4">&quot;string&quot;</span><span class="hl-1"> | </span><span class="hl-4">&quot;cellophane-tape&quot;</span><span class="hl-1">&gt;</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-0">export</span><span class="hl-1"> </span><span class="hl-0">default</span><span class="hl-1"> </span><span class="hl-3">phyla</span><span class="hl-1">.</span><span class="hl-7">pipeline</span><span class="hl-1">((</span><span class="hl-3">params</span><span class="hl-1">: </span><span class="hl-5">ExposedParams</span><span class="hl-1">) </span><span class="hl-2">=&gt;</span><span class="hl-1"> ({</span><br/><span class="hl-1">  </span><span class="hl-3">tasks:</span><span class="hl-1"> [</span><br/><span class="hl-1">    </span><span class="hl-2">import</span><span class="hl-1">(</span><span class="hl-4">&quot;@org/important-business&quot;</span><span class="hl-1">),</span><br/><span class="hl-1">  ],</span><br/><span class="hl-1">  </span><span class="hl-3">parameters:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-3">materials:</span><span class="hl-1"> [</span><span class="hl-4">&quot;paddle-pop-sticks&quot;</span><span class="hl-1">, </span><span class="hl-4">&quot;pva&quot;</span><span class="hl-1">, ...</span><span class="hl-3">params</span><span class="hl-1">.</span><span class="hl-3">components</span><span class="hl-1">],</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">}))</span>
+</code></pre>
+
+<a href="#commands" id="commands" style="color: inherit; text-decoration: none;">
+  <h2>Commands</h2>
+</a>
+<p>While pipelines can also be run programmatically, a CLI client is included in the <code>@phyla/core</code> package. Run <code>phyla --help</code> for commands and options.</p>
+<p>All commands expect a path to a directory with a pipeline exported as the default export of a <code>phyla.mjs</code> module (defaulting to the current working directory if no path is provided).</p>
+
+<a href="#phyla-write-project" id="phyla-write-project" style="color: inherit; text-decoration: none;">
+  <h3><code>phyla write [project]</code></h3>
+</a>
+<p>Run the pipeline in-place and write changes immediately to disk. This can be destructive, so you want to have a clean work tree, and maybe run <code>phyla diff</code> first.</p>
+
+<a href="#phyla-diff-project" id="phyla-diff-project" style="color: inherit; text-decoration: none;">
+  <h3><code>phyla diff [project]</code></h3>
+</a>
+<p>Diff the pipeline against the current state of the filesystem, exiting non-zero on any required changes, or on failing pre- or post-task assertions.</p>
+<p>Uses your git pager by default. Add the <code>--ci</code> flag for use in CI environments.</p>
+<pre><code class="language-patch">--- a/.../project/package.json
++++ b/.../project/package.json
+@@ -1,11 +1,12 @@
+ {
+   &quot;name&quot;: &quot;@phyla/example-project&quot;,
+   &quot;version&quot;: &quot;0.0.0&quot;,
+-  &quot;author&quot;: &quot;Ray&quot;,
++  &quot;author&quot;: &quot;Raymond Luxury-Yacht &lt;rayly@example.com&gt;&quot;,
+   &quot;private&quot;: true,
+   &quot;dependencies&quot;: {
+     ...
+   }
+ }
+</code></pre>
+
+<a href="#phyla-dev-project" id="phyla-dev-project" style="color: inherit; text-decoration: none;">
+  <h3><code>phyla dev [project]</code></h3>
+</a>
+<p>Play with the pipeline output via a hot-reloading dev server (oh yes!)</p>
+<p>Automatically watches the project directory, but you can add (multiple) <code>--watch [path]</code> arguments to watch task directories as well, and <code>--exclude [path]</code> directories to prevent syncing heavy directories like <code>node_modules</code>.</p>
+<p>WIP and experimental, but it works well.</p>
+
+<a href="#where-to-next" id="where-to-next" style="color: inherit; text-decoration: none;">
+  <h2>Where to next?</h2>
+</a>
+<p>There&#39;s a working example project in the <a href="./examples/"><code>./examples/</code></a> directory.</p>
+
+<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+  <h2>Contributing</h2>
+</a>
+<p>Contributions and ideas are sincerely welcome! ❤️</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/assert.html">assert</a></li><li class=" tsd-kind-module"><a href="modules/core.html">core</a></li><li class=" tsd-kind-module"><a href="modules/template.html">template</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li><li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li><li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
