@@ -6,7 +6,6 @@ import { flow } from "fp-ts/lib/function"
 import { Context, TaskDefinition, pipeline, task } from "./api.js"
 
 const simple = task((params: { dir: string }) => ({
-  name: "my-task",
   run: async ctx => {
     ctx.cwd = path.join(ctx.cwd, params.dir)
   },
@@ -35,7 +34,7 @@ describe(`the ${pipeline.name} factory`, () => {
   describe(`initialised with a simple task module`, () => {
     const simpleTaskModule = Promise.resolve({ default: simple })
     const simplePipeline = pipeline({
-      name: "simple-pipeline",
+      meta: { name: "simple-pipeline" },
       tasks: [simpleTaskModule],
       parameters: {
         dir: "blep",
@@ -64,7 +63,7 @@ describe(`the ${pipeline.name} factory`, () => {
   describe(`initialised with multiple simple task module`, () => {
     const simpleTaskModule = Promise.resolve({ default: simple })
     const simplePipelineComposingTasks = pipeline({
-      name: "simple-pipeline-composing",
+      meta: { name: "simple-pipeline-composing" },
       tasks: [simpleTaskModule, simpleTaskModule],
       parameters: {
         dir: "blep",
@@ -85,7 +84,7 @@ describe(`the ${pipeline.name} factory`, () => {
     describe(`initialised with a factory function`, () => {
       const simpleTaskModule = Promise.resolve({ default: simple })
       const simplePipeline = pipeline((params: { fancyPath: string }) => ({
-        name: "simple-pipeline-from-factory",
+        meta: { name: "simple-pipeline-from-factory" },
         tasks: [simpleTaskModule],
         parameters: {
           dir: params.fancyPath,
@@ -102,7 +101,7 @@ describe(`the ${pipeline.name} factory`, () => {
 
   it(`merges parameter types`, () => {
     pipeline(() => ({
-      name: "pipeline",
+      meta: { name: "pipeline" },
       tasks: [
         Promise.resolve({
           default: task((p: { one: string }) => ({} as TaskDefinition)),
@@ -129,7 +128,7 @@ describe(`the ${pipeline.name} factory`, () => {
 
 describe(`the task call stack`, () => {
   const checkStack = task((params: { examine: Function }) => ({
-    name: "check-stack",
+    meta: { name: "check-stack" },
     run: async ctx => {
       params.examine([...ctx.stack])
     },
@@ -141,12 +140,14 @@ describe(`the task call stack`, () => {
 
     await checkStack({ examine })(TE.of(context))()
 
-    expect(examine).toHaveBeenCalledWith(["check-stack"])
+    expect(examine).toHaveBeenCalledWith([
+      expect.objectContaining({ name: "check-stack" }),
+    ])
   })
 
   describe(`when tasks are composed within a pipeline`, () => {
     const checkPipeline = pipeline((params: { examine: Function }) => ({
-      name: "check-pipeline",
+      meta: { name: "check-pipeline" },
       tasks: [Promise.resolve({ default: checkStack })],
       parameters: {
         ...params,
@@ -161,7 +162,10 @@ describe(`the task call stack`, () => {
         .then(p => p(TE.of(context)))
         .then(p => p())
 
-      expect(examine).toHaveBeenCalledWith(["check-pipeline", "check-stack"])
+      expect(examine).toHaveBeenCalledWith([
+        expect.objectContaining({ name: "check-pipeline" }),
+        expect.objectContaining({ name: "check-stack" }),
+      ])
     })
   })
 })

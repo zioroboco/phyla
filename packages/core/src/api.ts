@@ -1,7 +1,16 @@
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
 import { Union } from "ts-toolbelt"
-import { flow, pipe } from "fp-ts/function"
+import { getMeta } from "./util.js"
+import { pipe } from "fp-ts/function"
+
+/**
+ * Details about the task or pipeline, used in stack traces and reporting.
+ */
+export type Meta = {
+  name?: string
+  version?: string
+}
 
 /**
  * State passed down through pipelines of tasks.
@@ -14,27 +23,18 @@ export interface Context {
   /**
    * Stack trace, for errors and other output.
    */
-  stack: string[]
-}
-
-/**
- * Additional properties expected on all runnable tasks and pipelines.
- */
-export interface Definition {
-  /**
-   * The name of the task or pipeline, used in stack traces and reporting.
-   */
-  name: string
+  stack: Meta[]
 }
 
 /**
  * Object describing the behavior of a task or pipeline.
  */
-export interface TaskDefinition extends Definition {
+export interface TaskDefinition {
   /**
    * Run implementation of the task or pipeline.
    */
   run: (context: Context) => Promise<void | Context>
+  meta?: Meta
 }
 
 /**
@@ -60,20 +60,22 @@ export function task<P> (
 ): (parameters: P) => Chainable {
   return parameters => {
     const definition = init(parameters)
+    const meta = getMeta(definition.meta)
     return TE.chain(
       (ctx: Context) =>
         TE.tryCatch(async () => {
-          ctx.stack.push(definition.name)
+          ctx.stack.push(meta)
           const rv = await definition.run(ctx)
           ctx.stack.pop()
-          return rv || ctx
+          return rv ?? ctx
         }, toError(ctx.stack))
     )
   }
 }
 
-function toError (stack: string[]) {
-  return (e: unknown) => E.toError(`${e} (from: ${stack.join(" -> ")})`)
+function toError (stack: Meta[]) {
+  return (e: unknown) =>
+    E.toError(`${e} (from: ${stack.map(s => s.name).join(" -> ")})`)
 }
 
 /**
@@ -99,7 +101,8 @@ type ParametersUnion<Modules extends readonly Promise<TaskModule>[]> =
  *
  * @typeParam Modules See {@link TaskModule}.
  */
-export interface PipelineDefinition<Modules, ModuleParameters> extends Definition {
+export interface PipelineDefinition<Modules, ModuleParameters> {
+  meta?: Meta
   /**
    * A list of (unresolved) async {@link TaskModule} imports.
    *
@@ -137,11 +140,11 @@ export interface PipelineDefinition<Modules, ModuleParameters> extends Definitio
  */
 export function pipeline<Modules extends readonly Promise<TaskModule>[], P> (
   init: ((parameters: P) => {
-    name: string
+    meta?: Meta
     tasks: Modules
     parameters: ParametersUnion<Modules>
   }) | {
-    name: string
+    meta?: Meta
     tasks: Modules
     parameters: ParametersUnion<Modules>
   }
@@ -154,7 +157,7 @@ export function pipeline<Modules extends readonly Promise<TaskModule>[], P> (
     )
 
     return task((inner: ParametersUnion<Modules>) => ({
-      name: definition.name,
+      meta: getMeta(definition.meta),
       // @ts-ignore: can't infer argument types from a tasks array
       run: async ctx => pipe(TE.of(ctx), ...tasks.map(t => t(inner)))().then(
         // @ts-ignore: expects a context, but we deliberately throw
