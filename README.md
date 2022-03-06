@@ -23,14 +23,12 @@ Phyla is a framework for developing, testing and continuously re-applying hierar
   - templating and maintenance deserves a better developer experience
   - generator outcomes should be testable and compose scalably
   - package registries can be used to asynchronously push updates to projects
-  - supply-chain vulnerabilities exist, needless dependencies are a liability
-  - node, typescript and esm are the right tools for this job
+  - supply-chain vulnerabilities exist — needless dependencies are a liability
+  - node, npm packages, typescript and esm are the right tools for this job!
 
 ## Concepts
 
 Phyla is designed around composable **pipelines** and **tasks**, which can optionally include **suites of assertions**.
-
-Note that phyla tasks and pipelines are **always the default export of an es-module**. This narrows the API to make breaking changes harder (and maintenance of pipelines via package updates therefore easier).
 
 ### Tasks
 
@@ -38,10 +36,12 @@ Phyla tasks are discrete pipeline steps which do useful work.
 
 Tasks are as strict or as lax as you like. They can operate entirely on an injected in-memory `fs` module, or go wild and fire ze missiles with shell scripts written with [google/zx](https://github.com/google/zx) or whatever else.
 
+Note that phyla tasks and pipelines are **always the default export of an es-module**. This narrows the API to make breaking changes harder (and maintenance of pipelines via package updates therefore easier).
+
 ```ts
 import * as phyla from "@phyla/core"
 
-type TaskParams = { /* inputs to the tasks */ }
+type TaskParams = { /* inputs to this task */ }
 
 export default phyla.task((params: TaskParams) => ({
   pre: ({ describe, it }, { cwd, fs }) => [
@@ -120,7 +120,7 @@ export default phyla.pipeline((params: ExposedParams) => ({
     import("@org/important-business"),
   ],
   parameters: {
-    materials: ["paddle-pop-sticks", "pva", ...params.components],
+    materials: ["paddle-pop-sticks", "pva", ...params.materials],
   },
 }))
 ```
