@@ -1,5 +1,11 @@
 # @phyla/core
 
+## 0.3.0
+
+### Minor Changes
+
+- [`4dfad47`](https://github.com/zioroboco/phyla/commit/4dfad47066386853e6c239548fd89109de817638) Thanks [@zioroboco](https://github.com/zioroboco)! - Redo the API internals to support pipeline chaining / composition.
+
 ## 0.2.0
 
 ### Minor Changes
