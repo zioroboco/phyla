@@ -3,6 +3,7 @@ import * as TE from "fp-ts/TaskEither"
 import * as assertions from "@phyla/assert"
 import * as reporting from "./reporting.js"
 import { Union } from "ts-toolbelt"
+import { callsiteMeta } from "./util.js"
 import { pipe } from "fp-ts/function"
 
 export function run (task: Chainable, ctx: Context) {
@@ -80,8 +81,9 @@ export type Chainable = (
 export function task<P> (
   init: (parameters: P) => TaskDefinition
 ): (parameters: P) => Chainable {
+  const meta: Meta = callsiteMeta()
   return parameters => {
-    const definition = init(parameters)
+    const definition = Object.assign(init(parameters), meta)
     return TE.chain(
       (ctx: Context) =>
         TE.tryCatch(async () => {

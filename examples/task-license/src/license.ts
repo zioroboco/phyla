@@ -13,8 +13,6 @@ export type LicenseTaskParameters = {
 }
 
 export default phyla.task((params: LicenseTaskParameters) => ({
-  ...phyla.getMeta(import.meta.url),
-
   pre: ({ describe, it }, ctx) => [
     it(`requested a supported license`, () => {
       expect(supportedLicenses).toContain(params.license)

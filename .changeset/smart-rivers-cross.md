@@ -2,4 +2,4 @@
 "@phyla/core": patch
 ---
 
-Add a utility for setting task meta from the nearest package.
+Automatically set package name and version for tasks by looking for call sites of the `task` function.

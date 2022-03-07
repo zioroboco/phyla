@@ -4,8 +4,6 @@ import { $, cd } from "zx"
 import expect from "expect"
 
 export default phyla.task(() => ({
-  ...phyla.getMeta(import.meta.url),
-
   run: async ctx => {
     await cd(ctx.cwd)
     await $`echo "# replace me with a real install!" > pnpm-lock.yaml`
