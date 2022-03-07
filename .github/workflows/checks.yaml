@@ -14,9 +14,13 @@ jobs:
         with:
           cache: pnpm
           node-version-file: .nvmrc
+          registry-url: https://npm.pkg.github.com
       - run: pnpm install --ignore-scripts --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: pnpm run build
       - run: pnpm run test-ci
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -28,5 +32,8 @@ jobs:
         with:
           cache: pnpm
           node-version-file: .nvmrc
+          registry-url: https://npm.pkg.github.com
       - run: pnpm install --ignore-scripts --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: pnpm run lint-ci

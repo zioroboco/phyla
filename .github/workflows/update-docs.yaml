@@ -14,11 +14,12 @@ jobs:
         with:
           cache: pnpm
           node-version-file: .nvmrc
-
+          registry-url: https://npm.pkg.github.com
       - run: pnpm install --ignore-scripts --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: pnpm run build
       - run: pnpm docgen
-
       - uses: peaceiris/actions-gh-pages@068dc23d9710f1ba62e86896f84735d869951305
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
