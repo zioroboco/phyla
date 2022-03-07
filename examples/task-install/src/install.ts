@@ -1,11 +1,10 @@
 import * as path from "path"
-
+import * as phyla from "@phyla/core"
 import { $, cd } from "zx"
-import { task } from "@phyla/core"
 import expect from "expect"
 
-export default task(() => ({
-  name: "@phyla/example-install",
+export default phyla.task(() => ({
+  ...phyla.getMeta(import.meta.url),
 
   run: async ctx => {
     await cd(ctx.cwd)

@@ -1,8 +1,7 @@
+import * as phyla from "@phyla/core"
 import { dirname } from "path"
 import { fileURLToPath } from "url"
 import { join } from "path"
-
-import * as phyla from "@phyla/core"
 import { template } from "@phyla/template"
 import expect from "expect"
 
@@ -14,7 +13,7 @@ export type LicenseTaskParameters = {
 }
 
 export default phyla.task((params: LicenseTaskParameters) => ({
-  name: "@phyla/example-license",
+  ...phyla.getMeta(import.meta.url),
 
   pre: ({ describe, it }, ctx) => [
     it(`requested a supported license`, () => {

@@ -1,6 +1,6 @@
-import { pipeline } from "@phyla/core"
+import * as phyla from "@phyla/core"
 
-export default pipeline({
+export default phyla.pipeline({
   tasks: [
     import("@phyla/example-task-install"),
     import("@phyla/example-task-license"),

@@ -14,3 +14,7 @@ export {
   run,
   task,
 } from "./api.js"
+
+export {
+  getMeta,
+} from "./util.js"
