@@ -20,5 +20,5 @@
     { "path": "./examples/task-install" },
     { "path": "./examples/task-license" }
   ],
-  "include": ["**/*.spec.ts"]
+  "files": []
 }
