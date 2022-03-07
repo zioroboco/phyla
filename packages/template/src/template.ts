@@ -5,7 +5,7 @@ import glob from "fast-glob"
 
 type Options = {
   directory: string
-  variables: object
+  variables: {  [key: string]: string }
 }
 
 type Context = {
@@ -58,7 +58,17 @@ export async function template (context: Context, options: Options) {
 
   await Promise.all(
     rendered.map(async ({ templatePath, rendered }) => {
-      const relativePath = path.relative(options.directory, templatePath)
+      const interpolatedPath = templatePath.replaceAll(
+        /{{\s*(.+?)\s*}}/g,
+        (match, capture) => {
+          if (capture in options.variables) {
+            return options.variables[capture]
+          }
+          throw new Error("No template variable: " + capture)
+        }
+      )
+
+      const relativePath = path.relative(options.directory, interpolatedPath)
 
       await context.fs.promises.mkdir(
         path.dirname(path.join(context.cwd, relativePath)),

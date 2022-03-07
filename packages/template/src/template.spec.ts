@@ -4,7 +4,7 @@ import { Volume, createFsFromVolume } from "memfs"
 import { describe, expect, it } from "@jest/globals"
 import { template } from "./template.js"
 
-describe(`with the template fixture`, () => {
+describe(`the example templates`, () => {
   const directory = path.resolve(
     path.dirname(url.fileURLToPath(import.meta.url)),
     "./fixtures"
@@ -27,6 +27,14 @@ describe(`with the template fixture`, () => {
 
     expect(vol.toJSON()).toMatchObject({
       "/project/config.json": `{\n  "key": "blep"\n}\n`,
+    })
+
+    expect(vol.toJSON()).toMatchObject({
+      "/project/blep.json": `{\n  "key": "blep"\n}\n`,
+    })
+
+    expect(vol.toJSON()).toMatchObject({
+      "/project/blep/blep.blep": `blep!\n`,
     })
   })
 })
