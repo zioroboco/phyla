@@ -26,7 +26,7 @@
     "docgen": "typedoc --entryPointStrategy packages 'packages/*'"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.4.3",
+    "@zioroboco/changelog-github": "^0.1.1",
     "@changesets/cli": "^2.21.0",
     "@phyla/core": "workspace:*",
     "@tsconfig/node16": "^1.0.2",
