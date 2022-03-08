@@ -81,9 +81,10 @@ export type Chainable = (
 export function task<P> (
   init: (parameters: P) => TaskDefinition
 ): (parameters: P) => Chainable {
-  const meta: Meta = callsiteMeta()
+  const defaultMeta: Meta = callsiteMeta()
   return parameters => {
-    const definition = Object.assign(init(parameters), meta)
+    const definition = { ...defaultMeta, ...init(parameters) }
+
     return TE.chain(
       (ctx: Context) =>
         TE.tryCatch(async () => {
