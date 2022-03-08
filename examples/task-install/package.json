@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./dist/install.js",
   "peerDependencies": {
-    "@phyla/core": "^0.3.0"
+    "@phyla/core": "^0.3.1"
   },
   "devDependencies": {
     "@jest/globals": "^27.5.1",

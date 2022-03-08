@@ -1,5 +1,11 @@
 # @phyla/core
 
+## 0.3.1
+
+### Patch Changes
+
+- [`165cd8e`](https://github.com/zioroboco/phyla/commit/165cd8ec4e35fa30031ec40b25f3117fb45a3ab3) - Automatically set package name and version for tasks by looking for call sites of the `task` function.
+
 ## 0.3.0
 
 ### Minor Changes

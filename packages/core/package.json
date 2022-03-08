@@ -1,6 +1,6 @@
 {
   "name": "@phyla/core",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A framework for distributed project generation and maintenance 🧬",
   "author": "Louis Quinnell <_@ziorobo.co>",
   "license": "MIT",
