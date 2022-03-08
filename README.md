@@ -21,10 +21,9 @@ Phyla is a framework for developing, testing and continuously re-applying hierar
 ## Principles
 
   - templating and maintenance deserves a better developer experience
-  - generator outcomes should be testable and compose scalably
-  - package registries can be used to asynchronously push updates to projects
-  - supply-chain vulnerabilities exist — needless dependencies are a liability
-  - node, npm packages, typescript and esm are the right tools for this job!
+  - generator outcomes should be well-tested and composable
+  - updates can be pushed asynchronously via packages
+  - node, typescript and esm are the right tools for the job
 
 ## Concepts
 
@@ -98,7 +97,7 @@ export default phyla.pipeline({
   parameters: {
     project: "event-log-stream-dispatch-agent-mk2",
     channel: "#glitter-and-chaos",
-    environments: ["production", "extra-production"],
+    environments: ["production", "hyper-production"],
     tags: ["wildly-important"],
   },
 })
@@ -167,7 +166,7 @@ WIP and experimental, but it works well.
 
 ## Where to next?
 
-There's a working example project in the [`./examples/`](./examples/) directory.
+There's a working example project in the [`./examples/`](https://github.com/zioroboco/phyla/tree/master/examples) directory.
 
 ## Contributing
 
