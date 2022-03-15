@@ -32,9 +32,9 @@
   "dependencies": {
     "@phyla/assert": "workspace:^0.1.0",
     "clipanion": "^3.2.0-rc.10",
-    "fp-ts": "^2.11.8",
+    "fp-ts": "^2.11.9",
     "ts-toolbelt": "^9.6.0",
     "typanion": "^3.7.1",
-    "xstate": "^4.30.5"
+    "xstate": "^4.30.6"
   }
 }
