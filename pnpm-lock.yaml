@@ -114,11 +114,9 @@ importers:
   packages/template:
     specifiers:
       '@jest/globals': ^27.5.1
-      eta: ^1.12.3
       fast-glob: ^3.2.11
       memfs: ^3.4.1
     dependencies:
-      eta: 1.12.3
       fast-glob: 3.2.11
     devDependencies:
       '@jest/globals': 27.5.1
@@ -2101,11 +2099,6 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
     dev: true
-
-  /eta/1.12.3:
-    resolution: {integrity: sha512-qHixwbDLtekO/d51Yr4glcaUJCIjGVJyTzuqV4GPlgZo1YpgOKG+avQynErZIYrfM6JIJdtiG2Kox8tbb+DoGg==}
-    engines: {node: '>=6.0.0'}
-    dev: false
 
   /event-stream/3.3.4:
     resolution: {integrity: sha1-SrTJoPWlTbkzi0w02Gv86PSzVXE=}

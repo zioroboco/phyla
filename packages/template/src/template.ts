@@ -1,4 +1,3 @@
-import * as eta from "eta"
 import * as path from "path"
 import * as system_fs from "fs"
 import glob from "fast-glob"
@@ -11,19 +10,6 @@ type Options = {
 type Context = {
   cwd: string
   fs: typeof system_fs
-}
-
-const etaConfig: Partial<typeof eta.config> = {
-  autoEscape: false,
-  autoTrim: false,
-  rmWhitespace: false,
-  useWith: true,
-  tags: ["{{", "}}"],
-  parse: {
-    exec: "$",
-    interpolate: "",
-    raw: "~",
-  },
 }
 
 export async function template (context: Context, options: Options) {
@@ -39,11 +25,7 @@ export async function template (context: Context, options: Options) {
         "utf8"
       )
 
-      const rendered = await eta.render(
-        templateData,
-        options.variables,
-        etaConfig
-      )
+      const rendered = templateData
 
       if (typeof rendered != "string") {
         throw new Error(`Error rendering template: ${templatePath}`)
