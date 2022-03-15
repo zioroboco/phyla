@@ -12,6 +12,38 @@ type Context = {
   fs: typeof system_fs
 }
 
+function render (
+  input: string,
+  variables: { [key: string]: string }
+): string {
+  const definitions = Object.keys(variables).map(
+    key => `let ${key} = ${JSON.stringify(variables[key])}`
+  )
+  return input
+    .replaceAll(
+      // Match pairs of double-curlies (unless escaped), capturing the inner
+      // string and any preceeding whitespace
+      /(\s*){{\s*(.*?)\s*}}/g,
+      function (match, whitespace, inner) {
+        // Evaluate the inner string as a javascript expression
+        const evaluated = new Function(
+          [...definitions, `return ${inner}`].join(";")
+        )()
+        // Return result with captured whitespace applied per-line
+        if (whitespace.length > 0) {
+          const lines = Array.isArray(evaluated)
+            ? evaluated
+            : evaluated.split("\n")
+          return lines.map((line: string) => `${whitespace}${line}`).join("")
+        }
+        return evaluated
+      }
+    )
+    // Remove backslashes from escaped double-curlies
+    .replaceAll(/\\{\\{/g, "{{")
+    .replaceAll(/\\}\\}/g, "}}")
+}
+
 export async function template (context: Context, options: Options) {
   const templatePaths = await glob(path.join(options.directory, "**/*"), {
     cwd: process.cwd(),
@@ -25,7 +57,7 @@ export async function template (context: Context, options: Options) {
         "utf8"
       )
 
-      const rendered = templateData
+      const rendered = render(templateData, options.variables)
 
       if (typeof rendered != "string") {
         throw new Error(`Error rendering template: ${templatePath}`)
