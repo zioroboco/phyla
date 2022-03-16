@@ -95,7 +95,7 @@ export async function template (context: Context, options: Options) {
   await Promise.all(
     rendered.map(async ({ templatePath, rendered }) => {
       const interpolatedPath = templatePath.replaceAll(
-        /{{\s*(.+?)\s*}}/g,
+        /{{[ ]*(.+?)[ ]*}}/g,
         (match, capture) => {
           if (capture in options.variables) {
             return options.variables[capture]
