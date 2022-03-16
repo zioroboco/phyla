@@ -61,5 +61,12 @@ describe(`the example templates`, () => {
           `export const Thing = () => <div prop={{ value: "blep" }} />\n`,
       })
     })
+
+    it(`captures and removes slots (which render nothing by default)`, () => {
+      expect(vol.toJSON()).toMatchObject({
+        "/project/slot.md":
+          `Start\n\nEnd\n`,
+      })
+    })
   })
 })

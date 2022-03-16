@@ -12,9 +12,12 @@ type Context = {
   fs: typeof system_fs
 }
 
+type Tag = "slot"
+
 function render (
   input: string,
-  variables: { [key: string]: string }
+  variables: { [key: string]: string },
+  transform: (tag: Tag, inner: string) => string = () => ""
 ): string {
   const definitions = Object.keys(variables).map(
     key => `let ${key} = ${JSON.stringify(variables[key])}`
@@ -22,9 +25,13 @@ function render (
   return input
     .replaceAll(
       // Match pairs of double-curlies (unless escaped), capturing the inner
-      // string and any preceeding whitespace
-      /(\s*){{\s*(.*?)\s*}}/g,
-      function (match, whitespace, inner) {
+      // string (and optional tag, e.g. `slot:`) and any preceeding whitespace.
+      // e.g. `{{ item }}`, {{ items.map(i => {...}) }}`, `{{ slot: content }}`
+      /([ \t]*){{[ ]*(?:(\w+):)?[ ]*(.*?)[ ]*}}/g,
+      function (match, whitespace, tag, inner) {
+        if (tag && tag == "slot") {
+          return transform("slot", inner)
+        }
         // Evaluate the inner string as a javascript expression
         const evaluated = new Function(
           [...definitions, `return ${inner}`].join(";")
@@ -34,7 +41,7 @@ function render (
           const lines = Array.isArray(evaluated)
             ? evaluated
             : evaluated.split("\n")
-          return lines.map((line: string) => `${whitespace}${line}`).join("")
+          return lines.map((line: string) => `${whitespace}${line}`).join("\n")
         }
         return evaluated
       }
