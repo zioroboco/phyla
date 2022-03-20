@@ -1,7 +1,6 @@
+import  * as path from "path"
 import * as phyla from "@phyla/core"
-import { dirname } from "path"
 import { fileURLToPath } from "url"
-import { join } from "path"
 import { template } from "@phyla/template"
 import expect from "expect"
 
@@ -21,7 +20,10 @@ export default phyla.task((params: LicenseTaskParameters) => ({
     describe(`the package.json file`)
       .setup(async () => ({
         packageJson: JSON.parse(
-          await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
+          await ctx.fs.promises.readFile(
+            path.join(ctx.cwd, "package.json"),
+            "utf8"
+          )
         ),
       }))
       .assert(({ packageJson }) => [
@@ -32,8 +34,8 @@ export default phyla.task((params: LicenseTaskParameters) => ({
   ],
 
   run: async ctx => {
-    const templateDir = join(
-      dirname(fileURLToPath(import.meta.url)),
+    const templateDir = path.join(
+      path.dirname(fileURLToPath(import.meta.url)),
       "../templates"
     )
 
@@ -46,14 +48,14 @@ export default phyla.task((params: LicenseTaskParameters) => ({
     })
 
     const packageJson = JSON.parse(
-      await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
+      await ctx.fs.promises.readFile(path.join(ctx.cwd, "package.json"), "utf8")
     )
 
     packageJson.author = params.author
     packageJson.license = params.license
 
     await ctx.fs.promises.writeFile(
-      join(ctx.cwd, "package.json"),
+      path.join(ctx.cwd, "package.json"),
       JSON.stringify(packageJson, null, 2) + "\n"
     )
   },
@@ -62,7 +64,7 @@ export default phyla.task((params: LicenseTaskParameters) => ({
     describe(`the LICENSE file`)
       .setup(async () => ({
         licenseFile: await ctx.fs.promises.readFile(
-          join(ctx.cwd, "LICENSE"),
+          path.join(ctx.cwd, "LICENSE"),
           "utf8"
         ),
       }))
@@ -77,7 +79,10 @@ export default phyla.task((params: LicenseTaskParameters) => ({
     describe(`the package.json file`)
       .setup(async () => ({
         packageJson: JSON.parse(
-          await ctx.fs.promises.readFile(join(ctx.cwd, "package.json"), "utf8")
+          await ctx.fs.promises.readFile(
+            path.join(ctx.cwd, "package.json"),
+            "utf8"
+          )
         ),
       }))
       .assert(({ packageJson }) => [
