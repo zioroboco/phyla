@@ -20,6 +20,7 @@
     "memfs": "^3.4.1"
   },
   "dependencies": {
-    "fast-glob": "^3.2.11"
+    "fast-glob": "^3.2.11",
+    "fp-ts": "^2.11.9"
   }
 }

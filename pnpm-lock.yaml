@@ -115,9 +115,11 @@ importers:
     specifiers:
       '@jest/globals': ^27.5.1
       fast-glob: ^3.2.11
+      fp-ts: ^2.11.9
       memfs: ^3.4.1
     dependencies:
       fast-glob: 3.2.11
+      fp-ts: 2.11.9
     devDependencies:
       '@jest/globals': 27.5.1
       memfs: 3.4.1
