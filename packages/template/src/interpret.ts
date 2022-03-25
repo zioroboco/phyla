@@ -31,6 +31,9 @@ export function interpret (
   )
 
   const rendered = template.replaceAll(
+    // Match pairs of double-curlies (unless escaped), capturing the inner
+    // string (and optional tag, e.g. `slot:`) and any preceeding whitespace.
+    // e.g. `{{ stuff }}`, `{{ ...stuff.map(s => ...) }}`, `{{ slot: stuff }}`
     /(?:^([ \t]*))?{{[ ]*(?:(\w+):)?[ ]*(\.{3})?(.+?)[ ]*}}/gm,
     (_, indent, tag, spread, expression) => {
       try {
@@ -38,6 +41,9 @@ export function interpret (
           return transform(tag, expression)
         }
 
+        // Evaluate the inner string as a javascript expression.
+        // No validation is performed, since this is effectively a javascript
+        // runtime. If you give it untrusted input, that's on you.
         const evaluated = new Function(
           [...definitions, `return ${expression}`].join(";")
         )()
