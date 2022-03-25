@@ -13,7 +13,7 @@ describe(`expecting no template variables`, () => {
     const variables = { bee: "🐝" }
 
     it(`ignores any variables and returns the template verbatim`, () => {
-      expect(interpret(template, variables)).toMatchObject({
+      expect(interpret(template, { variables })).toMatchObject({
         right: template,
       })
     })
@@ -27,7 +27,7 @@ describe(`expecting a single template variable`, () => {
     const variables = { bee: "🐝" }
 
     it(`returns the template with the value interpolated`, () => {
-      expect(interpret(template, variables)).toMatchObject({
+      expect(interpret(template, { variables })).toMatchObject({
         right: `blah 🐝 blah`,
       })
     })
@@ -56,7 +56,7 @@ describe(`expecting a single template variable (including whitespace)`, () => {
     const variables = { bee: "🐝" }
 
     it(`returns the template with the value interpolated`, () => {
-      expect(interpret(template, variables)).toMatchObject({
+      expect(interpret(template, { variables })).toMatchObject({
         right: `blah 🐝 blah`,
       })
     })
@@ -88,7 +88,7 @@ describe(`expecting multiple template variables`, () => {
     }
 
     it(`returns the template with all values interpolated`, () => {
-      const result = interpret(template, variables)
+      const result = interpret(template, { variables })
       expect(result).toMatchObject({
         right: `🐝 🐞`,
       })
@@ -120,7 +120,7 @@ describe(`rendering arrays`, () => {
     const template = `title:\n{{items}}`
 
     it(`renders the array as a string`, () => {
-      const result = interpret(template, variables)
+      const result = interpret(template, { variables })
       expect(result).toMatchObject({
         right: `title:\n🐝,🐞`,
       })
@@ -131,9 +131,16 @@ describe(`rendering arrays`, () => {
     const template = `title:\n{{...items}}`
 
     it(`renders elements to separate lines`, () => {
-      const result = interpret(template, variables)
+      const result = interpret(template, { variables })
       expect(result).toMatchObject({
         right: `title:\n🐝\n🐞`,
+      })
+    })
+
+    it(`renders elements to separate lines with a custom separator`, () => {
+      const result = interpret(template, { variables, separator: ",\n" })
+      expect(result).toMatchObject({
+        right: `title:\n🐝,\n🐞`,
       })
     })
 
@@ -143,7 +150,7 @@ describe(`rendering arrays`, () => {
       }
 
       it(`returns an error`, () => {
-        const result = interpret(template, variables)
+        const result = interpret(template, { variables })
         expect(result).toMatchObject({
           left: [
             expect.objectContaining({

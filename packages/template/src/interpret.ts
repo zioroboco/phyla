@@ -10,8 +10,12 @@ class TemplateError extends Error {
 
 export function interpret (
   template: string,
-  variables: { [key: string]: string | string[] } = {}
+  options?: Partial<{
+    variables: { [key: string]: string | string[] },
+    separator: string
+  }>
 ): E.Either<Error[], string> {
+  const variables = { ...options?.variables }
   const errors: Error[] = []
 
   const definitions = Object.keys(variables).map(
@@ -33,7 +37,7 @@ export function interpret (
                 ` but expression returned ${inspect(evaluated)}`
             )
           }
-          return evaluated.join("\n")
+          return evaluated.join(options?.separator ?? "\n")
         }
 
         return evaluated
