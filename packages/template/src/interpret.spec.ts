@@ -110,3 +110,49 @@ describe(`expecting multiple template variables`, () => {
     })
   })
 })
+
+describe(`rendering arrays`, () => {
+  const variables = {
+    items: ["🐝", "🐞"],
+  }
+
+  describe(`expecting a simple variable`, () => {
+    const template = `title:\n{{items}}`
+
+    it(`renders the array as a string`, () => {
+      const result = interpret(template, variables)
+      expect(result).toMatchObject({
+        right: `title:\n🐝,🐞`,
+      })
+    })
+  })
+
+  describe(`using the spread operator`, () => {
+    const template = `title:\n{{...items}}`
+
+    it(`renders elements to separate lines`, () => {
+      const result = interpret(template, variables)
+      expect(result).toMatchObject({
+        right: `title:\n🐝\n🐞`,
+      })
+    })
+
+    describe(`with something other than an array`, () => {
+      const variables = {
+        items: "🐝🐝🐝",
+      }
+
+      it(`returns an error`, () => {
+        const result = interpret(template, variables)
+        expect(result).toMatchObject({
+          left: [
+            expect.objectContaining({
+              name: "TemplateError",
+              message: expect.stringContaining("items"),
+            }),
+          ],
+        })
+      })
+    })
+  })
+})
