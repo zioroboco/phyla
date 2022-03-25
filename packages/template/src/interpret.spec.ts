@@ -163,3 +163,16 @@ describe(`rendering arrays`, () => {
     })
   })
 })
+
+describe(`combining features`, () => {
+  const variables = { workspaces: ["one", "two"] }
+
+  it(`renders a json example`, () => {
+    const template = `{\n  "workspaces": [\n    {{ ...workspaces.map(ws => \`"\${ws}"\`) }}\n  ]\n}`
+
+    const result = interpret(template, { variables, separator: ",\n" })
+    expect(result).toMatchObject({
+      right: `{\n  "workspaces": [\n    "one",\n    "two"\n  ]\n}`,
+    })
+  })
+})

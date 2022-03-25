@@ -23,8 +23,8 @@ export function interpret (
   )
 
   const rendered = template.replaceAll(
-    /{{[ ]*(\.{3})?(.+?)[ ]*}}/g,
-    (_, spread, expression) => {
+    /([ \t]*){{[ ]*(\.{3})?(.+?)[ ]*}}/g,
+    (_, whitespace, spread, expression) => {
       try {
         const evaluated = new Function(
           [...definitions, `return ${expression}`].join(";")
@@ -37,10 +37,12 @@ export function interpret (
                 ` but expression returned ${inspect(evaluated)}`
             )
           }
-          return evaluated.join(options?.separator ?? "\n")
+          return evaluated
+            .map(element => whitespace + element)
+            .join(options?.separator ?? "\n")
         }
 
-        return evaluated
+        return whitespace + evaluated
       } catch (e) {
         errors.push(e instanceof Error ? e : new Error(String(e)))
         return ""
