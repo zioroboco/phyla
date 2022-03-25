@@ -8,13 +8,21 @@ class TemplateError extends Error {
   }
 }
 
+const transformFallback = (tag: string, value: string) => {
+  throw new TemplateError(
+    `Encountered tag ${inspect(tag)} with no transform function`
+  )
+}
+
 export function interpret (
   template: string,
   options?: Partial<{
     variables: { [key: string]: string | string[] },
-    separator: string
+    separator: string,
+    transform: (tag: string, value: string) => string
   }>
 ): E.Either<Error[], string> {
+  const transform = options?.transform ?? transformFallback
   const variables = { ...options?.variables }
   const errors: Error[] = []
 
@@ -23,9 +31,13 @@ export function interpret (
   )
 
   const rendered = template.replaceAll(
-    /([ \t]*){{[ ]*(\.{3})?(.+?)[ ]*}}/g,
-    (_, whitespace, spread, expression) => {
+    /(?:^([ \t]*))?{{[ ]*(?:(\w+):)?[ ]*(\.{3})?(.+?)[ ]*}}/gm,
+    (_, indent, tag, spread, expression) => {
       try {
+        if (tag) {
+          return transform(tag, expression)
+        }
+
         const evaluated = new Function(
           [...definitions, `return ${expression}`].join(";")
         )()
@@ -38,11 +50,11 @@ export function interpret (
             )
           }
           return evaluated
-            .map(element => whitespace + element)
+            .map(element => indent ? indent + element : element)
             .join(options?.separator ?? "\n")
         }
 
-        return whitespace + evaluated
+        return indent ? indent + evaluated : evaluated
       } catch (e) {
         errors.push(e instanceof Error ? e : new Error(String(e)))
         return ""

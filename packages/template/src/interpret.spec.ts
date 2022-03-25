@@ -164,6 +164,37 @@ describe(`rendering arrays`, () => {
   })
 })
 
+describe("tags", () => {
+  const template = `blah {{ tagged: bee }} blah`
+
+  describe("with a transform function", () => {
+    const transform = (tag: string, value: string) => {
+      expect(tag).toBe("tagged")
+      expect(value).toBe("bee")
+      return "🐝"
+    }
+
+    it(`transforms the tagged value`, () => {
+      expect(interpret(template, { transform })).toMatchObject({
+        right: `blah 🐝 blah`,
+      })
+    })
+
+    describe("without a transform function", () => {
+      it(`returns an error including the tag type`, () => {
+        expect(interpret(template)).toMatchObject({
+          left: [
+            expect.objectContaining({
+              name: "TemplateError",
+              message: expect.stringContaining("tagged"),
+            }),
+          ],
+        })
+      })
+    })
+  })
+})
+
 describe(`combining features`, () => {
   const variables = { workspaces: ["one", "two"] }
 
