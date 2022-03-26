@@ -195,6 +195,23 @@ describe("tags", () => {
   })
 })
 
+describe(`a multiline expression`, () => {
+  const template = `{{
+    ...things.map(thing => {
+      return thing.name
+    })
+  }}`
+
+  it(`is evaluated normally`, () => {
+    const result = interpret(template, {
+      variables: { things: [{ name: "bee" }, { name: "ladybird" }] },
+    })
+    expect(result).toMatchObject({
+      right: `bee\nladybird`,
+    })
+  })
+})
+
 describe(`escaping double-curlies`, () => {
   const template = `() => <Thing prop=\\{\\{ shrug: true \\}\\} />`
 

@@ -17,7 +17,7 @@ const transformFallback = (tag: string, value: string) => {
 export function interpret (
   template: string,
   options?: Partial<{
-    variables: { [key: string]: string | string[] },
+    variables: { [key: string]: string | any[] },
     separator: string,
     transform: (tag: string, value: string) => string
   }>
@@ -34,7 +34,7 @@ export function interpret (
     // Match pairs of double-curlies (unless escaped), capturing the inner
     // string (and optional tag, e.g. `slot:`) and any preceeding whitespace.
     // e.g. `{{ stuff }}`, `{{ ...stuff.map(s => ...) }}`, `{{ slot: stuff }}`
-    /(?:^([ \t]*))?{{[ ]*(?:(\w+):)?[ ]*(\.{3})?(.+?)[ ]*}}/gm,
+    /(?:^([ \t]*))?{{[ \t\n]*(?:(\w+):[ ]*)?(\.{3})?(.+?)[ \t\n]*}}/gms,
     (_, indent, tag, spread, expression) => {
       try {
         if (tag) {
