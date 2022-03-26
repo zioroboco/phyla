@@ -2,12 +2,12 @@ import * as E from "fp-ts/Either"
 import { describe, expect, it } from "@jest/globals"
 
 import { interpret } from "./interpret.js"
-import { slotted } from "./slot.js"
+import { split } from "./slot.js"
 
-describe(slotted.name, () => {
+describe(split.name, () => {
   it(`slices input strings around named slot tags`, () => {
     expect(
-      slotted(`{{ start }}{{ slot: one }}{{ middle }}{{ slot: two }}{{ end }}`)
+      split(`{{ start }}{{ slot: one }}{{ middle }}{{ slot: two }}{{ end }}`)
     ).toEqual([
       "{{ start }}",
       { slot: "one" },
@@ -24,7 +24,7 @@ describe(slotted.name, () => {
       end: "end-value",
     }
     expect(
-      slotted(
+      split(
         `{{ start }}{{ slot: one }}{{ middle }}{{ slot: two }}{{ end }}`
       ).map(element => {
         if (typeof element === "string") {

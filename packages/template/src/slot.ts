@@ -1,14 +1,15 @@
-export function slotted (
-  input: string,
-): (string | { slot: string })[] {
-  const match = input.match(/{{[ ]*slot:[ ]*(\w+?)[ ]}}/)
+type SlotToken = { slot: string }
+type SplitTemplate = Array<string | SlotToken>
+
+export function split (template: string): SplitTemplate {
+  const match = template.match(/{{[ ]*slot:[ ]*(\w+?)[ ]}}/)
   if (!match) {
-    return [input]
+    return [template]
   } else {
     return [
-      input.slice(0, match.index),
+      template.slice(0, match.index),
       { slot: match[1] },
-      ...slotted(input.slice(match.index! + match[0].length)),
+      ...split(template.slice(match.index! + match[0].length)),
     ]
   }
 }
