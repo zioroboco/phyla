@@ -1,7 +1,3 @@
-/**
- * @module assert
- */
-
 export const Pass = Symbol("Pass")
 
 export type TestOutcome = typeof Pass | Error
@@ -106,20 +102,4 @@ export async function run (suite: Array<Block | Test>): Promise<Report> {
     failures: results.filter(r => r.outcome != Pass).length,
     results: flatten(results),
   }
-}
-
-function boldred (str: string) {
-  return `\x1b[1m\x1b[31m${str}\x1b[0m`
-}
-
-function red (str: string) {
-  return `\x1b[31m${str}\x1b[0m`
-}
-
-function green (str: string) {
-  return `\x1b[32m${str}\x1b[0m`
-}
-
-function grey (str: string) {
-  return `\x1b[90m${str}\x1b[0m`
 }

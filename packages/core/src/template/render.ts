@@ -3,16 +3,12 @@ import * as path from "path"
 import * as system_fs from "fs"
 import glob from "fast-glob"
 
+import { Context } from "../api.js"
 import { interpret } from "./interpret.js"
 
 type Options = {
   directory: string
   variables: { [key: string]: string }
-}
-
-type Context = {
-  cwd: string
-  fs: typeof system_fs
 }
 
 export async function template (context: Context, options: Options) {
