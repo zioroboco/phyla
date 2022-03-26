@@ -2,7 +2,8 @@ import * as path from "path"
 import * as url from "url"
 import { Volume, createFsFromVolume } from "memfs"
 import { beforeAll, describe, expect, it } from "@jest/globals"
-import { render, slotted, template } from "./template.js"
+
+import { template } from "./render.js"
 
 describe(`the example templates`, () => {
   const directory = path.resolve(
@@ -68,40 +69,5 @@ describe(`the example templates`, () => {
           `Start\n\nEnd\n`,
       })
     })
-  })
-})
-
-describe(slotted.name, () => {
-  it(`slices input strings around named slot tags`, () => {
-    expect(
-      slotted(`{{ start }}{{ slot: one }}{{ middle }}{{ slot: two }}{{ end }}`)
-    ).toEqual([
-      "{{ start }}",
-      { slot: "one" },
-      "{{ middle }}",
-      { slot: "two" },
-      "{{ end }}",
-    ])
-  })
-
-  it(`produces slices that can be rendered`, () => {
-    const variables = {
-      start: "start-value",
-      middle: "middle-value",
-      end: "end-value",
-    }
-    expect(
-      slotted(
-        `{{ start }}{{ slot: one }}{{ middle }}{{ slot: two }}{{ end }}`
-      ).map(element =>
-        typeof element == "string" ? render(element, variables) : element
-      )
-    ).toEqual([
-      "start-value",
-      { slot: "one" },
-      "middle-value",
-      { slot: "two" },
-      "end-value",
-    ])
   })
 })

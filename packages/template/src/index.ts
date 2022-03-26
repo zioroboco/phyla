@@ -2,4 +2,4 @@
  * @module template
  */
 
-export { template } from "./template.js"
+export { template } from "./render.js"

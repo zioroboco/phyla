@@ -1,2 +1,2 @@
 {{ purpose }} list:
-  {{ items.map(element => `- ${element}`) }}
+  {{ ...items.map(element => `- ${element}`) }}
