@@ -1,6 +1,6 @@
 import { describe, expect, it } from "@jest/globals"
 
-import * as phyla from "./index.js"
+import * as phyla from "./assert.js"
 
 describe(`an individual passing test`, () => {
   const test = phyla.it(`passes, yay`, () => {})

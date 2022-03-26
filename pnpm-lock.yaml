@@ -82,16 +82,9 @@ importers:
       '@phyla/core': link:../../packages/core
       memfs: 3.4.1
 
-  packages/assert:
-    specifiers:
-      '@jest/globals': ^27.5.1
-    devDependencies:
-      '@jest/globals': 27.5.1
-
   packages/core:
     specifiers:
       '@jest/globals': ^27.5.1
-      '@phyla/assert': workspace:^0.1.0
       '@types/node': ^17.0.21
       clipanion: ^3.2.0-rc.10
       fp-ts: ^2.11.9
@@ -100,7 +93,6 @@ importers:
       typanion: ^3.7.1
       xstate: ^4.30.6
     dependencies:
-      '@phyla/assert': link:../assert
       clipanion: 3.2.0-rc.10
       fp-ts: 2.11.9
       ts-toolbelt: 9.6.0

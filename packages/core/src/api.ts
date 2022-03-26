@@ -1,6 +1,6 @@
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
-import * as assertions from "@phyla/assert"
+import * as assertions from "./assert.js"
 import * as reporting from "./reporting.js"
 import { Union } from "ts-toolbelt"
 import { callsiteMeta } from "./util.js"

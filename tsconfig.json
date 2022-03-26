@@ -20,7 +20,6 @@
     "noEmit": true
   },
   "references": [
-    { "path": "./packages/assert" },
     { "path": "./packages/core" },
     { "path": "./packages/template" },
     { "path": "./examples/task-install" },
