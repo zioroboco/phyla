@@ -128,19 +128,27 @@ describe(`rendering arrays`, () => {
   })
 
   describe(`using the spread operator`, () => {
-    const template = `title:\n{{...items}}`
+    const template = `title:\n  {{...items}}`
 
     it(`renders elements to separate lines`, () => {
       const result = interpret(template, { variables })
       expect(result).toMatchObject({
-        right: `title:\n🐝\n🐞`,
+        right: `title:\n  🐝\n  🐞`,
+      })
+    })
+
+    it(`renders correct base indentation for multi-line outputs`, () => {
+      const template = `title:\n  {{...items.map(item => \`\${item}\n\${item}\`)}}`
+      const result = interpret(template, { variables })
+      expect(result).toMatchObject({
+        right: `title:\n  🐝\n  🐝\n  🐞\n  🐞`,
       })
     })
 
     it(`renders elements to separate lines with a custom separator`, () => {
       const result = interpret(template, { variables, separator: ",\n" })
       expect(result).toMatchObject({
-        right: `title:\n🐝,\n🐞`,
+        right: `title:\n  🐝,\n  🐞`,
       })
     })
 
@@ -271,7 +279,7 @@ describe(`invalid templates`, () => {
       }}`,
     ]
 
-    it(`return errors`, () => {
+    it(`returns errors`, () => {
       const results = invalidTemplates.map(template =>
         interpret(template, { variables: { one: [], two: [] } })
       )

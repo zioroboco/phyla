@@ -78,6 +78,7 @@ export function interpret (
           }
           return evaluated
             .map(element => indent ? indent + element : element)
+            .map(element => element.replaceAll("\n", "\n" + indent))
             .join(options?.separator ?? "\n")
         }
 
