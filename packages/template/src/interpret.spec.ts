@@ -195,6 +195,17 @@ describe("tags", () => {
   })
 })
 
+describe(`escaping double-curlies`, () => {
+  const template = `() => <Thing prop=\\{\\{ shrug: true \\}\\} />`
+
+  it(`renders unescaped literal double-curlies`, () => {
+    const result = interpret(template)
+    expect(result).toMatchObject({
+      right: `() => <Thing prop={{ shrug: true }} />`,
+    })
+  })
+})
+
 describe(`combining features`, () => {
   const variables = { workspaces: ["one", "two"] }
 

@@ -67,6 +67,9 @@ export function interpret (
       }
     }
   )
+    // Remove backslashes from escaped double-curlies
+    .replaceAll(/\\{\\{/g, "{{")
+    .replaceAll(/\\}\\}/g, "}}")
 
   if (errors.length > 0) {
     return E.left(errors)
