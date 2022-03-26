@@ -26,6 +26,27 @@ export function interpret (
   const variables = { ...options?.variables }
   const errors: Error[] = []
 
+  /** Match cases of a single output rendered from multiple blocks. */
+  const flagPotentialSpreadMisuse =
+    /{{[ \t\n]*(\.{3})?(?:.+?)[ \t\n]*}}[^\n]*?{{[ \t\n]*(\.{3})?/g.exec(
+      template
+    )
+
+  if (flagPotentialSpreadMisuse) {
+    // If a spread operator is included in match, the template is invalid
+    const [_, ...spreadsPerFlaggedLine] = flagPotentialSpreadMisuse
+    if (spreadsPerFlaggedLine.filter(Boolean).length > 0) {
+      errors.push(
+        new TemplateError(
+          `template contained spread syntax on a line with multiple` +
+            ` interpolation expressions`
+        )
+      )
+      return E.left(errors)
+    }
+  }
+
+
   const definitions = Object.keys(variables).map(
     key => `let ${key} = ${JSON.stringify(variables[key])}`
   )

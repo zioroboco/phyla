@@ -235,3 +235,57 @@ describe(`combining features`, () => {
     })
   })
 })
+
+describe(`invalid templates`, () => {
+  describe(`caused by illegal use of the spread operator`, () => {
+    const invalidTemplates = [
+      `{{...one}} {{...two}}`,
+      `{{...one}} {{two}}`,
+      `{{one}} {{...two}}`,
+      `{{ ...one }} {{ ...two }}`,
+      `{{ ...one }} {{ two }}`,
+      `{{ one }} {{ ...two }}`,
+      `{{ ...one }} {{
+        ...two
+      }}`,
+      `{{ ...one }} {{
+        two
+      }}`,
+      `{{ one }} {{
+        ...two
+      }}`,
+      `{{
+        ...one
+      }} {{
+        ...two
+      }}`,
+      `{{
+        ...one
+      }} {{
+        two
+      }}`,
+      `{{
+        one
+      }} {{
+        ...two
+      }}`,
+    ]
+
+    it(`return errors`, () => {
+      const results = invalidTemplates.map(template =>
+        interpret(template, { variables: { one: [], two: [] } })
+      )
+
+      for (const result of results) {
+        expect(result).toMatchObject({
+          left: [
+            expect.objectContaining({
+              name: "TemplateError",
+              message: expect.stringContaining("spread"),
+            }),
+          ],
+        })
+      }
+    })
+  })
+})
