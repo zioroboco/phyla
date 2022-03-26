@@ -37,12 +37,10 @@ export const findupSync = function (
   target: string,
 ): string | null {
   if (current == "/") return null
-
   try {
     if (fs.statSync(path.join(current, target)).isFile()) {
       return path.resolve(path.join(current, target))
     }
   } catch (e) {}
-
   return findupSync(path.dirname(current), target)
 }
