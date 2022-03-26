@@ -14,3 +14,5 @@ export {
   run,
   task,
 } from "./api.js"
+
+export { template } from "./template/index.js"
