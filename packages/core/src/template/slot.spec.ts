@@ -10,9 +10,9 @@ describe(split.name, () => {
       split(`{{ start }}{{ slot: one }}{{ middle }}{{ slot: two }}{{ end }}`)
     ).toEqual([
       "{{ start }}",
-      { slot: "one" },
+      { type: "slot", id: "one" },
       "{{ middle }}",
-      { slot: "two" },
+      { type: "slot", id: "two" },
       "{{ end }}",
     ])
   })
@@ -45,9 +45,9 @@ describe(split.name, () => {
       })
     ).toEqual([
       "start-value",
-      { slot: "one" },
+      { type: "slot", id: "one" },
       "middle-value",
-      { slot: "two" },
+      { type: "slot", id: "two" },
       "end-value",
     ])
   })
