@@ -6,6 +6,7 @@
   "dependencies": {
     "@phyla/core": "workspace:*",
     "@phyla/example-task-install": "workspace:*",
-    "@phyla/example-task-license": "workspace:*"
+    "@phyla/example-task-license": "workspace:*",
+    "@phyla/example-task-package": "workspace:*"
   }
 }

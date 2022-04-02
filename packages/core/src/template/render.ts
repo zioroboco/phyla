@@ -8,7 +8,7 @@ import { interpret } from "./interpret.js"
 
 type Options = {
   directory: string
-  variables: { [key: string]: string }
+  variables: { [key: string]: unknown },
 }
 
 export async function template (context: Context, options: Options) {
@@ -26,7 +26,7 @@ export async function template (context: Context, options: Options) {
 
       const rendered = interpret(templateData, {
         variables: options.variables,
-        transform: () => "", // FIXME stubbed tag transform
+        transform: () => ``, // FIXME stubbed tag transform
       })
 
       if (E.isLeft(rendered)) {
@@ -49,9 +49,12 @@ export async function template (context: Context, options: Options) {
         /{{[ ]*(.+?)[ ]*}}/g,
         (_, capture) => {
           if (capture in options.variables) {
-            return options.variables[capture]
+            const value = options.variables[capture]
+            if (typeof value == "string") {
+              return value
+            }
           }
-          throw new Error("No template variable: " + capture)
+          throw new Error("No string-valued template variable: " + capture)
         }
       )
 

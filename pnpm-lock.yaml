@@ -45,10 +45,12 @@ importers:
       '@phyla/core': workspace:*
       '@phyla/example-task-install': workspace:*
       '@phyla/example-task-license': workspace:*
+      '@phyla/example-task-package': workspace:*
     dependencies:
       '@phyla/core': link:../../packages/core
       '@phyla/example-task-install': link:../task-install
       '@phyla/example-task-license': link:../task-license
+      '@phyla/example-task-package': link:../task-package
 
   examples/task-install:
     specifiers:
@@ -64,6 +66,19 @@ importers:
       '@phyla/core': link:../../packages/core
 
   examples/task-license:
+    specifiers:
+      '@jest/globals': ^27.5.1
+      '@phyla/core': ^0.3.0
+      expect: ^27.5.1
+      memfs: ^3.4.1
+    dependencies:
+      '@phyla/core': link:../../packages/core
+      expect: 27.5.1
+    devDependencies:
+      '@jest/globals': 27.5.1
+      memfs: 3.4.1
+
+  examples/task-package:
     specifiers:
       '@jest/globals': ^27.5.1
       '@phyla/core': ^0.3.0

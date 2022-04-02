@@ -17,7 +17,7 @@ const transformFallback = (tag: string, value: string) => {
 export function interpret (
   template: string,
   options?: Partial<{
-    variables: { [key: string]: string | any[] },
+    variables: { [key: string]: unknown },
     separator: string,
     transform: (tag: string, value: string) => string
   }>
