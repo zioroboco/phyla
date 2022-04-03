@@ -1,15 +1,19 @@
-module.exports = function () {
+export default function () {
   return {
     files: [
       "./package.json",
-      "./{examples,packages}/*/src/**/*.{ts,json}",
-      "!./{examples,packages}/*/src/**/*.spec.ts",
+      "./tsconfig.json",
+      "./src/**/*.{ts,json}",
+      "!./src/**/*.spec.ts",
       "!./node_modules/**/*",
     ],
-    tests: ["./{examples,packages}/*/src/**/*.spec.ts", "!./node_modules/**/*"],
+
+    tests: [
+      "./src/**/*.spec.ts",
+    ],
+
     runMode: "onsave",
-    testFramework: "mocha",
-    workers: { restart: true },
+
     env: {
       type: "node",
       runner: "/usr/local/bin/node",
@@ -21,5 +25,10 @@ module.exports = function () {
         ].join(" "),
       },
     },
+
+    // see: https://wallabyjs.com/docs/integration/esm.html#mocha
+    testFramework: "mocha",
+    symlinkNodeModules: true,
+    workers: { restart: true },
   }
 }
