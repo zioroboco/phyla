@@ -1,4 +1,5 @@
-import { describe, expect, it } from "@jest/globals"
+import { describe, it } from "mocha"
+import expect from "expect"
 
 import * as phyla from "./assert.js"
 
@@ -138,7 +139,7 @@ describe(`a describe block with setup function`, () => {
 describe(`a describe block with no setup function`, () => {
   const block = phyla.describe(`no setup`).assert(variables => [
     phyla.it(`passes an empty object`, () => {
-      expect(variables).toMatchInlineSnapshot(`Object {}`)
+      expect(variables).toEqual({})
     }),
   ])
 

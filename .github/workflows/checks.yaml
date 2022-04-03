@@ -19,7 +19,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: pnpm run build
-      - run: pnpm run test-ci
+      - run: pnpm run test
 
   lint:
     runs-on: ubuntu-latest

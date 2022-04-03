@@ -1,7 +1,9 @@
 import * as TE from "fp-ts/TaskEither"
 import * as path from "path"
-import { describe, expect, it, jest } from "@jest/globals"
+import { describe, it } from "mocha"
 import { flow } from "fp-ts/lib/function"
+import { spy } from "sinon"
+import expect from "expect"
 
 import { Context, TaskDefinition, pipeline, task } from "./api.js"
 
@@ -137,14 +139,14 @@ describe(`the task call stack`, () => {
   }))
 
   it(`reports task names`, async () => {
-    const examine = jest.fn()
+    const examine = spy()
     const context: Context = { cwd: "/", fs, stack: [] }
 
     await checkStack({ examine })(TE.of(context))()
 
-    expect(examine).toHaveBeenCalledWith([
-      expect.objectContaining({ name: "check-stack" }),
-    ])
+    expect(
+      examine.calledWith({ name: "check-stack" })
+    )
   })
 
   describe(`when tasks are composed within a pipeline`, () => {
@@ -157,17 +159,19 @@ describe(`the task call stack`, () => {
     }))
 
     it(`reports its the task and pipeline names`, async () => {
-      const examine = jest.fn()
+      const examine = spy()
       const context: Context = { cwd: "/", fs, stack: [] }
 
       await checkPipeline({ examine })
         .then(p => p(TE.of(context)))
         .then(p => p())
 
-      expect(examine).toHaveBeenCalledWith([
-        expect.objectContaining({ name: "check-pipeline" }),
-        expect.objectContaining({ name: "check-stack" }),
-      ])
+      expect(
+        examine.calledWith({ name: "check-pipeline" })
+      )
+      expect(
+        examine.calledWith({ name: "check-stack" })
+      )
     })
   })
 })

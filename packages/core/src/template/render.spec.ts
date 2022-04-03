@@ -1,7 +1,8 @@
 import * as path from "path"
 import * as url from "url"
 import { Volume, createFsFromVolume } from "memfs"
-import { beforeAll, describe, expect, it } from "@jest/globals"
+import { before, describe, it } from "mocha"
+import expect from "expect"
 
 import { template } from "./render.js"
 
@@ -14,7 +15,7 @@ describe(`the example templates`, () => {
   describe(`rendering templates`, () => {
     const vol = new Volume()
 
-    beforeAll(async () => {
+    before(async () => {
       await template(
         {
         // @ts-ignore

@@ -1,6 +1,7 @@
 import * as phyla from "@phyla/core"
 import { Volume, createFsFromVolume } from "memfs"
-import { expect, test } from "@jest/globals"
+import { test } from "mocha"
+import expect from "expect"
 import packageTask, { PackageTaskParameters } from "./package.js"
 
 const cwd = "/my-project"

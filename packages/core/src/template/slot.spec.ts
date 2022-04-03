@@ -1,5 +1,6 @@
 import * as E from "fp-ts/Either"
-import { describe, expect, it } from "@jest/globals"
+import { describe, it } from "mocha"
+import expect from "expect"
 
 import { interpret } from "./interpret.js"
 import { split } from "./slot.js"

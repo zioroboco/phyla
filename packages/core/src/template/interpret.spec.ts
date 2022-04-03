@@ -1,5 +1,6 @@
-import { describe, expect, it } from "@jest/globals"
+import { describe, it } from "mocha"
 import { interpret } from "./interpret.js"
+import expect from "expect"
 
 describe(`expecting no template variables`, () => {
   const template = `blah blah`

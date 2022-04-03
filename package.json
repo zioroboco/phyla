@@ -4,9 +4,7 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "test:watch": "JEST_HIDE_USAGE=1 && pnpm run test -- --watch",
-    "test": "NODE_OPTIONS='--no-warnings --experimental-vm-modules' jest",
-    "test-ci": "pnpm test -- --ci",
+    "test": "mocha --no-warnings --experimental-specifier-resolution=node --experimental-import-meta-resolve",
     "lint": "pnpm lint:prettier -- --write && pnpm lint:eslint -- --fix",
     "lint-ci": "pnpm lint:prettier -- --check && pnpm lint:eslint -- --max-warnings=0",
     "lint:eslint": "eslint . --ext .ts",
@@ -18,8 +16,9 @@
   "devDependencies": {
     "@changesets/cli": "^2.21.1",
     "@phyla/core": "workspace:*",
-    "@types/jest": "^27.4.1",
+    "@types/mocha": "^9.1.0",
     "@types/node": "^17.0.23",
+    "@types/sinon": "^10.0.11",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "@zioroboco/changelog-github": "^0.1.1",
@@ -27,11 +26,11 @@
     "eslint-import-resolver-typescript": "^2.7.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
-    "jest": "^27.5.1",
-    "jest-resolve": "^27.5.1",
-    "jest-ts-webcompat-resolver": "^1.0.0",
+    "expect": "^27.5.1",
+    "mocha": "^9.2.2",
     "prettier": "^2.6.1",
-    "ts-jest": "^27.1.4",
+    "sinon": "^13.0.1",
+    "tsm": "^2.2.1",
     "typescript": "^4.6.3"
   }
 }
