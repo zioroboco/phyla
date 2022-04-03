@@ -2,7 +2,7 @@ import * as phyla from "@phyla/core"
 import { Volume, createFsFromVolume } from "memfs"
 import { test } from "mocha"
 import expect from "expect"
-import licenseTask, { LicenseTaskParameters } from "./license.js"
+import licenseTask, { LicenseTaskParameters } from "./license"
 
 const cwd = "/my-project"
 

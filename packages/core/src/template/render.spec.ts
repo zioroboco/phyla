@@ -4,7 +4,7 @@ import { Volume, createFsFromVolume } from "memfs"
 import { before, describe, it } from "mocha"
 import expect from "expect"
 
-import { template } from "./render.js"
+import { template } from "./render"
 
 describe(`the example templates`, () => {
   const directory = path.resolve(

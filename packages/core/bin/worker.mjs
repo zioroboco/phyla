@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-specifier-resolution=node
+#!/usr/bin/env node --experimental-specifier-resolution=node --experimental-import-meta-resolve
 
 import * as path from "path"
 import * as system_fs from "fs"

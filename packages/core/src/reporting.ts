@@ -1,4 +1,4 @@
-import { Pass, Report } from "./assert.js"
+import { Pass, Report } from "./assert"
 
 export const boldred = (s: string) => `\x1b[1m\x1b[31m${s}\x1b[0m`
 export const inverse = (s: string) => `\x1b[7m${boldred(s)}\x1b[0m`

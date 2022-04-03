@@ -6,7 +6,7 @@ import { fileURLToPath } from "url"
 
 import { createMachine, createSchema, interpret } from "xstate"
 
-import { Chainable } from "./api.js"
+import { Chainable } from "./api"
 
 /**
  * Duration for which file watcher events will be buffered -- i.e. for any two

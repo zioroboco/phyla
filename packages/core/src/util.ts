@@ -1,6 +1,6 @@
 import * as fs from "fs"
 import * as path from "path"
-import { Meta } from "./api.js"
+import { Meta } from "./api"
 
 function stacktrace () {
   const _prepareStackTrace = Error.prepareStackTrace
@@ -14,7 +14,7 @@ export function callsiteMeta (): Meta {
   const stack = stacktrace()
   for (const frame of stack.slice(3)) {
     let file = frame.getFileName()
-    if (file && !file.endsWith("/core/dist/api.js")) {
+    if (file && !file.endsWith("/core/dist/api")) {
       // something is causing paths in stack traces to be simplified in tests
       const dirname = file.startsWith("file://")
         ? path.dirname(file.slice(7))

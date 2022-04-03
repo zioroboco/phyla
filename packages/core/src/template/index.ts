@@ -1,1 +1,1 @@
-export { template } from "./render.js"
+export { template } from "./render"

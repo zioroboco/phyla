@@ -1,5 +1,5 @@
 import { describe, it } from "mocha"
-import { interpret } from "./interpret.js"
+import { interpret } from "./interpret"
 import expect from "expect"
 
 describe(`expecting no template variables`, () => {

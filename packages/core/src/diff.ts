@@ -1,4 +1,4 @@
-import { Chainable, run } from "./api.js"
+import { Chainable, run } from "./api"
 import { strict as assert } from "assert"
 import { spawn } from "child_process"
 

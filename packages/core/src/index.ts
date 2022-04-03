@@ -13,6 +13,6 @@ export {
   pipeline,
   run,
   task,
-} from "./api.js"
+} from "./api"
 
-export { template } from "./template/index.js"
+export { template } from "./template/index"

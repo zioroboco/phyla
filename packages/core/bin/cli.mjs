@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-specifier-resolution=node
+#!/usr/bin/env node --experimental-specifier-resolution=node --experimental-import-meta-resolve
 
 import * as commands from "../dist/commands.js"
 import { Cli } from "clipanion"

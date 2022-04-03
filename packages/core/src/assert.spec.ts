@@ -1,7 +1,7 @@
 import { describe, it } from "mocha"
 import expect from "expect"
 
-import * as phyla from "./assert.js"
+import * as phyla from "./assert"
 
 describe(`an individual passing test`, () => {
   const test = phyla.it(`passes, yay`, () => {})

@@ -5,7 +5,7 @@ import { flow } from "fp-ts/lib/function"
 import { spy } from "sinon"
 import expect from "expect"
 
-import { Context, TaskDefinition, pipeline, task } from "./api.js"
+import { Context, TaskDefinition, pipeline, task } from "./api"
 
 const fs = {} as typeof import("fs")
 

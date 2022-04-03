@@ -4,12 +4,12 @@ import * as path from "path"
 import { strict as assert } from "assert"
 
 import { Command, Option } from "clipanion"
-import { richFormat } from "clipanion/lib/format.js"
+import { richFormat } from "clipanion/lib/format"
 
-import * as server from "./server.js"
-import { Chainable, run } from "./api.js"
-import { diff } from "./diff.js"
-import { dim } from "./reporting.js"
+import * as server from "./server"
+import { Chainable, run } from "./api"
+import { diff } from "./diff"
+import { dim } from "./reporting"
 
 enum Category {
   Main = "main",

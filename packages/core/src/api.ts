@@ -1,9 +1,9 @@
 import * as E from "fp-ts/Either"
 import * as TE from "fp-ts/TaskEither"
-import * as assertions from "./assert.js"
-import * as reporting from "./reporting.js"
+import * as assertions from "./assert"
+import * as reporting from "./reporting"
 import { Union } from "ts-toolbelt"
-import { callsiteMeta } from "./util.js"
+import { callsiteMeta } from "./util"
 import { pipe } from "fp-ts/function"
 
 export function run (task: Chainable, ctx: Context) {

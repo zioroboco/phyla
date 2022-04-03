@@ -2,8 +2,8 @@ import * as E from "fp-ts/Either"
 import { describe, it } from "mocha"
 import expect from "expect"
 
-import { interpret } from "./interpret.js"
-import { split } from "./slot.js"
+import { interpret } from "./interpret"
+import { split } from "./slot"
 
 describe(split.name, () => {
   it(`slices input strings around named slot tags`, () => {
