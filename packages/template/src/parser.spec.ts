@@ -40,6 +40,36 @@ describe(lex.name, () => {
     })
   })
 
+  it(`lexes a multiline expression`, () => {
+    const input = `{{
+      blep
+    }}`
+    expect(lex(input)).toMatchObject({
+      right: [{
+        type: "expression",
+        value: "blep",
+        text: input,
+        line: 1,
+        col: 1,
+      }],
+    })
+  })
+
+  it(`lexes a multiline spread expression`, () => {
+    const input = `{{
+      ...blep
+    }}`
+    expect(lex(input)).toMatchObject({
+      right: [{
+        type: "spread",
+        value: "blep",
+        text: input,
+        line: 1,
+        col: 1,
+      }],
+    })
+  })
+
   it(`lexes a slot`, () => {
     expect(lex("{{ slot: blep }}")).toMatchObject({
       right: [{

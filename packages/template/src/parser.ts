@@ -4,9 +4,9 @@ import moo from "moo"
 
 const lexer = moo.compile({
   static: { match: /[^(?:{{)]+/, lineBreaks: true },
-  expression: /{{[ ]*\w+[ ]*}}/,
-  spread: /{{[ ]*\.{3}\w+[ ]*}}/,
-  slot: /{{[ ]*slot:[ ]*\w+[ ]*}}/,
+  expression: { match: /{{[ \t\n]*[^slot: ?][_$a-zA-Z].*?[ \t\n]*}}/, lineBreaks: true },
+  spread: { match: /{{[ \t\n]*\.{3}[_$a-zA-Z].+?[ \t\n]*}}/, lineBreaks: true },
+  slot: /{{[ ]*slot: ?\w+[ ]*}}/,
 })
 
 const tokens = ["static", "expression", "spread", "slot"] as const
@@ -31,8 +31,8 @@ export function lex (input: string): E.Either<Error, Token[]> {
       result.push({
         type: token.type as typeof tokens[number],
         value: token.value
-          .replace(/^{{[ ]*/, "")
-          .replace(/[ ]*}}$/, "")
+          .replace(/^{{[ \t\n]*/, "")
+          .replace(/[ \t\n]*}}$/, "")
           .replace(/^\.{3}/, "")
           .replace(/^slot:[ ]*/, ""),
         text: token.text,
