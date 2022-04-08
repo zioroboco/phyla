@@ -21,6 +21,7 @@
   },
   "references": [
     { "path": "./packages/core" },
+    { "path": "./packages/template" },
     { "path": "./examples/task-install" },
     { "path": "./examples/task-license" },
     { "path": "./examples/task-package" }
