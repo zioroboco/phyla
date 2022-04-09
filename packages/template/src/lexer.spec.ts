@@ -143,23 +143,23 @@ test(`nothing`, () => {
 
 test(`complex example`, () => {
   const input = `{
-    "name": "{{ name }}"
-    "author": "{{ author.name }} <{{ author.email }}>"
-    "private": true,
-    "scripts": {
-      "test": "mocha"
-    },
-    "workspaces": [
-      "{{ ...workspaces }}",
-    ],
-    "dependencies: {
-      {{
-        ...dependencies.map(([package, version]) => {
-          return \`"\${package}": "\${version}"\`
-        })
-      }},
-    }
-  }`
+  "name": "{{ name }}"
+  "author": "{{ author.name }} <{{ author.email }}>"
+  "private": true,
+  "scripts": {
+    "test": "mocha"
+  },
+  "workspaces": [
+    "{{ ...workspaces }}",
+  ],
+  "dependencies: {
+    {{
+      ...dependencies.map(([package, version]) => {
+        return \`"\${package}": "\${version}"\`
+      })
+    }},
+  }
+}`
 
   const { tokens, errors } = lexer.tokenize(input)
 
@@ -168,28 +168,28 @@ test(`complex example`, () => {
 
   expect(tokens).toMatchObject([
     { tokenType: { name: TokenType.StaticLine        }, image: "{\n" },
-    { tokenType: { name: TokenType.StaticPrefix      }, image: "    \"name\": \"" },
+    { tokenType: { name: TokenType.StaticPrefix      }, image: "  \"name\": \"" },
     { tokenType: { name: TokenType.Placeholder       }, image: "{{ name }}" },
     { tokenType: { name: TokenType.StaticPostfix     }, image: "\"\n" },
-    { tokenType: { name: TokenType.StaticPrefix      }, image: "    \"author\": \"" },
+    { tokenType: { name: TokenType.StaticPrefix      }, image: "  \"author\": \"" },
     { tokenType: { name: TokenType.Placeholder       }, image: "{{ author.name }}" },
     { tokenType: { name: TokenType.StaticPrefix      }, image: " <" },
     { tokenType: { name: TokenType.Placeholder       }, image: "{{ author.email }}" },
     { tokenType: { name: TokenType.StaticPostfix     }, image: ">\"\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "    \"private\": true,\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "    \"scripts\": {\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "      \"test\": \"mocha\"\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "    },\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "    \"workspaces\": [\n" },
-    { tokenType: { name: TokenType.StaticPrefix      }, image: "      \"" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "  \"private\": true,\n" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "  \"scripts\": {\n" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "    \"test\": \"mocha\"\n" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "  },\n" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "  \"workspaces\": [\n" },
+    { tokenType: { name: TokenType.StaticPrefix      }, image: "    \"" },
     { tokenType: { name: TokenType.PlaceholderSpread }, image: "{{ ...workspaces }}" },
     { tokenType: { name: TokenType.StaticPostfix     }, image: "\",\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "    ],\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "    \"dependencies: {\n" },
-    { tokenType: { name: TokenType.StaticPrefix      }, image: "      " },
-    { tokenType: { name: TokenType.PlaceholderSpread }, image: "{{\n        ...dependencies.map(([package, version]) => {\n          return `\"${package}\": \"${version}\"`\n        })\n      }}" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "  ],\n" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "  \"dependencies: {\n" },
+    { tokenType: { name: TokenType.StaticPrefix      }, image: "    " },
+    { tokenType: { name: TokenType.PlaceholderSpread }, image: "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}" },
     { tokenType: { name: TokenType.StaticPostfix     }, image: ",\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "    }\n" },
-    { tokenType: { name: TokenType.StaticLine        }, image: "  }" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "  }\n" },
+    { tokenType: { name: TokenType.StaticLine        }, image: "}" },
   ])
 })
