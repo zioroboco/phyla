@@ -1,43 +1,53 @@
-import { Lexer, createToken } from "chevrotain"
+import moo from "moo"
 
 export enum TokenType {
   Expression = "Expression",
   SlotExpression = "SlotExpression",
   SpreadExpression = "SpreadExpression",
-  StaticLine = "StaticBlankLine",
+  StaticLine = "StaticLine",
   StaticPostfix = "StaticPostfix",
   StaticPrefix = "StaticPrefix",
 }
 
-export const lexer = new Lexer([
-  createToken({
-    name: TokenType.SlotExpression,
-    pattern: /{{[ ]*slot:[ ]*\w+[ ]*}}/,
-    line_breaks: false,
-  }),
-  createToken({
-    name: TokenType.SpreadExpression,
-    pattern: /{{[ \t\n]*\.{3}[a-zA-Z$_](?:.|\n)*?}}/,
-    line_breaks: true,
-  }),
-  createToken({
-    name: TokenType.Expression,
-    pattern: /{{(?:.|\n)+?}}/,
-    line_breaks: true,
-  }),
-  createToken({
-    name: TokenType.StaticPrefix,
-    pattern: /.+?(?={{)/,
-    line_breaks: false,
-  }),
-  createToken({
-    name: TokenType.StaticPostfix,
-    pattern: /(?<=}}).*\n?/,
-    line_breaks: true,
-  }),
-  createToken({
-    name: TokenType.StaticLine,
-    pattern: /\n|.+\n?/,
-    line_breaks: true,
-  }),
-])
+const lexer = moo.compile({
+  [TokenType.SlotExpression]: {
+    match: /{{[ ]*slot:[ ]*\w+[ ]*}}/,
+    lineBreaks: false,
+  },
+  [TokenType.SpreadExpression]: {
+    match: /{{[ \t\n]*\.{3}[a-zA-Z$_](?:.|\n)*?}}/,
+    lineBreaks: true,
+  },
+  [TokenType.Expression]: {
+    match: /{{(?:.|\n)+?}}/,
+    lineBreaks: true,
+  },
+  [TokenType.StaticPrefix]: {
+    match: /.+?(?={{)/,
+    lineBreaks: false,
+  },
+  [TokenType.StaticPostfix]: {
+    match: /(?<=}}).*\n?/,
+    lineBreaks: true,
+  },
+  [TokenType.StaticLine]: {
+    match: /\n|.+\n?/,
+    lineBreaks: true,
+  },
+})
+
+function collect (lexer: moo.Lexer): moo.Token[] {
+  const acc: moo.Token[] = []
+  for (const token of lexer) {
+    acc.push(token)
+  }
+  return acc
+}
+
+export interface Token extends moo.Token {
+  type: TokenType
+}
+
+export function lex (input: string): Token[] {
+  return collect(lexer.reset(input)) as Token[]
+}
