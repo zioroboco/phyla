@@ -1,8 +1,8 @@
 import { Lexer, createToken } from "chevrotain"
 
 export enum TokenType {
-  Placeholder = "Placeholder",
-  PlaceholderSpread = "PlaceholderSpread",
+  Expression = "Expression",
+  SpreadExpression = "SpreadExpression",
   StaticBlankLine = "StaticEmpty",
   StaticLine = "StaticBlankLine",
   StaticPostfix = "StaticPostfix",
@@ -11,12 +11,12 @@ export enum TokenType {
 
 export const lexer = new Lexer([
   createToken({
-    name: TokenType.PlaceholderSpread,
+    name: TokenType.SpreadExpression,
     pattern: /{{[ \t\n]*\.{3}[a-zA-Z$_](?:.|\n)*?}}/,
     line_breaks: true,
   }),
   createToken({
-    name: TokenType.Placeholder,
+    name: TokenType.Expression,
     pattern: /{{(?:.|\n)+?}}/,
     line_breaks: true,
   }),

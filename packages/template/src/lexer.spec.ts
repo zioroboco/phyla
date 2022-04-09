@@ -43,7 +43,7 @@ test(`single line, placeholder only`, () => {
   expect(tokens).toHaveLength(1)
   expect(tokens).toMatchObject([
     {
-      tokenType: { name: TokenType.Placeholder },
+      tokenType: { name: TokenType.Expression },
       image: "{{ blep }}",
     },
   ])
@@ -56,7 +56,7 @@ test(`multiple lines, placeholder only`, () => {
   expect(tokens).toHaveLength(1)
   expect(tokens).toMatchObject([
     {
-      tokenType: { name: TokenType.Placeholder },
+      tokenType: { name: TokenType.Expression },
       image: "{{\n  blep\n}}",
     },
   ])
@@ -73,7 +73,7 @@ test(`single line, prefix`, () => {
       image: "before ",
     },
     {
-      tokenType: { name: TokenType.Placeholder },
+      tokenType: { name: TokenType.Expression },
       image: "{{ blep }}",
     },
   ])
@@ -86,7 +86,7 @@ test(`single line, postfix`, () => {
   expect(tokens).toHaveLength(2)
   expect(tokens).toMatchObject([
     {
-      tokenType: { name: TokenType.Placeholder },
+      tokenType: { name: TokenType.Expression },
       image: "{{ blep }}",
     },
     {
@@ -107,7 +107,7 @@ test(`single line, prefix and postfix`, () => {
       image: "before ",
     },
     {
-      tokenType: { name: TokenType.Placeholder },
+      tokenType: { name: TokenType.Expression },
       image: "{{ blep }}",
     },
     {
@@ -169,12 +169,12 @@ test(`complex example`, () => {
   expect(tokens).toMatchObject([
     { tokenType: { name: TokenType.StaticLine        }, image: "{\n" },
     { tokenType: { name: TokenType.StaticPrefix      }, image: "  \"name\": \"" },
-    { tokenType: { name: TokenType.Placeholder       }, image: "{{ name }}" },
+    { tokenType: { name: TokenType.Expression        }, image: "{{ name }}" },
     { tokenType: { name: TokenType.StaticPostfix     }, image: "\"\n" },
     { tokenType: { name: TokenType.StaticPrefix      }, image: "  \"author\": \"" },
-    { tokenType: { name: TokenType.Placeholder       }, image: "{{ author.name }}" },
+    { tokenType: { name: TokenType.Expression        }, image: "{{ author.name }}" },
     { tokenType: { name: TokenType.StaticPrefix      }, image: " <" },
-    { tokenType: { name: TokenType.Placeholder       }, image: "{{ author.email }}" },
+    { tokenType: { name: TokenType.Expression        }, image: "{{ author.email }}" },
     { tokenType: { name: TokenType.StaticPostfix     }, image: ">\"\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  \"private\": true,\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  \"scripts\": {\n" },
@@ -182,12 +182,12 @@ test(`complex example`, () => {
     { tokenType: { name: TokenType.StaticLine        }, image: "  },\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  \"workspaces\": [\n" },
     { tokenType: { name: TokenType.StaticPrefix      }, image: "    \"" },
-    { tokenType: { name: TokenType.PlaceholderSpread }, image: "{{ ...workspaces }}" },
+    { tokenType: { name: TokenType.SpreadExpression  }, image: "{{ ...workspaces }}" },
     { tokenType: { name: TokenType.StaticPostfix     }, image: "\",\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  ],\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  \"dependencies: {\n" },
     { tokenType: { name: TokenType.StaticPrefix      }, image: "    " },
-    { tokenType: { name: TokenType.PlaceholderSpread }, image: "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}" },
+    { tokenType: { name: TokenType.SpreadExpression  }, image: "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}" },
     { tokenType: { name: TokenType.StaticPostfix     }, image: ",\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  }\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "}" },
