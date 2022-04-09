@@ -67,6 +67,8 @@ export function lex (input: string): Token[] {
       value = value.replace(/^slot:[ ]*/, "")
     }
 
+    value = value.replace(/\\{\\{/, "{{").replace(/\\}\\}/, "}}")
+
     acc.push({ ...token, value } as Token)
   }
 

@@ -137,6 +137,19 @@ test(`nothing`, () => {
   expect(tokens).toHaveLength(0)
 })
 
+test(`escaped double-curlies`, () => {
+  const input = `() => <Thing prop=\\{\\{ shrug: true \\}\\} />`
+  const tokens = lex(input)
+  expect(tokens).toHaveLength(1)
+  expect(tokens).toMatchObject([
+    {
+      type: TokenType.StaticLine,
+      text: `() => <Thing prop=\\{\\{ shrug: true \\}\\} />`,
+      value: `() => <Thing prop={{ shrug: true }} />`,
+    },
+  ])
+})
+
 test(`complex example`, () => {
   const input = `{
   "name": "{{ name }}"
