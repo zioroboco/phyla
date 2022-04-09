@@ -3,27 +3,35 @@ import { test } from "mocha"
 import expect from "expect"
 
 test(`single line, static content`, () => {
-  const input = `blep`
+  const input = `thing one`
   const { tokens, errors } = lexer.tokenize(input)
   expect(errors).toHaveLength(0)
   expect(tokens).toHaveLength(1)
   expect(tokens).toMatchObject([
     {
-      tokenType: { name: TokenType.Static },
-      image: "blep",
+      tokenType: { name: TokenType.StaticLine },
+      image: "thing one",
     },
   ])
 })
 
 test(`multiple lines, static content`, () => {
-  const input = `one\ntwo\nthree`
+  const input = `thing one\nthing two\nthing three`
   const { tokens, errors } = lexer.tokenize(input)
   expect(errors).toHaveLength(0)
-  expect(tokens).toHaveLength(1)
+  expect(tokens).toHaveLength(3)
   expect(tokens).toMatchObject([
     {
-      tokenType: { name: TokenType.Static },
-      image: "one\ntwo\nthree",
+      tokenType: { name: TokenType.StaticLine },
+      image: "thing one\n",
+    },
+    {
+      tokenType: { name: TokenType.StaticLine },
+      image: "thing two\n",
+    },
+    {
+      tokenType: { name: TokenType.StaticLine },
+      image: "thing three",
     },
   ])
 })
@@ -54,23 +62,56 @@ test(`multiple lines, placeholder only`, () => {
   ])
 })
 
+test(`single line, prefix`, () => {
+  const input = `before {{ blep }}`
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(2)
+  expect(tokens).toMatchObject([
+    {
+      tokenType: { name: TokenType.StaticPrefix },
+      image: "before ",
+    },
+    {
+      tokenType: { name: TokenType.Placeholder },
+      image: "{{ blep }}",
+    },
+  ])
+})
 
-test(`single line, mixed`, () => {
+test(`single line, postfix`, () => {
+  const input = `{{ blep }} after`
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(2)
+  expect(tokens).toMatchObject([
+    {
+      tokenType: { name: TokenType.Placeholder },
+      image: "{{ blep }}",
+    },
+    {
+      tokenType: { name: TokenType.StaticPostfix },
+      image: " after",
+    },
+  ])
+})
+
+test(`single line, prefix and postfix`, () => {
   const input = `before {{ blep }} after`
   const { tokens, errors } = lexer.tokenize(input)
   expect(errors).toHaveLength(0)
   expect(tokens).toHaveLength(3)
   expect(tokens).toMatchObject([
     {
-      tokenType: { name: TokenType.Static },
+      tokenType: { name: TokenType.StaticPrefix },
       image: "before ",
     },
     {
       tokenType: { name: TokenType.Placeholder },
-      image: "{{  blep }}",
+      image: "{{ blep }}",
     },
     {
-      tokenType: { name: TokenType.Static },
+      tokenType: { name: TokenType.StaticPostfix },
       image: " after",
     },
   ])

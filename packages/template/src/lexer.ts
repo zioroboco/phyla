@@ -1,19 +1,32 @@
 import { Lexer, createToken } from "chevrotain"
 
 export enum TokenType {
-  Static = "Static",
+  StaticLine = "StaticLine",
+  StaticPrefix = "StaticPrefix",
+  StaticPostfix = "StaticPostfix",
+  StaticInfix = "StaticInfix",
   Placeholder = "Placeholder",
 }
 
 export const lexer = new Lexer([
   createToken({
+    name: TokenType.StaticPrefix,
+    pattern: /.+?(?={{)/,
+    line_breaks: false,
+  }),
+  createToken({
     name: TokenType.Placeholder,
-    pattern: /{{(?:.|\w|\n)+}}/,
+    pattern: /{{(?:.|\n)+}}/,
     line_breaks: true,
   }),
   createToken({
-    name: TokenType.Static,
-    pattern: /(?:.|\w|\n)+(?=\{{2})?/,
+    name: TokenType.StaticPostfix,
+    pattern: /(?<=}}).*\n?/,
+    line_breaks: true,
+  }),
+  createToken({
+    name: TokenType.StaticLine,
+    pattern: /.+\n?/,
     line_breaks: true,
   }),
 ])
