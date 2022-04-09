@@ -2,6 +2,7 @@ import { Lexer, createToken } from "chevrotain"
 
 export enum TokenType {
   Expression = "Expression",
+  SlotExpression = "SlotExpression",
   SpreadExpression = "SpreadExpression",
   StaticBlankLine = "StaticEmpty",
   StaticLine = "StaticBlankLine",
@@ -10,6 +11,11 @@ export enum TokenType {
 }
 
 export const lexer = new Lexer([
+  createToken({
+    name: TokenType.SlotExpression,
+    pattern: /{{[ ]*slot:[ ]*\w+[ ]*}}/,
+    line_breaks: false,
+  }),
   createToken({
     name: TokenType.SpreadExpression,
     pattern: /{{[ \t\n]*\.{3}[a-zA-Z$_](?:.|\n)*?}}/,

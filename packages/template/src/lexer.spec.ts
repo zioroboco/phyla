@@ -147,6 +147,7 @@ test(`complex example`, () => {
   "author": "{{ author.name }} <{{ author.email }}>"
   "private": true,
   "scripts": {
+    {{ slot: blep }}
     "test": "mocha"
   },
   "workspaces": [
@@ -164,7 +165,7 @@ test(`complex example`, () => {
   const { tokens, errors } = lexer.tokenize(input)
 
   expect(errors).toHaveLength(0)
-  expect(tokens).toHaveLength(24)
+  expect(tokens).toHaveLength(27)
 
   expect(tokens).toMatchObject([
     { tokenType: { name: TokenType.StaticLine        }, image: "{\n" },
@@ -178,6 +179,9 @@ test(`complex example`, () => {
     { tokenType: { name: TokenType.StaticPostfix     }, image: ">\"\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  \"private\": true,\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  \"scripts\": {\n" },
+    { tokenType: { name: TokenType.StaticPrefix      }, image: "    " },
+    { tokenType: { name: TokenType.SlotExpression    }, image: "{{ slot: blep }}" },
+    { tokenType: { name: TokenType.StaticPostfix     }, image: "\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "    \"test\": \"mocha\"\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  },\n" },
     { tokenType: { name: TokenType.StaticLine        }, image: "  \"workspaces\": [\n" },
