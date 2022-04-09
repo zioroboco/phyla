@@ -25,6 +25,7 @@
     "mocha": "^9.2.2"
   },
   "dependencies": {
+    "chevrotain": "^10.1.2",
     "fp-ts": "^2.11.9"
   }
 }
