@@ -1,6 +1,7 @@
 import { Lexer, createToken } from "chevrotain"
 
 export enum TokenType {
+  StaticEmpty = "StaticEmpty",
   StaticLine = "StaticLine",
   StaticPrefix = "StaticPrefix",
   StaticPostfix = "StaticPostfix",
@@ -27,6 +28,11 @@ export const lexer = new Lexer([
   createToken({
     name: TokenType.StaticLine,
     pattern: /.+\n?/,
+    line_breaks: true,
+  }),
+  createToken({
+    name: TokenType.StaticEmpty,
+    pattern: /\n/,
     line_breaks: true,
   }),
 ])

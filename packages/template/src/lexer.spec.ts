@@ -116,3 +116,27 @@ test(`single line, prefix and postfix`, () => {
     },
   ])
 })
+
+test(`multiple lines, empty`, () => {
+  const input = `\n\n`
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(2)
+  expect(tokens).toMatchObject([
+    {
+      tokenType: { name: TokenType.StaticEmpty },
+      image: "\n",
+    },
+    {
+      tokenType: { name: TokenType.StaticEmpty },
+      image: "\n",
+    },
+  ])
+})
+
+test(`nothing`, () => {
+  const input = ``
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(0)
+})
