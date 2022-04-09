@@ -124,11 +124,11 @@ test(`multiple lines, empty`, () => {
   expect(tokens).toHaveLength(2)
   expect(tokens).toMatchObject([
     {
-      tokenType: { name: TokenType.StaticBlankLine },
+      tokenType: { name: TokenType.StaticLine },
       image: "\n",
     },
     {
-      tokenType: { name: TokenType.StaticBlankLine },
+      tokenType: { name: TokenType.StaticLine },
       image: "\n",
     },
   ])

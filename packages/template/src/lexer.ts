@@ -4,7 +4,6 @@ export enum TokenType {
   Expression = "Expression",
   SlotExpression = "SlotExpression",
   SpreadExpression = "SpreadExpression",
-  StaticBlankLine = "StaticEmpty",
   StaticLine = "StaticBlankLine",
   StaticPostfix = "StaticPostfix",
   StaticPrefix = "StaticPrefix",
@@ -38,12 +37,7 @@ export const lexer = new Lexer([
   }),
   createToken({
     name: TokenType.StaticLine,
-    pattern: /.+\n?/,
-    line_breaks: true,
-  }),
-  createToken({
-    name: TokenType.StaticBlankLine,
-    pattern: /\n/,
+    pattern: /\n|.+\n?/,
     line_breaks: true,
   }),
 ])
