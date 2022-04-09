@@ -4,52 +4,74 @@ import expect from "expect"
 
 test(`single line, static content`, () => {
   const input = `blep`
-  expect(lexer.tokenize(input)).toMatchObject({
-    errors: [],
-    tokens: [
-      {
-        tokenType: { name: TokenType.Static },
-        image: "blep",
-      },
-    ],
-  })
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(1)
+  expect(tokens).toMatchObject([
+    {
+      tokenType: { name: TokenType.Static },
+      image: "blep",
+    },
+  ])
 })
 
 test(`multiple lines, static content`, () => {
   const input = `one\ntwo\nthree`
-  expect(lexer.tokenize(input)).toMatchObject({
-    errors: [],
-    tokens: [
-      {
-        tokenType: { name: TokenType.Static },
-        image: "one\ntwo\nthree",
-      },
-    ],
-  })
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(1)
+  expect(tokens).toMatchObject([
+    {
+      tokenType: { name: TokenType.Static },
+      image: "one\ntwo\nthree",
+    },
+  ])
 })
 
 test(`single line, placeholder only`, () => {
   const input = `{{ blep }}`
-  expect(lexer.tokenize(input)).toMatchObject({
-    errors: [],
-    tokens: [
-      {
-        tokenType: { name: TokenType.Placeholder },
-        image: "{{ blep }}",
-      },
-    ],
-  })
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(1)
+  expect(tokens).toMatchObject([
+    {
+      tokenType: { name: TokenType.Placeholder },
+      image: "{{ blep }}",
+    },
+  ])
 })
 
 test(`multiple lines, placeholder only`, () => {
   const input = `{{\n  blep\n}}`
-  expect(lexer.tokenize(input)).toMatchObject({
-    errors: [],
-    tokens: [
-      {
-        tokenType: { name: TokenType.Placeholder },
-        image: "{{\n  blep\n}}",
-      },
-    ],
-  })
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(1)
+  expect(tokens).toMatchObject([
+    {
+      tokenType: { name: TokenType.Placeholder },
+      image: "{{\n  blep\n}}",
+    },
+  ])
+})
+
+
+test(`single line, mixed`, () => {
+  const input = `before {{ blep }} after`
+  const { tokens, errors } = lexer.tokenize(input)
+  expect(errors).toHaveLength(0)
+  expect(tokens).toHaveLength(3)
+  expect(tokens).toMatchObject([
+    {
+      tokenType: { name: TokenType.Static },
+      image: "before ",
+    },
+    {
+      tokenType: { name: TokenType.Placeholder },
+      image: "{{  blep }}",
+    },
+    {
+      tokenType: { name: TokenType.Static },
+      image: " after",
+    },
+  ])
 })

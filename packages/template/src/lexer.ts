@@ -8,12 +8,12 @@ export enum TokenType {
 export const lexer = new Lexer([
   createToken({
     name: TokenType.Placeholder,
-    pattern: /{{(?:.|\n)+}}/,
+    pattern: /{{(?:.|\w|\n)+}}/,
     line_breaks: true,
   }),
   createToken({
     name: TokenType.Static,
-    pattern: /(?:.|\n)+/,
+    pattern: /(?:.|\w|\n)+(?=\{{2})?/,
     line_breaks: true,
   }),
 ])
