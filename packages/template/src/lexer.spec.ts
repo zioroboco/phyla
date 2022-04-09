@@ -42,6 +42,7 @@ test(`single line, placeholder only`, () => {
     {
       type: TokenType.Expression,
       text: "{{ blep }}",
+      value: "blep",
     },
   ])
 })
@@ -54,6 +55,7 @@ test(`multiple lines, placeholder only`, () => {
     {
       type: TokenType.Expression,
       text: "{{\n  blep\n}}",
+      value: "blep",
     },
   ])
 })
@@ -70,6 +72,7 @@ test(`single line, prefix`, () => {
     {
       type: TokenType.Expression,
       text: "{{ blep }}",
+      value: "blep",
     },
   ])
 })
@@ -82,6 +85,7 @@ test(`single line, postfix`, () => {
     {
       type: TokenType.Expression,
       text: "{{ blep }}",
+      value: "blep",
     },
     {
       type: TokenType.StaticPostfix,
@@ -102,6 +106,7 @@ test(`single line, prefix and postfix`, () => {
     {
       type: TokenType.Expression,
       text: "{{ blep }}",
+      value: "blep",
     },
     {
       type: TokenType.StaticPostfix,
@@ -160,28 +165,28 @@ test(`complex example`, () => {
   expect(tokens).toMatchObject([
     { type: TokenType.StaticLine,       text: "{\n" },
     { type: TokenType.StaticPrefix,     text: "  \"name\": \"" },
-    { type: TokenType.Expression,       text: "{{ name }}" },
+    { type: TokenType.Expression,       text: "{{ name }}", value: "name" },
     { type: TokenType.StaticPostfix,    text: "\"\n" },
     { type: TokenType.StaticPrefix,     text: "  \"author\": \"" },
-    { type: TokenType.Expression,       text: "{{ author.name }}" },
+    { type: TokenType.Expression,       text: "{{ author.name }}", value: "author.name" },
     { type: TokenType.StaticPrefix,     text: " <" },
-    { type: TokenType.Expression,       text: "{{ author.email }}" },
+    { type: TokenType.Expression,       text: "{{ author.email }}", value: "author.email" },
     { type: TokenType.StaticPostfix,    text: ">\"\n" },
     { type: TokenType.StaticLine,       text: "  \"private\": true,\n" },
     { type: TokenType.StaticLine,       text: "  \"scripts\": {\n" },
     { type: TokenType.StaticPrefix,     text: "    " },
-    { type: TokenType.SlotExpression,   text: "{{ slot: blep }}" },
+    { type: TokenType.SlotExpression,   text: "{{ slot: blep }}", value: "blep" },
     { type: TokenType.StaticPostfix,    text: "\n" },
     { type: TokenType.StaticLine,       text: "    \"test\": \"mocha\"\n" },
     { type: TokenType.StaticLine,       text: "  },\n" },
     { type: TokenType.StaticLine,       text: "  \"workspaces\": [\n" },
     { type: TokenType.StaticPrefix,     text: "    \"" },
-    { type: TokenType.SpreadExpression, text: "{{ ...workspaces }}" },
+    { type: TokenType.SpreadExpression, text: "{{ ...workspaces }}", value: "workspaces" },
     { type: TokenType.StaticPostfix,    text: "\",\n" },
     { type: TokenType.StaticLine,       text: "  ],\n" },
     { type: TokenType.StaticLine,       text: "  \"dependencies: {\n" },
     { type: TokenType.StaticPrefix,     text: "    " },
-    { type: TokenType.SpreadExpression, text: "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}" },
+    { type: TokenType.SpreadExpression, text: "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}", value: "dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })" },
     { type: TokenType.StaticPostfix,    text: ",\n" },
     { type: TokenType.StaticLine,       text: "  }\n" },
     { type: TokenType.StaticLine,       text: "}" },

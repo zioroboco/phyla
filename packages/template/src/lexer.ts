@@ -1,4 +1,9 @@
+import assert from "assert"
 import moo from "moo"
+
+export interface Token extends moo.Token {
+  type: TokenType
+}
 
 export enum TokenType {
   Expression = "Expression",
@@ -36,18 +41,34 @@ const lexer = moo.compile({
   },
 })
 
-function collect (lexer: moo.Lexer): moo.Token[] {
-  const acc: moo.Token[] = []
-  for (const token of lexer) {
-    acc.push(token)
-  }
-  return acc
-}
-
-export interface Token extends moo.Token {
-  type: TokenType
-}
-
 export function lex (input: string): Token[] {
-  return collect(lexer.reset(input)) as Token[]
+  const acc: Token[] = []
+
+  for (const token of lexer.reset(input)) {
+    assert.ok(token.type, `token.type had value ${token.type}`)
+
+    let value = token.text
+
+    if (
+      [
+        TokenType.Expression,
+        TokenType.SlotExpression,
+        TokenType.SpreadExpression,
+      ].some(t => t === token.type)
+    ) {
+      value = value.replace(/^{{[ \t\n]*/, "").replace(/[ \t\n]*}}$/, "")
+    }
+
+    if (token.type === TokenType.SpreadExpression) {
+      value = value.replace(/^\.{3}/, "")
+    }
+
+    if (token.type === TokenType.SlotExpression) {
+      value = value.replace(/^slot:[ ]*/, "")
+    }
+
+    acc.push({ ...token, value } as Token)
+  }
+
+  return acc
 }
