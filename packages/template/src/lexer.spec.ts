@@ -1,6 +1,8 @@
-import { TokenType, lex } from "./lexer"
 import { test } from "mocha"
 import expect from "expect"
+
+import { TokenType } from "./types"
+import { lex } from "./lexer"
 
 test(`single line, static content`, () => {
   const input = `thing one`
