@@ -9,7 +9,7 @@ test(`single line, static content`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.StaticLine,
-      text: "thing one",
+      image: "thing one",
     },
   ])
 })
@@ -21,15 +21,15 @@ test(`multiple lines, static content`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.StaticLine,
-      text: "thing one\n",
+      image: "thing one\n",
     },
     {
       type: TokenType.StaticLine,
-      text: "thing two\n",
+      image: "thing two\n",
     },
     {
       type: TokenType.StaticLine,
-      text: "thing three",
+      image: "thing three",
     },
   ])
 })
@@ -41,7 +41,7 @@ test(`single line, placeholder only`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.Expression,
-      text: "{{ blep }}",
+      image: "{{ blep }}",
       value: "blep",
     },
   ])
@@ -54,7 +54,7 @@ test(`multiple lines, placeholder only`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.Expression,
-      text: "{{\n  blep\n}}",
+      image: "{{\n  blep\n}}",
       value: "blep",
     },
   ])
@@ -67,11 +67,11 @@ test(`single line, prefix`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.StaticPrefix,
-      text: "before ",
+      image: "before ",
     },
     {
       type: TokenType.Expression,
-      text: "{{ blep }}",
+      image: "{{ blep }}",
       value: "blep",
     },
   ])
@@ -84,12 +84,12 @@ test(`single line, postfix`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.Expression,
-      text: "{{ blep }}",
+      image: "{{ blep }}",
       value: "blep",
     },
     {
       type: TokenType.StaticPostfix,
-      text: " after",
+      image: " after",
     },
   ])
 })
@@ -101,16 +101,16 @@ test(`single line, prefix and postfix`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.StaticPrefix,
-      text: "before ",
+      image: "before ",
     },
     {
       type: TokenType.Expression,
-      text: "{{ blep }}",
+      image: "{{ blep }}",
       value: "blep",
     },
     {
       type: TokenType.StaticPostfix,
-      text: " after",
+      image: " after",
     },
   ])
 })
@@ -122,11 +122,11 @@ test(`multiple lines, empty`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.StaticLine,
-      text: "\n",
+      image: "\n",
     },
     {
       type: TokenType.StaticLine,
-      text: "\n",
+      image: "\n",
     },
   ])
 })
@@ -144,7 +144,7 @@ test(`escaped double-curlies`, () => {
   expect(tokens).toMatchObject([
     {
       type: TokenType.StaticLine,
-      text: `() => <Thing prop=\\{\\{ shrug: true \\}\\} />`,
+      image: `() => <Thing prop=\\{\\{ shrug: true \\}\\} />`,
       value: `() => <Thing prop={{ shrug: true }} />`,
     },
   ])
@@ -176,32 +176,32 @@ test(`complex example`, () => {
   expect(tokens).toHaveLength(27)
 
   expect(tokens).toMatchObject([
-    { type: TokenType.StaticLine,       text: "{\n" },
-    { type: TokenType.StaticPrefix,     text: "  \"name\": \"" },
-    { type: TokenType.Expression,       text: "{{ name }}", value: "name" },
-    { type: TokenType.StaticPostfix,    text: "\"\n" },
-    { type: TokenType.StaticPrefix,     text: "  \"author\": \"" },
-    { type: TokenType.Expression,       text: "{{ author.name }}", value: "author.name" },
-    { type: TokenType.StaticPrefix,     text: " <" },
-    { type: TokenType.Expression,       text: "{{ author.email }}", value: "author.email" },
-    { type: TokenType.StaticPostfix,    text: ">\"\n" },
-    { type: TokenType.StaticLine,       text: "  \"private\": true,\n" },
-    { type: TokenType.StaticLine,       text: "  \"scripts\": {\n" },
-    { type: TokenType.StaticPrefix,     text: "    " },
-    { type: TokenType.SlotExpression,   text: "{{ slot: blep }}", value: "blep" },
-    { type: TokenType.StaticPostfix,    text: "\n" },
-    { type: TokenType.StaticLine,       text: "    \"test\": \"mocha\"\n" },
-    { type: TokenType.StaticLine,       text: "  },\n" },
-    { type: TokenType.StaticLine,       text: "  \"workspaces\": [\n" },
-    { type: TokenType.StaticPrefix,     text: "    \"" },
-    { type: TokenType.SpreadExpression, text: "{{ ...workspaces }}", value: "workspaces" },
-    { type: TokenType.StaticPostfix,    text: "\",\n" },
-    { type: TokenType.StaticLine,       text: "  ],\n" },
-    { type: TokenType.StaticLine,       text: "  \"dependencies: {\n" },
-    { type: TokenType.StaticPrefix,     text: "    " },
-    { type: TokenType.SpreadExpression, text: "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}", value: "dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })" },
-    { type: TokenType.StaticPostfix,    text: ",\n" },
-    { type: TokenType.StaticLine,       text: "  }\n" },
-    { type: TokenType.StaticLine,       text: "}" },
+    { type: TokenType.StaticLine,       image: "{\n" },
+    { type: TokenType.StaticPrefix,     image: "  \"name\": \"" },
+    { type: TokenType.Expression,       image: "{{ name }}", value: "name" },
+    { type: TokenType.StaticPostfix,    image: "\"\n" },
+    { type: TokenType.StaticPrefix,     image: "  \"author\": \"" },
+    { type: TokenType.Expression,       image: "{{ author.name }}", value: "author.name" },
+    { type: TokenType.StaticPrefix,     image: " <" },
+    { type: TokenType.Expression,       image: "{{ author.email }}", value: "author.email" },
+    { type: TokenType.StaticPostfix,    image: ">\"\n" },
+    { type: TokenType.StaticLine,       image: "  \"private\": true,\n" },
+    { type: TokenType.StaticLine,       image: "  \"scripts\": {\n" },
+    { type: TokenType.StaticPrefix,     image: "    " },
+    { type: TokenType.SlotExpression,   image: "{{ slot: blep }}", value: "blep" },
+    { type: TokenType.StaticPostfix,    image: "\n" },
+    { type: TokenType.StaticLine,       image: "    \"test\": \"mocha\"\n" },
+    { type: TokenType.StaticLine,       image: "  },\n" },
+    { type: TokenType.StaticLine,       image: "  \"workspaces\": [\n" },
+    { type: TokenType.StaticPrefix,     image: "    \"" },
+    { type: TokenType.SpreadExpression, image: "{{ ...workspaces }}", value: "workspaces" },
+    { type: TokenType.StaticPostfix,    image: "\",\n" },
+    { type: TokenType.StaticLine,       image: "  ],\n" },
+    { type: TokenType.StaticLine,       image: "  \"dependencies: {\n" },
+    { type: TokenType.StaticPrefix,     image: "    " },
+    { type: TokenType.SpreadExpression, image: "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}", value: "dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })" },
+    { type: TokenType.StaticPostfix,    image: ",\n" },
+    { type: TokenType.StaticLine,       image: "  }\n" },
+    { type: TokenType.StaticLine,       image: "}" },
   ])
 })

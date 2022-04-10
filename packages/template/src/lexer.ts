@@ -1,8 +1,12 @@
 import assert from "assert"
 import moo from "moo"
 
-export interface Token extends moo.Token {
+export interface Token {
   type: TokenType
+  image: string
+  value: string
+  line: number
+  col: number
 }
 
 export enum TokenType {
@@ -69,7 +73,13 @@ export function lex (input: string): Token[] {
 
     value = value.replace(/\\{\\{/, "{{").replace(/\\}\\}/, "}}")
 
-    acc.push({ ...token, value } as Token)
+    acc.push({
+      value,
+      type: token.type as TokenType,
+      image: token.text,
+      line: token.line,
+      col: token.col,
+    })
   }
 
   return acc
