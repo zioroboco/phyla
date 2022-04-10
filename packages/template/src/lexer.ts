@@ -45,7 +45,7 @@ export function lex (input: string): Token[] {
           .replace(/\\}\\}/, "}}"),
       image: token.text,
       line: token.line,
-      col: token.col,
+      column: token.col,
     })
   }
   return acc

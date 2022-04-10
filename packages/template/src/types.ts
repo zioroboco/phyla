@@ -3,7 +3,7 @@ export interface Token {
   image: string
   value: string
   line: number
-  col: number
+  column: number
 }
 
 export enum TokenType {
