@@ -20,7 +20,7 @@ export enum TokenType {
 
 const lexer = moo.compile({
   [TokenType.SlotExpression]: {
-    match: /{{[ ]*slot:[ ]*\w+[ ]*}}/,
+    match: /{{[ \t\n]*slot:[ \t\n]*\w+[ \t\n]*}}/,
     lineBreaks: false,
   },
   [TokenType.SpreadExpression]: {
@@ -47,40 +47,29 @@ const lexer = moo.compile({
 
 export function lex (input: string): Token[] {
   const acc: Token[] = []
-
   for (const token of lexer.reset(input)) {
     assert.ok(token.type, `token.type had value ${token.type}`)
-
-    let value = token.text
-
-    if (
-      [
-        TokenType.Expression,
-        TokenType.SlotExpression,
-        TokenType.SpreadExpression,
-      ].some(t => t === token.type)
-    ) {
-      value = value.replace(/^{{[ \t\n]*/, "").replace(/[ \t\n]*}}$/, "")
-    }
-
-    if (token.type === TokenType.SpreadExpression) {
-      value = value.replace(/^\.{3}/, "")
-    }
-
-    if (token.type === TokenType.SlotExpression) {
-      value = value.replace(/^slot:[ ]*/, "")
-    }
-
-    value = value.replace(/\\{\\{/, "{{").replace(/\\}\\}/, "}}")
-
     acc.push({
-      value,
       type: token.type as TokenType,
+      value: isExpressionToken(token)
+        ? token.text
+          .replace(/^{{[ \t\n]*(?:\.{3}|slot:[ \t\n]*)?/, "")
+          .replace(/[ \t\n]*}}$/, "")
+        : token.text
+          .replace(/\\{\\{/, "{{")
+          .replace(/\\}\\}/, "}}"),
       image: token.text,
       line: token.line,
       col: token.col,
     })
   }
-
   return acc
+}
+
+function isExpressionToken (token: { type?: string }): boolean {
+  return [
+    TokenType.Expression,
+    TokenType.SlotExpression,
+    TokenType.SpreadExpression,
+  ].some(t => t === token.type)
 }
