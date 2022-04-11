@@ -49,3 +49,12 @@ export function parseTokenType (expected: TokenType): Parser<Token> {
       )
     )
 }
+
+export const map =
+  <A, B>(f: (a: A) => B): ((fa: Parser<A>) => Parser<B>) =>
+    fa =>
+      (input: Input) =>
+        pipe(
+          fa(input),
+          E.map(([a, nextInput]) => [f(a), nextInput])
+        )

@@ -1,8 +1,9 @@
-import { describe, it } from "mocha"
+import { describe, it, test } from "mocha"
 import expect from "expect"
 
-import { Input, parseTokenType } from "./parser"
-import { Token, TokenType } from "./types"
+import { Input, map, parseTokenType } from "./parser"
+import { NodeType, SlotNode, Token, TokenType } from "./types"
+import { pipe } from "fp-ts/lib/function"
 
 describe(parseTokenType.name, () => {
   const token = { type: TokenType.StaticLine } as Token
