@@ -3,7 +3,7 @@ import * as O from "fp-ts/Option"
 import * as RA from "fp-ts/ReadonlyArray"
 import { pipe } from "fp-ts/function"
 
-import { Token, TokenType } from "./types"
+import { NodeType, SlotNode, Token, TokenType } from "./types"
 
 export interface Input {
   readonly tokens: ReadonlyArray<Token>
@@ -58,3 +58,13 @@ export const map =
           fa(input),
           E.map(([a, nextInput]) => [f(a), nextInput])
         )
+
+export const parseSlotNode = pipe(
+  parseTokenType(TokenType.SlotExpression),
+  map(
+    (token: Token): SlotNode => ({
+      type: NodeType.Slot,
+      token,
+    })
+  )
+)
