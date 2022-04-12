@@ -262,6 +262,40 @@ describe(parseBlockNode.name, () => {
       })
     })
   })
+
+  describe(`passed a block followed by a spread with prefix`, () => {
+    const input = Input([
+      // block...
+      { type: TokenType.StaticLine },
+      { type: TokenType.StaticLine },
+      { type: TokenType.StaticPrefix },
+      { type: TokenType.Expression },
+      { type: TokenType.StaticSuffix },
+      // spread...
+      { type: TokenType.StaticPrefix },
+      { type: TokenType.Spread },
+    ] as Token[])
+
+    const result = parseBlockNode(input)
+
+    it(`parses the block (and not the spread prefix)`, () => {
+      expect(result).toMatchObject({
+        right: [
+          {
+            type: NodeType.Block,
+            tokens: [
+              { type: TokenType.StaticLine },
+              { type: TokenType.StaticLine },
+              { type: TokenType.StaticPrefix },
+              { type: TokenType.Expression },
+              { type: TokenType.StaticSuffix },
+            ] as Token[],
+          },
+          Input(input.tokens, 5),
+        ],
+      })
+    })
+  })
 })
 
 describe(`${where.name} combinator`, () => {

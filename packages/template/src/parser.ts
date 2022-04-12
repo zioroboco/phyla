@@ -149,13 +149,26 @@ export const parseSlotNode = pipe(
   )
 )
 
+function isNotFollowedBy (type: TokenType): (input: Input) => boolean {
+  return input => pipe(
+    advance(input),
+    O.fold(
+      () => true,
+      ([_, nextInput]) => nextInput.tokens[nextInput.index].type !== type
+    )
+  )
+}
+
 export const parseBlockNode = pipe(
   many(
     either(
       parseTokenType(TokenType.Expression),
       parseTokenType(TokenType.StaticLine),
-      parseTokenType(TokenType.StaticPrefix),
       parseTokenType(TokenType.StaticSuffix),
+      where(
+        isNotFollowedBy(TokenType.Spread),
+        parseTokenType(TokenType.StaticPrefix),
+      )
     )
   ),
   map(
