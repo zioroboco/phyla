@@ -41,3 +41,5 @@ export type SpreadNode = {
   spreadToken: Token,
   suffixToken?: Token,
 }
+
+export type AST = readonly Node[]

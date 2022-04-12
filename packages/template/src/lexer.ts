@@ -30,9 +30,9 @@ const lexer = moo.compile({
   },
 })
 
-export function lex (input: string): Token[] {
+export function lex (template: string): Token[] {
   const acc: Token[] = []
-  for (const token of lexer.reset(input)) {
+  for (const token of lexer.reset(template)) {
     assert.ok(token.type, `token.type had value ${token.type}`)
     acc.push({
       type: token.type as TokenType,

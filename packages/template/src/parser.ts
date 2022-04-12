@@ -3,7 +3,15 @@ import * as O from "fp-ts/Option"
 import * as RA from "fp-ts/ReadonlyArray"
 import { pipe } from "fp-ts/function"
 
-import { BlockNode, NodeType, SlotNode, SpreadNode, Token, TokenType } from "./types"
+import {
+  AST,
+  BlockNode,
+  NodeType,
+  SlotNode,
+  SpreadNode,
+  Token,
+  TokenType,
+} from "./types"
 
 export interface Input {
   readonly tokens: ReadonlyArray<Token>
@@ -16,7 +24,7 @@ export function Input (tokens: ReadonlyArray<Token>, index: number = 0): Input {
 
 type Parser<A> = (input: Input) => E.Either<ParseError, readonly [A, Input]>
 
-interface ParseError {
+export interface ParseError {
   readonly message: string
   readonly input: Input
 }
@@ -212,3 +220,17 @@ export const parseSpreadNode = pipe(
     })
   )
 )
+
+export function parse (tokens: Token[]): E.Either<ParseError, AST> {
+  return pipe(
+    Input(tokens),
+    many(
+      either<SlotNode | BlockNode | SpreadNode>(
+        parseSlotNode,
+        parseBlockNode,
+        parseSpreadNode
+      )
+    ),
+    E.map(([ast, _]) => ast)
+  )
+}

@@ -1,13 +1,21 @@
 import { describe, it } from "mocha"
 import expect from "expect"
 
-import { BlockNode, NodeType, SlotNode, SpreadNode, Token, TokenType } from "./types"
+import {
+  BlockNode,
+  NodeType,
+  SlotNode,
+  SpreadNode,
+  Token,
+  TokenType,
+} from "./types"
 import {
   Input,
   either,
   empty,
   many,
   maybe,
+  parse,
   parseBlockNode,
   parseSlotNode,
   parseSpreadNode,
@@ -603,6 +611,87 @@ describe(parseSpreadNode.name, () => {
           Input(input.tokens, 3),
         ],
       })
+    })
+  })
+})
+
+describe(`the finished parser`, () => {
+  const tokens = [
+    // block...
+    /* 00 */ { type: TokenType.StaticLine },
+    /* 01 */ { type: TokenType.StaticPrefix },
+    /* 02 */ { type: TokenType.Expression },
+    /* 03 */ { type: TokenType.StaticPrefix },
+    /* 04 */ { type: TokenType.Expression },
+    /* 05 */ { type: TokenType.StaticSuffix },
+    /* 06 */ { type: TokenType.StaticPrefix },
+
+    // slot...
+    /* 07 */ { type: TokenType.Slot },
+
+    // block...
+    /* 08 */ { type: TokenType.StaticSuffix },
+    /* 09 */ { type: TokenType.StaticLine },
+
+    // spread...
+    /* 10 */ { type: TokenType.StaticPrefix },
+    /* 11 */ { type: TokenType.Spread },
+    /* 12 */ { type: TokenType.StaticSuffix },
+
+    // slot...
+    /* 13 */ { type: TokenType.Slot },
+
+    // slot...
+    /* 14 */ { type: TokenType.Slot },
+
+    // block...
+    /* 15 */ { type: TokenType.StaticLine },
+
+    // spread...
+    /* 16 */ { type: TokenType.StaticPrefix },
+    /* 17 */ { type: TokenType.Spread },
+  ] as Token[]
+
+  it(`works`, () => {
+    const result = parse(tokens)
+
+    expect(result).toMatchObject({
+      right: [
+        {
+          type: NodeType.Block,
+          tokens: [
+            { type: TokenType.StaticLine },
+            { type: TokenType.StaticPrefix },
+            { type: TokenType.Expression },
+            { type: TokenType.StaticPrefix },
+            { type: TokenType.Expression },
+            { type: TokenType.StaticSuffix },
+            { type: TokenType.StaticPrefix },
+          ],
+        },
+        { type: NodeType.Slot },
+        {
+          type: NodeType.Block,
+          tokens: [
+            { type: TokenType.StaticSuffix },
+            { type: TokenType.StaticLine },
+          ],
+        },
+        {
+          type: NodeType.Spread,
+          prefixToken: { type: TokenType.StaticPrefix },
+          spreadToken: { type: TokenType.Spread },
+          suffixToken: { type: TokenType.StaticSuffix },
+        },
+        { type: NodeType.Slot },
+        { type: NodeType.Slot },
+        { type: NodeType.Block },
+        {
+          type: NodeType.Spread,
+          prefixToken: { type: TokenType.StaticPrefix },
+          spreadToken: { type: TokenType.Spread },
+        },
+      ],
     })
   })
 })
