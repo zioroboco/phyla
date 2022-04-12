@@ -13,8 +13,8 @@ export enum TokenType {
   SlotExpression = "SlotExpression",
   SpreadExpression = "SpreadExpression",
   StaticLine = "StaticLine",
-  StaticPostfix = "StaticPostfix",
   StaticPrefix = "StaticPrefix",
+  StaticSuffix = "StaticSuffix",
 }
 
 export enum NodeType {
@@ -39,5 +39,5 @@ export type SpreadNode = {
   type: NodeType.Spread,
   prefixToken: O.Option<Token>,
   expressionToken: Token,
-  postfixToken: O.Option<Token>,
+  suffixToken: O.Option<Token>,
 }

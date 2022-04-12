@@ -20,7 +20,7 @@ const lexer = moo.compile({
     match: /.+?(?={{)/,
     lineBreaks: false,
   },
-  [TokenType.StaticPostfix]: {
+  [TokenType.StaticSuffix]: {
     match: /(?<=}}).*\n?/,
     lineBreaks: true,
   },

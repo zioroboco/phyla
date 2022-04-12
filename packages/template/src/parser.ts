@@ -140,8 +140,8 @@ export const parseBlockNode = pipe(
     either(
       parseTokenType(TokenType.Expression),
       parseTokenType(TokenType.StaticLine),
-      parseTokenType(TokenType.StaticPostfix),
       parseTokenType(TokenType.StaticPrefix),
+      parseTokenType(TokenType.StaticSuffix),
     )
   ),
   map(

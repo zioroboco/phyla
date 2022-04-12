@@ -123,14 +123,14 @@ describe(`the ${sequence.name} combinator`, () => {
     const parseSpread = sequence(
       parseTokenType(TokenType.StaticPrefix),
       parseTokenType(TokenType.SpreadExpression),
-      parseTokenType(TokenType.StaticPostfix),
+      parseTokenType(TokenType.StaticSuffix),
     )
 
     it(`parses a matching sequence of tokens`, () => {
       const input = Input([
         { type: TokenType.StaticPrefix },
         { type: TokenType.SpreadExpression },
-        { type: TokenType.StaticPostfix },
+        { type: TokenType.StaticSuffix },
       ] as Token[])
       const result = parseSpread(input)
       expect(result).toMatchObject({
@@ -221,7 +221,7 @@ describe(parseBlockNode.name, () => {
       { type: TokenType.Expression },
       { type: TokenType.StaticPrefix },
       { type: TokenType.Expression },
-      { type: TokenType.StaticPostfix },
+      { type: TokenType.StaticSuffix },
       { type: TokenType.StaticLine },
     ] as Token[])
 
