@@ -3,11 +3,11 @@ import expect from "expect"
 
 import {
   Input,
+  either,
   many,
   parseSlotNode,
   parseTokenType,
   sequence,
-  some,
 } from "./parser"
 import { NodeType, Token, TokenType } from "./types"
 
@@ -81,9 +81,9 @@ describe(parseSlotNode.name, () => {
   })
 })
 
-describe(`the ${some.name} combinator`, () => {
+describe(`the ${either.name} combinator`, () => {
   describe(`with multiple parsers`, () => {
-    const parseExpression = some(
+    const parseExpression = either(
       parseTokenType(TokenType.Expression),
       parseTokenType(TokenType.SpreadExpression)
     )

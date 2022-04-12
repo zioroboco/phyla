@@ -70,7 +70,7 @@ function failure (message: string): Parser<never> {
     E.left(ParseError(message, input))
 }
 
-export function some <A> (...fas: ReadonlyArray<Parser<A>>): Parser<A> {
+export function either <A> (...fas: ReadonlyArray<Parser<A>>): Parser<A> {
   return pipe(
     fas,
     RA.foldLeft(
@@ -78,7 +78,7 @@ export function some <A> (...fas: ReadonlyArray<Parser<A>>): Parser<A> {
       (fa: Parser<A>, tail: ReadonlyArray<Parser<A>>) => input =>
         pipe(
           fa(input),
-          E.fold(() => some(...tail)(input), E.right)
+          E.fold(() => either(...tail)(input), E.right)
         )
     )
   )
@@ -118,7 +118,7 @@ export function many <A> (fa: Parser<A>): Parser<ReadonlyArray<A>> {
       E.map(([a, inputAfterA]) => [[a], inputAfterA] as const),
       E.chain(([a, inputAfterA]) =>
         pipe(
-          some(many(fa), success<ReadonlyArray<A>>([]))(inputAfterA),
+          either(many(fa), success<ReadonlyArray<A>>([]))(inputAfterA),
           E.map(([b, inputAfterB]) => [a.concat(b), inputAfterB])
         )
       )
