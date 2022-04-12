@@ -3,7 +3,7 @@ import * as O from "fp-ts/Option"
 import * as RA from "fp-ts/ReadonlyArray"
 import { pipe } from "fp-ts/function"
 
-import { BlockNode, NodeType, SlotNode, Token, TokenType } from "./types"
+import { BlockNode, NodeType, SlotNode, SpreadNode, Token, TokenType } from "./types"
 
 export interface Input {
   readonly tokens: ReadonlyArray<Token>
@@ -192,3 +192,23 @@ export function maybe <A> (parser: Parser<A>): Parser<A> {
       )
     )
 }
+
+export const parseSpreadNode = pipe(
+  sequence(
+    maybe(parseTokenType(TokenType.StaticPrefix)),
+    parseTokenType(TokenType.Spread),
+    maybe(parseTokenType(TokenType.StaticSuffix))
+  ),
+  map(
+    ([
+      prefixToken,
+      spreadToken,
+      suffixToken,
+    ]: readonly Token[]): SpreadNode => ({
+      type: NodeType.Spread,
+      spreadToken,
+      ...(prefixToken === empty ? {} : { prefixToken }),
+      ...(suffixToken === empty ? {} : { suffixToken }),
+    })
+  )
+)

@@ -1,7 +1,7 @@
 import { describe, it } from "mocha"
 import expect from "expect"
 
-import { BlockNode, NodeType, SlotNode, Token, TokenType } from "./types"
+import { BlockNode, NodeType, SlotNode, SpreadNode, Token, TokenType } from "./types"
 import {
   Input,
   either,
@@ -10,6 +10,7 @@ import {
   maybe,
   parseBlockNode,
   parseSlotNode,
+  parseSpreadNode,
   parseTokenType,
   sequence,
   where,
@@ -557,6 +558,50 @@ describe(maybe.name, () => {
             Input(input.tokens, 3),
           ],
         })
+      })
+    })
+  })
+})
+
+describe(parseSpreadNode.name, () => {
+  const parse = parseSpreadNode
+
+  describe(`without a prefix or suffix`, () => {
+    const input = Input([{ type: TokenType.Spread }] as Token[])
+    const result = parse(input)
+
+    it(`parses the spread token into a spread node`, () => {
+      expect(result).toMatchObject({
+        right: [
+          {
+            type: NodeType.Spread,
+            spreadToken: { type: TokenType.Spread },
+          } as SpreadNode,
+          Input(input.tokens, 1),
+        ],
+      })
+    })
+  })
+
+  describe(`with a prefix and suffix`, () => {
+    const input = Input([
+      { type: TokenType.StaticPrefix },
+      { type: TokenType.Spread },
+      { type: TokenType.StaticSuffix },
+    ] as Token[])
+    const result = parse(input)
+
+    it(`parses all tokens into a spread node`, () => {
+      expect(result).toMatchObject({
+        right: [
+          {
+            type: NodeType.Spread,
+            spreadToken: { type: TokenType.Spread },
+            prefixToken: { type: TokenType.StaticPrefix },
+            suffixToken: { type: TokenType.StaticSuffix },
+          } as SpreadNode,
+          Input(input.tokens, 3),
+        ],
       })
     })
   })

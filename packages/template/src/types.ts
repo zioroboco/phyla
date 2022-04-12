@@ -37,7 +37,7 @@ export type SlotNode = {
 
 export type SpreadNode = {
   type: NodeType.Spread,
-  prefixToken: O.Option<Token>,
-  expressionToken: Token,
-  suffixToken: O.Option<Token>,
+  prefixToken?: Token,
+  spreadToken: Token,
+  suffixToken?: Token,
 }
