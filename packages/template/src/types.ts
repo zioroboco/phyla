@@ -27,7 +27,7 @@ export type Node = BlockNode | SlotNode | SpreadNode
 
 export type BlockNode = {
   type: NodeType.Block
-  tokens: Token[]
+  tokens: readonly Token[]
 }
 
 export type SlotNode = {

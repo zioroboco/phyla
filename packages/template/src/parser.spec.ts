@@ -5,6 +5,7 @@ import {
   Input,
   either,
   many,
+  parseBlockNode,
   parseSlotNode,
   parseTokenType,
   sequence,
@@ -206,6 +207,57 @@ describe(`the ${many.name} combinator`, () => {
             input: Input(input.tokens, 1),
           },
         })
+      })
+    })
+  })
+})
+
+describe(parseBlockNode.name, () => {
+  describe(`passed a sequence of tokens describing a block`, () => {
+    const input = Input([
+      { type: TokenType.StaticLine },
+      { type: TokenType.StaticLine },
+      { type: TokenType.StaticPrefix },
+      { type: TokenType.Expression },
+      { type: TokenType.StaticPrefix },
+      { type: TokenType.Expression },
+      { type: TokenType.StaticPostfix },
+      { type: TokenType.StaticLine },
+    ] as Token[])
+
+    const result = parseBlockNode(input)
+
+    it(`parses all tokens`, () => {
+      expect(result).toMatchObject({
+        right: [
+          { type: NodeType.Block, tokens: input.tokens },
+          Input(input.tokens, input.tokens.length),
+        ],
+      })
+    })
+  })
+
+  describe(`passed a block followed by a slot`, () => {
+    const input = Input([
+      { type: TokenType.StaticLine },
+      { type: TokenType.StaticLine },
+      { type: TokenType.SlotExpression },
+    ] as Token[])
+
+    const result = parseBlockNode(input)
+
+    it(`parses the block`, () => {
+      expect(result).toMatchObject({
+        right: [
+          {
+            type: NodeType.Block,
+            tokens: [
+              { type: TokenType.StaticLine },
+              { type: TokenType.StaticLine },
+            ] as Token[],
+          },
+          Input(input.tokens, 2),
+        ],
       })
     })
   })
