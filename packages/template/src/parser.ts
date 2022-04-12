@@ -59,7 +59,6 @@ function map <A, B> (f: (a: A) => B) {
       )
 }
 
-
 function success <A> (a: A): Parser<A> {
   return input =>
     E.right([a, input])
@@ -178,3 +177,18 @@ export const parseBlockNode = pipe(
     })
   )
 )
+
+export const empty = {}
+export function maybe <A> (parser: Parser<A>): Parser<A> {
+  return input =>
+    pipe(
+      parser(input),
+      E.fold(
+        // FIXME 😬
+        // The type `A` should be a monoid, and we should return a right of its
+        // empty value. But I don't know how to do that yet, so here we are.
+        () => E.right([empty as A, Input(input.tokens, input.index)] as const),
+        ([a, nextInput]) => E.right([a, nextInput] as const)
+      )
+    )
+}

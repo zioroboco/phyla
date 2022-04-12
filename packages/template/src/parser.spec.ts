@@ -5,7 +5,9 @@ import { BlockNode, NodeType, SlotNode, Token, TokenType } from "./types"
 import {
   Input,
   either,
+  empty,
   many,
+  maybe,
   parseBlockNode,
   parseSlotNode,
   parseTokenType,
@@ -432,5 +434,130 @@ describe(`parsing a series of block and slot nodes`, () => {
       ],
       Input(input.tokens, 8),
     ],
+  })
+})
+
+describe(maybe.name, () => {
+  describe(`parsing a single (maybe) token`, () => {
+    const parse = maybe(parseTokenType(TokenType.StaticPrefix))
+
+    describe(`when the token is present`, () => {
+      const input = Input([{ type: TokenType.StaticPrefix }] as Token[])
+      const result = parse(input)
+
+      it(`parses the token`, () => {
+        expect(result).toMatchObject({
+          right: [{ type: TokenType.StaticPrefix }, Input(input.tokens, 1)],
+        })
+      })
+    })
+
+    describe(`when a different token is present`, () => {
+      const input = Input([{ type: TokenType.Slot }] as Token[])
+      const result = parse(input)
+
+      it(`returns an empty value without advancing the input`, () => {
+        expect(result).toMatchObject({
+          right: [{}, Input(input.tokens, 0)],
+        })
+      })
+    })
+
+    describe(`when the token is absent altogether`, () => {
+      const input = Input([] as Token[])
+      const result = parse(input)
+
+      it(`returns an empty value without advancing the input`, () => {
+        expect(result).toMatchObject({
+          right: [{}, Input(input.tokens, 0)],
+        })
+      })
+    })
+  })
+
+  describe(`passed multiple tokens`, () => {
+    const parse = sequence(
+      maybe(parseTokenType(TokenType.StaticPrefix)),
+      parseTokenType(TokenType.Spread),
+      maybe(parseTokenType(TokenType.StaticSuffix)),
+    )
+
+    describe(`when all maybe tokens are absent`, () => {
+      const input = Input([{ type: TokenType.Spread }] as Token[])
+      const result = parse(input)
+
+      it(`successfully parses all tokens`, () => {
+        expect(result).toMatchObject({
+          right: [
+            [empty, { type: TokenType.Spread }, empty],
+            Input(input.tokens, 1),
+          ],
+        })
+      })
+    })
+
+    describe(`when the first maybe token is present`, () => {
+      const input = Input([
+        { type: TokenType.StaticPrefix },
+        { type: TokenType.Spread },
+      ] as Token[])
+      const result = parse(input)
+
+      it(`successfully parses all tokens`, () => {
+        expect(result).toMatchObject({
+          right: [
+            [
+              { type: TokenType.StaticPrefix },
+              { type: TokenType.Spread },
+              empty,
+            ],
+            Input(input.tokens, 2),
+          ],
+        })
+      })
+    })
+
+    describe(`when the second maybe token is present`, () => {
+      const input = Input([
+        { type: TokenType.Spread },
+        { type: TokenType.StaticSuffix },
+      ] as Token[])
+      const result = parse(input)
+
+      it(`successfully parses all tokens`, () => {
+        expect(result).toMatchObject({
+          right: [
+            [
+              empty,
+              { type: TokenType.Spread },
+              { type: TokenType.StaticSuffix },
+            ],
+            Input(input.tokens, 2),
+          ],
+        })
+      })
+    })
+
+    describe(`when all tokens are present`, () => {
+      const input = Input([
+        { type: TokenType.StaticPrefix },
+        { type: TokenType.Spread },
+        { type: TokenType.StaticSuffix },
+      ] as Token[])
+      const result = parse(input)
+
+      it(`successfully parses all tokens`, () => {
+        expect(result).toMatchObject({
+          right: [
+            [
+              { type: TokenType.StaticPrefix },
+              { type: TokenType.Spread },
+              { type: TokenType.StaticSuffix },
+            ],
+            Input(input.tokens, 3),
+          ],
+        })
+      })
+    })
   })
 })
