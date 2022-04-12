@@ -59,7 +59,13 @@ function map <A, B> (f: (a: A) => B) {
       )
 }
 
-function failParser (message: string): Parser<never> {
+
+function success <A> (a: A): Parser<A> {
+  return input =>
+    E.right([a, input])
+}
+
+function failure (message: string): Parser<never> {
   return input =>
     E.left(ParseError(message, input))
 }
@@ -68,12 +74,39 @@ export function either <A> (...fas: ReadonlyArray<Parser<A>>): Parser<A> {
   return pipe(
     fas,
     RA.foldLeft(
-      () => failParser("no parser succeeded"),
+      () => failure("no parser succeeded"),
       (fa: Parser<A>, tail: ReadonlyArray<Parser<A>>) => input =>
         pipe(
           fa(input),
           E.fold(() => either(...tail)(input), E.right)
         )
+    )
+  )
+}
+
+function product<A, B> (fa: Parser<A>, fb: Parser<B>): Parser<readonly [A, B]> {
+  return input =>
+    pipe(
+      fa(input),
+      E.chain(([a, inputAfterA]) =>
+        pipe(
+          fb(inputAfterA),
+          E.map(([b, inputAfterB]) => [[a, b] as const, inputAfterB])
+        )
+      )
+    )
+}
+
+export function sequence<A> (
+  ...fas: ReadonlyArray<Parser<A>>
+): Parser<ReadonlyArray<A>> {
+  return pipe(
+    fas,
+    RA.reduce(success<ReadonlyArray<A>>([]), (parser, fa) =>
+      pipe(
+        product(parser, fa),
+        map(([result, a]) => RA.append(a)(result))
+      )
     )
   )
 }

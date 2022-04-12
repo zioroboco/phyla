@@ -1,7 +1,13 @@
 import { describe, it } from "mocha"
 import expect from "expect"
 
-import { Input, either, parseSlotNode, parseTokenType } from "./parser"
+import {
+  Input,
+  either,
+  parseSlotNode,
+  parseTokenType,
+  sequence,
+} from "./parser"
 import { NodeType, Token, TokenType } from "./types"
 
 describe(parseTokenType.name, () => {
@@ -104,6 +110,42 @@ describe(`the ${either.name} combinator`, () => {
         left: {
           message: `no parser succeeded`,
           input: Input(input.tokens, 0),
+        },
+      })
+    })
+  })
+})
+
+describe(`the ${sequence.name} combinator`, () => {
+  describe(`with multiple parsers`, () => {
+    const parseSpread = sequence(
+      parseTokenType(TokenType.StaticPrefix),
+      parseTokenType(TokenType.SpreadExpression),
+      parseTokenType(TokenType.StaticPostfix),
+    )
+
+    it(`parses a matching sequence of tokens`, () => {
+      const input = Input([
+        { type: TokenType.StaticPrefix },
+        { type: TokenType.SpreadExpression },
+        { type: TokenType.StaticPostfix },
+      ] as Token[])
+      const result = parseSpread(input)
+      expect(result).toMatchObject({
+        right: [input.tokens, Input(input.tokens, 3)],
+      })
+    })
+
+    it(`returns an error on a non-matching token`, () => {
+      const input = Input([
+        { type: TokenType.StaticPrefix },
+        { type: TokenType.StaticLine },
+      ] as Token[])
+      const result = parseSpread(input)
+      expect(result).toMatchObject({
+        left: {
+          message: `expected token of type SpreadExpression, got StaticLine`,
+          input: Input(input.tokens, 2),
         },
       })
     })
