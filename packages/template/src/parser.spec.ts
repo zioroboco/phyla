@@ -9,6 +9,7 @@ import {
   parseSlotNode,
   parseTokenType,
   sequence,
+  where,
 } from "./parser"
 import { NodeType, Token, TokenType } from "./types"
 
@@ -256,6 +257,84 @@ describe(parseBlockNode.name, () => {
               { type: TokenType.StaticLine },
             ] as Token[],
           },
+          Input(input.tokens, 2),
+        ],
+      })
+    })
+  })
+})
+
+describe(`${where.name} combinator`, () => {
+  describe(`when predicate is true`, () => {
+    const parse = where(() => true, parseTokenType(TokenType.StaticLine))
+
+    it(`parses matching tokens`, () => {
+      const input = Input([{ type: TokenType.StaticLine }] as Token[])
+      const result = parse(input)
+      expect(result).toMatchObject({
+        right: [{ type: TokenType.StaticLine }, Input(input.tokens, 1)],
+      })
+    })
+
+    it(`doesn't parse non-matching tokens`, () => {
+      const input = Input([{ type: TokenType.Expression }] as Token[])
+      const result = parse(input)
+      expect(result).toMatchObject({
+        left: {
+          message: expect.stringMatching(
+            "expected token of type StaticLine, got Expression"
+          ),
+          input: Input(input.tokens, 1),
+        },
+      })
+    })
+  })
+
+  describe(`when predicate is false`, () => {
+    const parse = where(() => false, parseTokenType(TokenType.StaticLine))
+
+    it(`doesn't parse matching tokens`, () => {
+      const input = Input([{ type: TokenType.StaticLine }] as Token[])
+      const result = parse(input)
+      expect(result).toMatchObject({
+        left: {
+          message: expect.stringMatching("predicate is false"),
+          input: Input(input.tokens, 1),
+        },
+      })
+    })
+
+    it(`doesn't parse non-matching tokens`, () => {
+      const input = Input([{ type: TokenType.StaticLine }] as Token[])
+      const result = parse(input)
+      expect(result).toMatchObject({
+        left: {
+          message: expect.stringMatching("predicate is false"),
+          input: Input(input.tokens, 1),
+        },
+      })
+    })
+  })
+
+  describe(`when predicated on input`, () => {
+    const parse = many(
+      where(input => input.index < 2, parseTokenType(TokenType.StaticLine))
+    )
+
+    it(`parses only the expected tokens`, () => {
+      const input = Input([
+        { type: TokenType.StaticLine },
+        { type: TokenType.StaticLine },
+        { type: TokenType.StaticLine },
+      ] as Token[])
+
+      const result = parse(input)
+      expect(result).toMatchObject({
+        right: [
+          [
+            { type: TokenType.StaticLine },
+            { type: TokenType.StaticLine },
+          ],
           Input(input.tokens, 2),
         ],
       })

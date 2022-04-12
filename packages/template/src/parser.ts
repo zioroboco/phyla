@@ -125,6 +125,20 @@ export function many <A> (fa: Parser<A>): Parser<ReadonlyArray<A>> {
     )
 }
 
+export function where <A> (
+  predicate: (input: Input) => boolean,
+  fa: Parser<A>
+): Parser<A> {
+  return input =>
+    pipe(
+      fa(input),
+      E.chain(([a, nextInput]) =>
+        predicate(input)
+          ? E.right([a, nextInput])
+          : E.left(ParseError(`predicate is false`, nextInput))
+      ))
+}
+
 export const parseSlotNode = pipe(
   parseTokenType(TokenType.Slot),
   map(
