@@ -111,6 +111,20 @@ export function sequence<A> (
   )
 }
 
+export function many <A> (fa: Parser<A>): Parser<ReadonlyArray<A>> {
+  return input =>
+    pipe(
+      fa(input),
+      E.map(([a, inputAfterA]) => [[a], inputAfterA] as const),
+      E.chain(([a, inputAfterA]) =>
+        pipe(
+          some(many(fa), success<ReadonlyArray<A>>([]))(inputAfterA),
+          E.map(([b, inputAfterB]) => [a.concat(b), inputAfterB])
+        )
+      )
+    )
+}
+
 export const parseSlotNode = pipe(
   parseTokenType(TokenType.SlotExpression),
   map(

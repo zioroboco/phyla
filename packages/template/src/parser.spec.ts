@@ -3,6 +3,7 @@ import expect from "expect"
 
 import {
   Input,
+  many,
   parseSlotNode,
   parseTokenType,
   sequence,
@@ -147,6 +148,64 @@ describe(`the ${sequence.name} combinator`, () => {
           message: `expected token of type SpreadExpression, got StaticLine`,
           input: Input(input.tokens, 2),
         },
+      })
+    })
+  })
+})
+
+describe(`the ${many.name} combinator`, () => {
+  const parseLines = many(parseTokenType(TokenType.StaticLine))
+
+  describe(`passed multiple matching tokens`, () => {
+    const input = Input([
+      { type: TokenType.StaticLine },
+      { type: TokenType.StaticLine },
+      { type: TokenType.StaticLine },
+    ] as Token[])
+    const result = parseLines(input)
+
+    it(`parses all tokens`, () => {
+      expect(result).toMatchObject({
+        right: [[
+          { type: TokenType.StaticLine },
+          { type: TokenType.StaticLine },
+          { type: TokenType.StaticLine },
+        ], Input(input.tokens, 3)],
+      })
+    })
+
+    describe(`passed matching and non-mathing tokens`, () => {
+      const input = Input([
+        { type: TokenType.StaticLine },
+        { type: TokenType.StaticLine },
+        { type: TokenType.StaticPrefix },
+      ] as Token[])
+      const result = parseLines(input)
+
+      it(`stops at a non-matching token`, () => {
+        expect(result).toMatchObject({
+          right: [[
+            { type: TokenType.StaticLine },
+            { type: TokenType.StaticLine },
+          ], Input(input.tokens, 2)],
+        })
+      })
+    })
+
+    describe(`passed non-matching tokens`, () => {
+      const input = Input([
+        { type: TokenType.Expression },
+        { type: TokenType.StaticLine },
+      ] as Token[])
+      const result = parseLines(input)
+
+      it(`returns an error`, () => {
+        expect(result).toMatchObject({
+          left: {
+            message: `expected token of type StaticLine, got Expression`,
+            input: Input(input.tokens, 1),
+          },
+        })
       })
     })
   })
