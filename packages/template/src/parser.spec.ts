@@ -1,6 +1,7 @@
 import { describe, it } from "mocha"
 import expect from "expect"
 
+import { BlockNode, NodeType, SlotNode, Token, TokenType } from "./types"
 import {
   Input,
   either,
@@ -11,7 +12,6 @@ import {
   sequence,
   where,
 } from "./parser"
-import { NodeType, Token, TokenType } from "./types"
 
 describe(parseTokenType.name, () => {
   const token = { type: TokenType.StaticLine } as Token
@@ -373,5 +373,64 @@ describe(`${where.name} combinator`, () => {
         ],
       })
     })
+  })
+})
+
+describe(`parsing a series of block and slot nodes`, () => {
+  const parse = many(
+    either<BlockNode | SlotNode>(parseBlockNode, parseSlotNode)
+  )
+
+  const input = Input([
+    { type: TokenType.StaticLine },
+    { type: TokenType.StaticPrefix },
+    { type: TokenType.Slot },
+    { type: TokenType.StaticSuffix },
+    { type: TokenType.StaticLine },
+    { type: TokenType.Slot },
+    { type: TokenType.Slot },
+    { type: TokenType.StaticLine },
+  ] as Token[])
+
+  const result = parse(input)
+
+  expect(result).toMatchObject({
+    right: [
+      [
+        {
+          type: NodeType.Block,
+          tokens: [
+            { type: TokenType.StaticLine },
+            { type: TokenType.StaticPrefix },
+          ],
+        },
+        {
+          type: NodeType.Slot,
+          token: { type: TokenType.Slot },
+        },
+        {
+          type: NodeType.Block,
+          tokens: [
+            { type: TokenType.StaticSuffix },
+            { type: TokenType.StaticLine },
+          ],
+        },
+        {
+          type: NodeType.Slot,
+          token: { type: TokenType.Slot },
+        },
+        {
+          type: NodeType.Slot,
+          token: { type: TokenType.Slot },
+        },
+        {
+          type: NodeType.Block,
+          tokens: [
+            { type: TokenType.StaticLine },
+          ],
+        },
+      ],
+      Input(input.tokens, 8),
+    ],
   })
 })
