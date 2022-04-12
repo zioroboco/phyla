@@ -1,9 +1,8 @@
-import { describe, it, test } from "mocha"
+import { describe, it } from "mocha"
 import expect from "expect"
 
-import { Input, map, parseSlotNode, parseTokenType } from "./parser"
-import { NodeType, SlotNode, Token, TokenType } from "./types"
-import { pipe } from "fp-ts/lib/function"
+import { Input, either, parseSlotNode, parseTokenType } from "./parser"
+import { NodeType, Token, TokenType } from "./types"
 
 describe(parseTokenType.name, () => {
   const token = { type: TokenType.StaticLine } as Token
@@ -69,6 +68,42 @@ describe(parseSlotNode.name, () => {
         left: {
           message: `expected token of type SlotExpression, got StaticLine`,
           input: Input(input.tokens, 1),
+        },
+      })
+    })
+  })
+})
+
+describe(`the ${either.name} combinator`, () => {
+  describe(`with multiple parsers`, () => {
+    const parseExpression = either(
+      parseTokenType(TokenType.Expression),
+      parseTokenType(TokenType.SpreadExpression)
+    )
+
+    it(`parses one matching tokan`, () => {
+      const input = Input([{ type: TokenType.Expression }] as Token[])
+      const result = parseExpression(input)
+      expect(result).toMatchObject({
+        right: [{ type: TokenType.Expression }, Input(input.tokens, 1)],
+      })
+    })
+
+    it(`parses a second matching token`, () => {
+      const input = Input([{ type: TokenType.SpreadExpression }] as Token[])
+      const result = parseExpression(input)
+      expect(result).toMatchObject({
+        right: [{ type: TokenType.SpreadExpression }, Input(input.tokens, 1)],
+      })
+    })
+
+    it(`returns an error on a non-matching token`, () => {
+      const input = Input([{ type: TokenType.StaticLine }] as Token[])
+      const result = parseExpression(input)
+      expect(result).toMatchObject({
+        left: {
+          message: `no parser succeeded`,
+          input: Input(input.tokens, 0),
         },
       })
     })

@@ -50,14 +50,33 @@ export function parseTokenType (expected: TokenType): Parser<Token> {
     )
 }
 
-export const map =
-  <A, B>(f: (a: A) => B): ((fa: Parser<A>) => Parser<B>) =>
-    fa =>
-      (input: Input) =>
+function map <A, B> (f: (a: A) => B) {
+  return (fa: Parser<A>): Parser<B> =>
+    (input: Input) =>
+      pipe(
+        fa(input),
+        E.map(([a, nextInput]) => [f(a), nextInput])
+      )
+}
+
+function failParser (message: string): Parser<never> {
+  return input =>
+    E.left(ParseError(message, input))
+}
+
+export function either <A> (...fas: ReadonlyArray<Parser<A>>): Parser<A> {
+  return pipe(
+    fas,
+    RA.foldLeft(
+      () => failParser("no parser succeeded"),
+      (fa: Parser<A>, tail: ReadonlyArray<Parser<A>>) => input =>
         pipe(
           fa(input),
-          E.map(([a, nextInput]) => [f(a), nextInput])
+          E.fold(() => either(...tail)(input), E.right)
         )
+    )
+  )
+}
 
 export const parseSlotNode = pipe(
   parseTokenType(TokenType.SlotExpression),
