@@ -126,7 +126,7 @@ export function many <A> (fa: Parser<A>): Parser<ReadonlyArray<A>> {
 }
 
 export const parseSlotNode = pipe(
-  parseTokenType(TokenType.SlotExpression),
+  parseTokenType(TokenType.Slot),
   map(
     (token: Token): SlotNode => ({
       type: NodeType.Slot,

@@ -55,7 +55,7 @@ describe(parseTokenType.name, () => {
 
 describe(parseSlotNode.name, () => {
   describe(`when passed a slot token`, () => {
-    const token = { type: TokenType.SlotExpression, value: "blep" } as Token
+    const token = { type: TokenType.Slot, value: "blep" } as Token
     const input = Input([token])
     const result = parseSlotNode(input)
 
@@ -74,7 +74,7 @@ describe(parseSlotNode.name, () => {
     it(`returns an error`, () => {
       expect(result).toMatchObject({
         left: {
-          message: `expected token of type SlotExpression, got StaticLine`,
+          message: `expected token of type Slot, got StaticLine`,
           input: Input(input.tokens, 1),
         },
       })
@@ -86,7 +86,7 @@ describe(`the ${either.name} combinator`, () => {
   describe(`with multiple parsers`, () => {
     const parseExpression = either(
       parseTokenType(TokenType.Expression),
-      parseTokenType(TokenType.SpreadExpression)
+      parseTokenType(TokenType.Spread)
     )
 
     it(`parses one matching tokan`, () => {
@@ -98,10 +98,10 @@ describe(`the ${either.name} combinator`, () => {
     })
 
     it(`parses a second matching token`, () => {
-      const input = Input([{ type: TokenType.SpreadExpression }] as Token[])
+      const input = Input([{ type: TokenType.Spread }] as Token[])
       const result = parseExpression(input)
       expect(result).toMatchObject({
-        right: [{ type: TokenType.SpreadExpression }, Input(input.tokens, 1)],
+        right: [{ type: TokenType.Spread }, Input(input.tokens, 1)],
       })
     })
 
@@ -122,14 +122,14 @@ describe(`the ${sequence.name} combinator`, () => {
   describe(`with multiple parsers`, () => {
     const parseSpread = sequence(
       parseTokenType(TokenType.StaticPrefix),
-      parseTokenType(TokenType.SpreadExpression),
+      parseTokenType(TokenType.Spread),
       parseTokenType(TokenType.StaticSuffix),
     )
 
     it(`parses a matching sequence of tokens`, () => {
       const input = Input([
         { type: TokenType.StaticPrefix },
-        { type: TokenType.SpreadExpression },
+        { type: TokenType.Spread },
         { type: TokenType.StaticSuffix },
       ] as Token[])
       const result = parseSpread(input)
@@ -146,7 +146,7 @@ describe(`the ${sequence.name} combinator`, () => {
       const result = parseSpread(input)
       expect(result).toMatchObject({
         left: {
-          message: `expected token of type SpreadExpression, got StaticLine`,
+          message: `expected token of type Spread, got StaticLine`,
           input: Input(input.tokens, 2),
         },
       })
@@ -241,7 +241,7 @@ describe(parseBlockNode.name, () => {
     const input = Input([
       { type: TokenType.StaticLine },
       { type: TokenType.StaticLine },
-      { type: TokenType.SlotExpression },
+      { type: TokenType.Slot },
     ] as Token[])
 
     const result = parseBlockNode(input)

@@ -10,8 +10,8 @@ export type Token = {
 
 export enum TokenType {
   Expression = "Expression",
-  SlotExpression = "SlotExpression",
-  SpreadExpression = "SpreadExpression",
+  Slot = "Slot",
+  Spread = "Spread",
   StaticLine = "StaticLine",
   StaticPrefix = "StaticPrefix",
   StaticSuffix = "StaticSuffix",

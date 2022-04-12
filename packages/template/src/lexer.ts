@@ -4,11 +4,11 @@ import moo from "moo"
 import { Token, TokenType } from "./types"
 
 const lexer = moo.compile({
-  [TokenType.SlotExpression]: {
+  [TokenType.Slot]: {
     match: /{{[ \t\n]*slot:[ \t\n]*\w+[ \t\n]*}}/,
     lineBreaks: false,
   },
-  [TokenType.SpreadExpression]: {
+  [TokenType.Spread]: {
     match: /{{[ \t\n]*\.{3}[a-zA-Z$_](?:.|\n)*?}}/,
     lineBreaks: true,
   },
@@ -54,7 +54,7 @@ export function lex (input: string): Token[] {
 function isExpressionToken (token: { type?: string }): boolean {
   return [
     TokenType.Expression,
-    TokenType.SlotExpression,
-    TokenType.SpreadExpression,
+    TokenType.Slot,
+    TokenType.Spread,
   ].some(t => t === token.type)
 }
