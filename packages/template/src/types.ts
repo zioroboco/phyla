@@ -1,5 +1,3 @@
-import * as O from "fp-ts/Option"
-
 export type Token = {
   type: TokenType,
   image: string
