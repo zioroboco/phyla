@@ -3,7 +3,7 @@ import expect from "expect"
 
 import * as E from "fp-ts/Either"
 import { identity, pipe } from "fp-ts/lib/function"
-import { render } from "./renderer"
+import { render } from "./render"
 
 it("renders a template", () => {
   const template = `{
