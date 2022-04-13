@@ -2,16 +2,17 @@ import * as E from "fp-ts/Either"
 import { inspect } from "util"
 import { pipe } from "fp-ts/function"
 
-import { BlockNode, NodeType, SpreadNode, TokenType } from "./types"
+import { BlockNode, NodeType, SlotNode, SpreadNode, TokenType } from "./types"
+import { ParseError, parse } from "./parser"
 import { lex } from "./lexer"
-import { parse } from "./parser"
 
 type Variables = { [key: string]: unknown }
+type Slots = { [key: string]: string }
 
 export function render (
   template: string,
-  variables: Variables
-) {
+  options?: { variables?: Variables, slots?: Slots }
+): E.Either<ParseError, string> {
   return pipe(
     template,
     lex,
@@ -20,15 +21,49 @@ export function render (
       ast.map(node => {
         switch (node.type) {
           case NodeType.Block:
-            return evaluateBlock(node, variables)
+            return evaluateBlock(node, options?.variables ?? {})
           case NodeType.Spread:
-            return evaluateSpread(node, variables)
-          default:
-            throw new Error(`unexpected node type ${node.type}`)
+            return evaluateSpread(node, options?.variables ?? {})
+          case NodeType.Slot:
+            return options?.slots?.[node.token.value] ?? ""
         }
       })
     ),
     E.map(lines => lines.join(""))
+  )
+}
+
+export function withSlotNodes (
+  template: string,
+  options?: { variables?: Variables }
+): E.Either<ParseError, Array<string | SlotNode>> {
+  return pipe(
+    template,
+    lex,
+    parse,
+    E.map(ast =>
+      ast.map(node => {
+        switch (node.type) {
+          case NodeType.Block:
+            return evaluateBlock(node, options?.variables ?? {})
+          case NodeType.Spread:
+            return evaluateSpread(node, options?.variables ?? {})
+          case NodeType.Slot:
+            return node
+        }
+      })
+    ),
+    E.map(rendered =>
+      rendered
+        .reduce<Array<string | SlotNode>>(
+        ([head, ...rest], next) =>
+          typeof next === "string" && typeof head === "string"
+            ? [head + next, ...rest].filter(Boolean)
+            : [next, head, ...rest],
+        []
+      )
+        .reverse()
+    )
   )
 }
 
