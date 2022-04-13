@@ -142,7 +142,7 @@ export function where <A> (
       E.chain(([a, nextInput]) =>
         predicate(input)
           ? E.right([a, nextInput])
-          : E.left(ParseError(`predicate is false`, nextInput))
+          : E.left(ParseError(`predicate is false`, input))
       ))
 }
 

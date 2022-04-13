@@ -344,7 +344,7 @@ describe(`${where.name} combinator`, () => {
       expect(result).toMatchObject({
         left: {
           message: expect.stringMatching("predicate is false"),
-          input: Input(input.tokens, 1),
+          input: Input(input.tokens, 0),
         },
       })
     })
@@ -355,7 +355,7 @@ describe(`${where.name} combinator`, () => {
       expect(result).toMatchObject({
         left: {
           message: expect.stringMatching("predicate is false"),
-          input: Input(input.tokens, 1),
+          input: Input(input.tokens, 0),
         },
       })
     })
