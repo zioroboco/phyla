@@ -102,3 +102,15 @@ function evaluate (expression: string, variables: Variables): unknown {
   )
   return new Function([...definitions, `return ${expression}`].join(";"))()
 }
+
+export function upgrade ({
+  current,
+  from,
+  to,
+}: {
+  current: string
+  from: { template: string; variables?: Variables }
+  to: { template: string; variables?: Variables }
+}): E.Either<Error, string> {
+  return E.right(current)
+}
