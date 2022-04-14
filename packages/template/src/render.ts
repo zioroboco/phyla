@@ -1,13 +1,15 @@
 import * as E from "fp-ts/Either"
+import { fromPairs, zip } from "ramda"
 import { inspect } from "util"
 import { pipe } from "fp-ts/function"
 
 import { BlockNode, NodeType, SlotNode, SpreadNode, TokenType } from "./types"
 import { ParseError, parse } from "./parser"
+import { identity } from "fp-ts/function"
 import { lex } from "./lexer"
 
 type Variables = { [key: string]: unknown }
-type Slots = { [key: string]: string }
+type Slots = { [key: string]: string } | ((key: string) => string)
 
 export function render (
   template: string,
@@ -25,7 +27,13 @@ export function render (
           case NodeType.Spread:
             return evaluateSpread(node, options?.variables ?? {})
           case NodeType.Slot:
-            return options?.slots?.[node.token.value] ?? ""
+            if (options?.slots) {
+              return typeof options.slots === "function"
+                ? options.slots(node.token.value)
+                : options.slots[node.token.value]
+            } else {
+              return ""
+            }
         }
       })
     ),
@@ -103,14 +111,56 @@ function evaluate (expression: string, variables: Variables): unknown {
   return new Function([...definitions, `return ${expression}`].join(";"))()
 }
 
+function throwParseError<T> (a: E.Either<ParseError, T>): T {
+  return pipe(
+    a,
+    E.fold(
+      error => {
+        throw new Error(`error parsing template: ${error.message}`)
+      },
+      identity
+    )
+  )
+}
+
 export function upgrade ({
-  current,
-  from,
-  to,
+  content,
+  prev,
+  next,
 }: {
-  current: string
-  from: { template: string; variables?: Variables }
-  to: { template: string; variables?: Variables }
-}): E.Either<Error, string> {
-  return E.right(current)
+  content: string
+  prev: { template: string; variables?: Variables }
+  next: { template: string; variables?: Variables }
+}): E.Either<ParseError, string> {
+  const SEPARATOR = "⍼⍼" // string with no legitimate right to exist
+  const prevTemplateChunks = pipe(
+    render(prev.template, {
+      variables: prev.variables,
+      slots: () => SEPARATOR,
+    }),
+    throwParseError,
+    chunks => chunks.split(SEPARATOR),
+  )
+
+  const slotContentChunks = prevTemplateChunks.reduce<string[]>(
+    (acc, templateChunk) => {
+      return acc.length > 0
+        ? [...acc.slice(0, -1), ...acc[acc.length - 1].split(templateChunk)]
+        : content.split(templateChunk)
+    },
+    []
+  ).filter(Boolean)
+
+  const slotContentByName = pipe(
+    withSlotNodes(prev.template, { variables: prev.variables }),
+    throwParseError,
+    entries => entries.filter(node => typeof node !== "string"),
+    entries => entries.map(entry => (entry as SlotNode).token.value),
+    names => fromPairs(zip(names, slotContentChunks)),
+  )
+
+  return render(next.template, {
+    variables: next.variables,
+    slots: name => slotContentByName[name],
+  })
 }

@@ -156,7 +156,7 @@ describe(withSlotNodes.name, () => {
 
 describe(upgrade.name, () => {
 
-  const current = `{
+  const content = `{
   "name": "my-package"
   "author": "Blep B. Leppington <b.lep@example.com>"
   "private": true,
@@ -175,7 +175,7 @@ describe(upgrade.name, () => {
   }
 }`
 
-  const from = {
+  const prev = {
     variables: {
       name: "my-package",
       author: {
@@ -213,9 +213,9 @@ describe(upgrade.name, () => {
 }`,
   }
 
-  const to = {
+  const next = {
     variables: {
-      package: { name: from.variables.name },
+      package: { name: prev.variables.name },
       author: {
         name: "Blep B. Leppington",
         email: "b.lep@example.com",
@@ -268,7 +268,7 @@ describe(upgrade.name, () => {
 }`
 
   it(`upgrades the templated content`, () => {
-    expect(upgrade({ current, from, to })).toMatchObject({
+    expect(upgrade({ content, prev, next })).toMatchObject({
       right: expected,
     })
   })
