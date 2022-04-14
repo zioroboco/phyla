@@ -3,8 +3,8 @@ import * as path from "path"
 import * as system_fs from "fs"
 import glob from "fast-glob"
 
-import { Context } from "../api"
-import { interpret } from "./interpret"
+import { Context } from "@phyla/core"
+import { render } from "./render"
 
 type Options = {
   directory: string
@@ -12,10 +12,13 @@ type Options = {
 }
 
 export async function template (context: Context, options: Options) {
-  const templatePaths = await glob(path.join(options.directory, "**/*"), {
-    cwd: process.cwd(),
-    fs: system_fs,
-  })
+  const templatePaths = await glob(
+    path.join(options.directory, "**/*.template"),
+    {
+      cwd: process.cwd(),
+      fs: system_fs,
+    }
+  )
 
   const rendered = await Promise.all(
     templatePaths.map(async templatePath => {
@@ -24,15 +27,14 @@ export async function template (context: Context, options: Options) {
         "utf8"
       )
 
-      const rendered = interpret(templateData, {
+      const rendered = render(templateData, {
         variables: options.variables,
-        transform: () => ``, // FIXME stubbed tag transform
       })
 
       if (E.isLeft(rendered)) {
         throw new Error(
           `Error rendering template: ${templatePath}` +
-            `\n\n\t${rendered.left.join("\n\t")}`
+            `\n\n\t${rendered.left}`
         )
       }
 

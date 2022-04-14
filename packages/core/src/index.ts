@@ -14,5 +14,3 @@ export {
   run,
   task,
 } from "./api"
-
-export { template } from "./template/index"

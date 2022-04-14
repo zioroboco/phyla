@@ -1,7 +1,7 @@
 import  * as path from "path"
 import * as phyla from "@phyla/core"
 import { fileURLToPath } from "url"
-import { template } from "@phyla/core"
+import { template } from "@phyla/template"
 import expect from "expect"
 
 export type PackageTaskParameters = {

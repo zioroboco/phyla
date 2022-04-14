@@ -4,7 +4,7 @@ import { Volume, createFsFromVolume } from "memfs"
 import { before, describe, it } from "mocha"
 import expect from "expect"
 
-import { template } from "./render"
+import { template } from "./task"
 
 describe(`the example templates`, () => {
   const directory = path.resolve(
@@ -61,13 +61,6 @@ describe(`the example templates`, () => {
       expect(vol.toJSON()).toMatchObject({
         "/project/props.jsx":
           `export const Thing = () => <div prop={{ value: "blep" }} />\n`,
-      })
-    })
-
-    it(`captures and removes slots (which render nothing by default)`, () => {
-      expect(vol.toJSON()).toMatchObject({
-        "/project/slot.md":
-          `Start\n\nEnd\n`,
       })
     })
   })

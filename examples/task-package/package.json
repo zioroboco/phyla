@@ -20,7 +20,7 @@
     "mocha": "^9.2.2"
   },
   "dependencies": {
-    "@phyla/core": "^0.3.0",
+    "@phyla/template": "^0.1.0",
     "expect": "^27.5.1"
   }
 }

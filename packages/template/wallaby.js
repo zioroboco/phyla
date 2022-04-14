@@ -3,7 +3,7 @@ export default function () {
     files: [
       "./package.json",
       "./tsconfig.json",
-      "./src/**/*.{ts,json}",
+      "./src/**/*",
       "!./src/**/*.spec.ts",
       "!./node_modules/**/*",
     ],
