@@ -3,8 +3,8 @@ import { inspect } from "util"
 import { pipe } from "fp-ts/function"
 
 import { BlockNode, NodeType, SlotNode, SpreadNode, TokenType } from "./types"
-import { ParseError, parse } from "./parser"
-import { lex } from "./lexer"
+import { ParseError, parse } from "./parse"
+import { scan } from "./scan"
 
 export type Variables = { [key: string]: unknown }
 export type Slots = { [key: string]: string } | ((key: string) => string)
@@ -15,7 +15,7 @@ export function render (
 ): E.Either<ParseError, string> {
   return pipe(
     template,
-    lex,
+    scan,
     parse,
     E.map(ast =>
       ast.map(node => {
@@ -45,7 +45,7 @@ export function withSlotNodes (
 ): E.Either<ParseError, Array<string | SlotNode>> {
   return pipe(
     template,
-    lex,
+    scan,
     parse,
     E.map(ast =>
       ast.map(node => {

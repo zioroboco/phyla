@@ -2,7 +2,7 @@ import * as E from "fp-ts/Either"
 import { fromPairs, zip } from "ramda"
 import { identity, pipe } from "fp-ts/function"
 
-import { ParseError } from "./parser"
+import { ParseError } from "./parse"
 import { SlotNode } from "./types"
 import { Variables, render, withSlotNodes } from "./render"
 

@@ -2,11 +2,11 @@ import { test } from "mocha"
 import expect from "expect"
 
 import { TokenType } from "./types"
-import { lex } from "./lexer"
+import { scan } from "./scan"
 
 test(`single line, static content`, () => {
   const input = `thing one`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(1)
   expect(tokens).toMatchObject([
     {
@@ -18,7 +18,7 @@ test(`single line, static content`, () => {
 
 test(`multiple lines, static content`, () => {
   const input = `thing one\nthing two\nthing three`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(3)
   expect(tokens).toMatchObject([
     {
@@ -38,7 +38,7 @@ test(`multiple lines, static content`, () => {
 
 test(`single line, placeholder only`, () => {
   const input = `{{ blep }}`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(1)
   expect(tokens).toMatchObject([
     {
@@ -51,7 +51,7 @@ test(`single line, placeholder only`, () => {
 
 test(`multiple lines, placeholder only`, () => {
   const input = `{{\n  blep\n}}`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(1)
   expect(tokens).toMatchObject([
     {
@@ -64,7 +64,7 @@ test(`multiple lines, placeholder only`, () => {
 
 test(`single line, prefix`, () => {
   const input = `before {{ blep }}`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(2)
   expect(tokens).toMatchObject([
     {
@@ -81,7 +81,7 @@ test(`single line, prefix`, () => {
 
 test(`single line, postfix`, () => {
   const input = `{{ blep }} after`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(2)
   expect(tokens).toMatchObject([
     {
@@ -98,7 +98,7 @@ test(`single line, postfix`, () => {
 
 test(`single line, prefix and postfix`, () => {
   const input = `before {{ blep }} after`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(3)
   expect(tokens).toMatchObject([
     {
@@ -119,7 +119,7 @@ test(`single line, prefix and postfix`, () => {
 
 test(`multiple lines, empty`, () => {
   const input = `\n\n`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(2)
   expect(tokens).toMatchObject([
     {
@@ -135,13 +135,13 @@ test(`multiple lines, empty`, () => {
 
 test(`nothing`, () => {
   const input = ``
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(0)
 })
 
 test(`escaped double-curlies`, () => {
   const input = `() => <Thing prop=\\{\\{ shrug: true \\}\\} />`
-  const tokens = lex(input)
+  const tokens = scan(input)
   expect(tokens).toHaveLength(1)
   expect(tokens).toMatchObject([
     {
@@ -173,7 +173,7 @@ test(`complex example`, () => {
   }
 }`
 
-  const tokens = lex(input)
+  const tokens = scan(input)
 
   expect(tokens).toHaveLength(27)
 

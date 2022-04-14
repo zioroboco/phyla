@@ -22,7 +22,7 @@ import {
   parseTokenType,
   sequence,
   where,
-} from "./parser"
+} from "./parse"
 
 describe(parseTokenType.name, () => {
   const token = { type: TokenType.StaticLine } as Token

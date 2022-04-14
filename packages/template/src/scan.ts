@@ -3,7 +3,7 @@ import moo from "moo"
 
 import { Token, TokenType } from "./types"
 
-const lexer = moo.compile({
+const scanner = moo.compile({
   [TokenType.Slot]: {
     match: /{{[ \t\n]*slot:[ \t\n]*\w+[ \t\n]*}}/,
     lineBreaks: false,
@@ -30,9 +30,9 @@ const lexer = moo.compile({
   },
 })
 
-export function lex (template: string): Token[] {
+export function scan (template: string): Token[] {
   const acc: Token[] = []
-  for (const token of lexer.reset(template)) {
+  for (const token of scanner.reset(template)) {
     assert.ok(token.type, `token.type had value ${token.type}`)
     acc.push({
       type: token.type as TokenType,
