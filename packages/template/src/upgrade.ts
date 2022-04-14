@@ -32,7 +32,7 @@ export function upgrade ({
         : content.split(templateChunk)
     },
     []
-  ).filter(Boolean)
+  ).slice(1, -1)
 
   const slotContentByName = pipe(
     withSlotNodes(prev.template, { variables: prev.variables }),

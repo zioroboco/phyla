@@ -7,6 +7,7 @@ describe(upgrade.name, () => {
 
   const content = `{
   "name": "my-package"
+  "description": "",
   "author": "Blep B. Leppington <b.lep@example.com>"
   "private": true,
   "scripts": {
@@ -42,6 +43,7 @@ describe(upgrade.name, () => {
     },
     template: `{
   "name": "{{ name }}"
+  "description": "{{ slot: description }}",
   "author": "{{ author.name }} <{{ author.email }}>"
   "private": true,
   "scripts": {
@@ -77,6 +79,7 @@ describe(upgrade.name, () => {
     },
     template: `{
   "name": "@org/{{ package.name }}"
+  "description": "{{ slot: description }}",
   "author": "{{ author.name }} <{{ author.email }}>"
   "private": false,
   "scripts": {
@@ -99,6 +102,7 @@ describe(upgrade.name, () => {
 
   const expected = `{
   "name": "@org/my-package"
+  "description": "",
   "author": "Blep B. Leppington <b.lep@example.com>"
   "private": false,
   "scripts": {
