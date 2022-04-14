@@ -1,7 +1,7 @@
 import  * as path from "path"
 import * as phyla from "@phyla/core"
 import { fileURLToPath } from "url"
-import { template } from "@phyla/template"
+import { task as template } from "@phyla/template"
 import expect from "expect"
 
 const supportedLicenses = ["MIT"] as const

@@ -1,1 +1,1 @@
-export { template } from "./task"
+export { task } from "./task"

@@ -11,7 +11,7 @@ type Options = {
   variables: { [key: string]: unknown },
 }
 
-export async function template (context: Context, options: Options) {
+export async function task (context: Context, options: Options) {
   const templatePaths = await glob(
     path.join(options.directory, "**/*.template"),
     {

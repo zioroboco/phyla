@@ -4,7 +4,7 @@ import { Volume, createFsFromVolume } from "memfs"
 import { before, describe, it } from "mocha"
 import expect from "expect"
 
-import { template } from "./task"
+import { task } from "./task"
 
 describe(`the example templates`, () => {
   const directory = path.resolve(
@@ -16,7 +16,7 @@ describe(`the example templates`, () => {
     const vol = new Volume()
 
     before(async () => {
-      await template(
+      await task(
         {
         // @ts-ignore
           fs: createFsFromVolume(vol),
