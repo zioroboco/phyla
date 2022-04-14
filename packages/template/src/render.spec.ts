@@ -4,7 +4,7 @@ import expect from "expect"
 import * as E from "fp-ts/Either"
 import { NodeType, TokenType } from "./types"
 import { identity, pipe } from "fp-ts/lib/function"
-import { render, upgrade, withSlotNodes } from "./render"
+import { render, withSlotNodes } from "./render"
 
 const template = `{
   "name": "{{ name }}"
@@ -47,29 +47,6 @@ const slots = {
   scripts: `"lint": "eslint src",`,
   dependencies: `"package-three": "3.0.0",`,
 }
-
-const expectedChunks = [
-  `{
-  "name": "my-package"
-  "author": "Blep B. Leppington <b.lep@example.com>"
-  "private": true,
-  "scripts": {
-    `,
-  `
-    "test": "mocha"
-  },
-  "workspaces": [
-    "workspace-one",
-    "workspace-two",
-  ],
-  "dependencies: {
-    "package-one": "1.0.0",
-    "package-two": "2.0.0",
-    `,
-  `
-  }
-}`,
-]
 
 describe(render.name, () => {
   it("renders template to the expected string", () => {
@@ -152,125 +129,4 @@ describe(withSlotNodes.name, () => {
 }`,
     ])
   })
-})
-
-describe(upgrade.name, () => {
-
-  const content = `{
-  "name": "my-package"
-  "author": "Blep B. Leppington <b.lep@example.com>"
-  "private": true,
-  "scripts": {
-    "lint": "eslint src",
-    "test": "mocha"
-  },
-  "workspaces": [
-    "workspace-one",
-    "workspace-two",
-  ],
-  "dependencies: {
-    "package-one": "1.0.0",
-    "package-two": "2.0.0",
-    "package-three": "3.0.0",
-  }
-}`
-
-  const prev = {
-    variables: {
-      name: "my-package",
-      author: {
-        name: "Blep B. Leppington",
-        email: "b.lep@example.com",
-      },
-      workspaces: [
-        "workspace-one",
-        "workspace-two",
-      ],
-      dependencies: [
-        ["package-one", "1.0.0"],
-        ["package-two", "2.0.0"],
-      ],
-    },
-    template: `{
-  "name": "{{ name }}"
-  "author": "{{ author.name }} <{{ author.email }}>"
-  "private": true,
-  "scripts": {
-    {{ slot: scripts }}
-    "test": "mocha"
-  },
-  "workspaces": [
-    "{{ ...workspaces }}",
-  ],
-  "dependencies: {
-    {{
-      ...dependencies.map(([package, version]) => {
-        return \`"\${package}": "\${version}"\`
-      })
-    }},
-    {{ slot: dependencies }}
-  }
-}`,
-  }
-
-  const next = {
-    variables: {
-      package: { name: prev.variables.name },
-      author: {
-        name: "Blep B. Leppington",
-        email: "b.lep@example.com",
-      },
-      workspaces: ["workspace-one", "workspace-two"],
-      dependencies: [
-        ["package-one", "1.0.0"],
-        ["package-two", "2.0.0"],
-      ],
-    },
-    template: `{
-  "name": "@org/{{ package.name }}"
-  "author": "{{ author.name }} <{{ author.email }}>"
-  "private": false,
-  "scripts": {
-    {{ slot: scripts }}
-    "test": "mocha"
-  },
-  "workspaces": [
-    "{{ ...workspaces }}",
-  ],
-  "dependencies: {
-    {{
-      ...dependencies.map(([package, version]) => {
-        return \`"\${package}": "\${version}"\`
-      })
-    }},
-    {{ slot: dependencies }}
-  }
-}`,
-  }
-
-  const expected = `{
-  "name": "@org/my-package"
-  "author": "Blep B. Leppington <b.lep@example.com>"
-  "private": false,
-  "scripts": {
-    "lint": "eslint src",
-    "test": "mocha"
-  },
-  "workspaces": [
-    "workspace-one",
-    "workspace-two",
-  ],
-  "dependencies: {
-    "package-one": "1.0.0",
-    "package-two": "2.0.0",
-    "package-three": "3.0.0",
-  }
-}`
-
-  it(`upgrades the templated content`, () => {
-    expect(upgrade({ content, prev, next })).toMatchObject({
-      right: expected,
-    })
-  })
-
 })
