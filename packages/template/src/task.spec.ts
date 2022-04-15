@@ -6,10 +6,10 @@ import expect from "expect"
 
 import { task } from "./task"
 
-describe(`the example templates`, () => {
+describe(`applying templates`, () => {
   const directory = path.resolve(
     path.dirname(url.fileURLToPath(import.meta.url)),
-    "./fixtures"
+    "./fixtures/apply"
   )
 
   describe(`rendering templates`, () => {
