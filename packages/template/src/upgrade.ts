@@ -6,14 +6,21 @@ import { ParseError } from "./parse"
 import { SlotNode } from "./types"
 import { Variables, render, withSlotNodes } from "./render"
 
+export type VersionArgs = {
+  template: string
+  variables?: Variables
+}
+
 export function upgrade ({
   content,
   prev,
   next,
+  mapSlotNames = identity,
 }: {
   content: string
-  prev: { template: string; variables?: Variables }
-  next: { template: string; variables?: Variables }
+  prev: VersionArgs
+  next: VersionArgs
+  mapSlotNames?: (name: string) => string
 }): E.Either<ParseError, string> {
   const SEPARATOR = "⍼⍼" // string with no legitimate right to exist
   const prevTemplateChunks = pipe(
@@ -38,8 +45,11 @@ export function upgrade ({
     withSlotNodes(prev.template, { variables: prev.variables }),
     throwParseError,
     entries => entries.filter(node => typeof node !== "string"),
-    entries => entries.map(entry => (entry as SlotNode).token.value),
-    names => fromPairs(zip(names, slotContentChunks)),
+    entries =>
+      entries.map(entry =>
+        mapSlotNames((entry as SlotNode).token.value)
+      ),
+    names => fromPairs(zip(names, slotContentChunks))
   )
 
   return render(next.template, {

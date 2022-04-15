@@ -1,7 +1,7 @@
 import { describe, it } from "mocha"
 import expect from "expect"
 
-import { upgrade } from "./upgrade"
+import { VersionArgs, upgrade } from "./upgrade"
 
 describe(upgrade.name, () => {
 
@@ -25,7 +25,7 @@ describe(upgrade.name, () => {
   }
 }`
 
-  const prev = {
+  const prev: VersionArgs = {
     variables: {
       name: "my-package",
       author: {
@@ -47,7 +47,7 @@ describe(upgrade.name, () => {
   "author": "{{ author.name }} <{{ author.email }}>"
   "private": true,
   "scripts": {
-    {{ slot: scripts }}
+    {{ slot: stuff }}
     "test": "mocha"
   },
   "workspaces": [
@@ -64,9 +64,9 @@ describe(upgrade.name, () => {
 }`,
   }
 
-  const next = {
+  const next: VersionArgs = {
     variables: {
-      package: { name: prev.variables.name },
+      package: { name: prev.variables!.name },
       author: {
         name: "Blep B. Leppington",
         email: "b.lep@example.com",
@@ -120,8 +120,10 @@ describe(upgrade.name, () => {
   }
 }`
 
+  const mapSlotNames = (name: string) => name === "stuff" ? "scripts" : name
+
   it(`upgrades the templated content`, () => {
-    expect(upgrade({ content, prev, next })).toMatchObject({
+    expect(upgrade({ content, prev, next, mapSlotNames })).toMatchObject({
       right: expected,
     })
   })
