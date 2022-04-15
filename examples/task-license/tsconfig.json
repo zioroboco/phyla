@@ -5,6 +5,9 @@
     "rootDir": "src",
     "noEmit": false
   },
-  "references": [{ "path": "../../packages/core" }],
+  "references": [
+    { "path": "../../packages/core" },
+    { "path": "../../packages/template" }
+  ],
   "include": ["src/**/*.ts"]
 }

@@ -130,6 +130,7 @@ importers:
 
   packages/template:
     specifiers:
+      '@phyla/core': workspace:*
       '@types/mocha': ^9.1.0
       '@types/moo': ^0.5.5
       '@types/node': ^17.0.23
@@ -147,6 +148,7 @@ importers:
       moo: 0.5.1
       ramda: 0.28.0
     devDependencies:
+      '@phyla/core': link:../core
       '@types/mocha': 9.1.0
       '@types/moo': 0.5.5
       '@types/node': 17.0.23
