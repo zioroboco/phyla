@@ -1,7 +1,7 @@
 import * as path from "path"
 import * as url from "url"
 import { Volume, createFsFromVolume } from "memfs"
-import { before, describe, it } from "mocha"
+import { before, describe, it, test } from "mocha"
 import expect from "expect"
 
 import { task } from "./task"
@@ -64,4 +64,58 @@ describe(`applying templates`, () => {
       })
     })
   })
+})
+
+test.only(`upgrading a template`, async () => {
+  const directory = path.resolve(
+    path.dirname(url.fileURLToPath(import.meta.url)),
+    "./fixtures/upgrade"
+  )
+
+  const vol = Volume.fromJSON({
+    "/project/package.json": `{
+  "name": "my-package"
+  "description": "",
+  "author": "Blep B. Leppington <b.lep@example.com>"
+  "private": true,
+  "scripts": {
+    "lint": "eslint src",
+    "test": "mocha"
+  },
+  "workspaces": [
+    "workspace-one",
+    "workspace-two",
+  ],
+  "dependencies: {
+    "package-one": "1.0.0",
+    "package-two": "2.0.0",
+    "package-three": "3.0.0",
+  }
+}`,
+  })
+
+  await task(
+    {
+      // @ts-ignore
+      fs: createFsFromVolume(vol),
+      cwd: "/project",
+    },
+    {
+      directory,
+      upgrade: true,
+      variables: {
+        package: { name: "my-package" },
+        author: {
+          name: "Blep B. Leppington",
+          email: "b.lep@example.com",
+        },
+        workspaces: ["workspace-one", "workspace-two"],
+        dependencies: [
+          ["package-one", "1.0.0"],
+          ["package-two", "2.0.0"],
+        ],
+      },
+    }
+  )
+
 })

@@ -1,0 +1,21 @@
+{
+  "name": "{{ name }}"
+  "description": "{{ slot: description }}",
+  "author": "{{ author.name }} <{{ author.email }}>"
+  "private": true,
+  "scripts": {
+    {{ slot: stuff }}
+    "test": "mocha"
+  },
+  "workspaces": [
+    "{{ ...workspaces }}",
+  ],
+  "dependencies: {
+    {{
+      ...dependencies.map(([package, version]) => {
+        return \`"\${package}": "\${version}"\`
+      })
+    }},
+    {{ slot: dependencies }}
+  }
+}

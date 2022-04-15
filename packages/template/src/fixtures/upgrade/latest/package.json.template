@@ -1,0 +1,21 @@
+{
+  "name": "@org/{{ package.name }}"
+  "description": "{{ slot: description }}",
+  "author": "{{ author.name }} <{{ author.email }}>"
+  "private": false,
+  "scripts": {
+    {{ slot: scripts }}
+    "test": "mocha"
+  },
+  "workspaces": [
+    "{{ ...workspaces }}",
+  ],
+  "dependencies: {
+    {{
+      ...dependencies.map(([package, version]) => {
+        return \`"\${package}": "\${version}"\`
+      })
+    }},
+    {{ slot: dependencies }}
+  }
+}
