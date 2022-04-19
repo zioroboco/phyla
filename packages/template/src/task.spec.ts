@@ -1,79 +1,101 @@
-import * as path from "path"
-import * as url from "url"
 import { Volume, createFsFromVolume } from "memfs"
-import { before, describe, it, test } from "mocha"
+import { describe, it } from "mocha"
+import { fromPairs, repeat, zip } from "ramda"
 import expect from "expect"
 
-import { task } from "./task"
+import { Context } from "@phyla/core"
+import { getVersionedTemplates, withOuterFS } from "./task"
 
-describe(`applying templates`, () => {
-  const directory = path.resolve(
-    path.dirname(url.fileURLToPath(import.meta.url)),
-    "./fixtures/apply"
-  )
+describe(getVersionedTemplates.name, () => {
+  function withData (paths: string[]): { [key: string]: string } {
+    return fromPairs(zip(paths, repeat("data!", paths.length)))
+  }
 
-  describe(`rendering templates`, () => {
-    const vol = new Volume()
+  describe(`with versioned templates`, () => {
+    const versions = ["0.0.0", "1.0.0", "2.0.0", "3.0.0", "latest"]
 
-    before(async () => {
-      await task(
-        {
-        // @ts-ignore
-          fs: createFsFromVolume(vol),
-          cwd: "/project",
-        },
-        {
-          directory,
-          variables: {
-            key: "blep",
-            purpose: "shopping",
-            items: ["apples", "oranges"],
-          },
-        }
+    const relativePaths = ["deep", null].flatMap(inner =>
+      ["a", "b", "c"].map(
+        file => [inner, file].filter(Boolean).join("/") + ".md.template"
       )
+    )
+
+    const fullPaths = versions.flatMap(dir =>
+      relativePaths.map(path => "/templates/" + [dir, path].join("/"))
+    )
+
+    const vol = Volume.fromJSON({
+      ...withData(fullPaths),
     })
 
-    it(`renders a simple variable into template contents`, () => {
-      expect(vol.toJSON()).toMatchObject({
-        "/project/config.json": `{\n  "key": "blep"\n}\n`,
-      })
-    })
+    // @ts-ignore
+    const fs = createFsFromVolume(vol) as typeof import("fs")
 
-    it(`renders a simple variable into template filename`, () => {
-      expect(vol.toJSON()).toMatchObject({
-        "/project/blep.json": `{\n  "key": "blep"\n}\n`,
-      })
-    })
-
-    it(`renders a simple variable into nested template filenames`, () => {
-      expect(vol.toJSON()).toMatchObject({
-        "/project/blep/blep.blep": `blep!\n`,
-      })
-    })
-
-    it(`renders a function, preserving whitespace from template`, () => {
-      expect(vol.toJSON()).toMatchObject({
-        "/project/list.md": `shopping list:\n  - apples\n  - oranges\n`,
-      })
-    })
-
-    it(`allows escaping double-curlies, e.g. in jsx`, () => {
-      expect(vol.toJSON()).toMatchObject({
-        "/project/props.jsx":
-          `export const Thing = () => <div prop={{ value: "blep" }} />\n`,
+    it(`returns templates organised by version`, async () => {
+      const result = await getVersionedTemplates(fs, "/templates", versions)
+      expect(result).toMatchObject({
+        "0.0.0": withData(relativePaths),
+        "1.0.0": withData(relativePaths),
+        "2.0.0": withData(relativePaths),
+        "3.0.0": withData(relativePaths),
+        latest: withData(relativePaths),
       })
     })
   })
 })
 
-test.only(`upgrading a template`, async () => {
-  const directory = path.resolve(
-    path.dirname(url.fileURLToPath(import.meta.url)),
-    "./fixtures/upgrade"
-  )
+describe(`the package.json example`, () => {
+  const vol_outer = Volume.fromJSON({
+    "templates/0.1.0/package.json.template": `{
+  "name": "{{ name }}"
+  "description": "{{ slot: description }}",
+  "author": "{{ author.name }} <{{ author.email }}>"
+  "private": true,
+  "scripts": {
+    {{ slot: stuff }}
+    "test": "mocha"
+  },
+  "workspaces": [
+    "{{ ...workspaces }}",
+  ],
+  "dependencies: {
+    {{
+      ...dependencies.map(([package, version]) => {
+        return \`"\${package}": "\${version}"\`
+      })
+    }},
+    {{ slot: dependencies }}
+  }
+}`,
+    "templates/latest/package.json.template": `{
+  "name": "@org/{{ package.name }}"
+  "description": "{{ slot: description }}",
+  "author": "{{ author.name }} <{{ author.email }}>"
+  "private": false,
+  "scripts": {
+    {{ slot: scripts }}
+    "test": "mocha"
+  },
+  "workspaces": [
+    "{{ ...workspaces }}",
+  ],
+  "dependencies: {
+    {{
+      ...dependencies.map(([package, version]) => {
+        return \`"\${package}": "\${version}"\`
+      })
+    }},
+    {{ slot: dependencies }}
+  }
+}`,
+  })
 
-  const vol = Volume.fromJSON({
-    "/project/package.json": `{
+  // @ts-ignore
+  const fs_outer = createFsFromVolume(vol_outer) as typeof import("fs")
+  const task = withOuterFS(fs_outer)
+
+  const vol_inner = Volume.fromJSON({
+    "/workspace/package.json": `{
   "name": "my-package"
   "description": "",
   "author": "Blep B. Leppington <b.lep@example.com>"
@@ -94,28 +116,30 @@ test.only(`upgrading a template`, async () => {
 }`,
   })
 
-  await task(
-    {
-      // @ts-ignore
-      fs: createFsFromVolume(vol),
-      cwd: "/project",
-    },
-    {
-      directory,
-      upgrade: true,
-      variables: {
-        package: { name: "my-package" },
-        author: {
-          name: "Blep B. Leppington",
-          email: "b.lep@example.com",
-        },
-        workspaces: ["workspace-one", "workspace-two"],
-        dependencies: [
-          ["package-one", "1.0.0"],
-          ["package-two", "2.0.0"],
-        ],
-      },
-    }
-  )
+  // @ts-ignore
+  const fs_inner = createFsFromVolume(vol_inner) as typeof import("fs")
+  const ctx = { cwd: "/project", fs: fs_inner } as Context
 
+  const variables = {
+    package: { name: "my-package" },
+    author: {
+      name: "Blep B. Leppington",
+      email: "b.lep@example.com",
+    },
+    workspaces: ["workspace-one", "workspace-two"],
+    dependencies: [
+      ["package-one", "1.0.0"],
+      ["package-two", "2.0.0"],
+    ],
+  }
+
+
+  describe(task.name, () => {
+    it(`works`, async () => {
+      await task(ctx, {
+        templates: "templates",
+        variables,
+      })
+    })
+  })
 })

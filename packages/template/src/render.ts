@@ -2,11 +2,17 @@ import * as E from "fp-ts/Either"
 import { inspect } from "util"
 import { pipe } from "fp-ts/function"
 
-import { BlockNode, NodeType, SlotNode, SpreadNode, TokenType } from "./types"
+import {
+  BlockNode,
+  NodeType,
+  SlotNode,
+  SpreadNode,
+  TokenType,
+  Variables,
+} from "./types"
 import { ParseError, parse } from "./parse"
 import { scan } from "./scan"
 
-export type Variables = { [key: string]: unknown }
 export type Slots = { [key: string]: string } | ((key: string) => string)
 
 export function render (

@@ -3,33 +3,28 @@ import { fromPairs, zip } from "ramda"
 import { identity, pipe } from "fp-ts/function"
 
 import { ParseError } from "./parse"
-import { SlotNode } from "./types"
-import { Variables, render, withSlotNodes } from "./render"
-
-export type VersionArgs = {
-  template: string
-  variables?: Variables
-}
+import { SlotNode, Variables } from "./types"
+import { render, withSlotNodes } from "./render"
 
 export function upgrade ({
   content,
   prev,
   next,
-  mapSlotNames = identity,
+  variables,
 }: {
   content: string
-  prev: VersionArgs
-  next: VersionArgs
-  mapSlotNames?: (name: string) => string
+  prev: string
+  next: string
+  variables: Variables
 }): E.Either<ParseError, string> {
   const SEPARATOR = "⍼⍼" // string with no legitimate right to exist
   const prevTemplateChunks = pipe(
-    render(prev.template, {
-      variables: prev.variables,
+    render(prev, {
+      variables,
       slots: () => SEPARATOR,
     }),
     throwParseError,
-    chunks => chunks.split(SEPARATOR),
+    chunks => chunks.split(SEPARATOR)
   )
 
   const slotContentChunks = prevTemplateChunks.reduce<string[]>(
@@ -42,18 +37,15 @@ export function upgrade ({
   ).slice(1, -1)
 
   const slotContentByName = pipe(
-    withSlotNodes(prev.template, { variables: prev.variables }),
+    withSlotNodes(prev, { variables }),
     throwParseError,
     entries => entries.filter(node => typeof node !== "string"),
-    entries =>
-      entries.map(entry =>
-        mapSlotNames((entry as SlotNode).token.value)
-      ),
+    entries => entries.map(entry => (entry as SlotNode).token.value),
     names => fromPairs(zip(names, slotContentChunks))
   )
 
-  return render(next.template, {
-    variables: next.variables,
+  return render(next, {
+    variables,
     slots: name => slotContentByName[name],
   })
 }

@@ -1,76 +1,90 @@
 import * as E from "fp-ts/Either"
-import * as path from "path"
-import * as system_fs from "fs"
+import * as fs_system from "fs"
+import { fromPairs, tail, toPairs, zip } from "ramda"
+import { join, resolve } from "path"
 import glob from "fast-glob"
+import semver from "semver"
 
 import { Context } from "@phyla/core"
+import { Variables } from "./types"
 import { render } from "./render"
+import { upgrade } from "./upgrade"
+
+type FS = typeof import("fs")
+const LATEST = "latest"
 
 type Options = {
-  directory: string
-  variables: { [key: string]: unknown },
+  templates: string
+  variables: Variables,
 }
 
-export async function task (context: Context, options: Options) {
-  const templatePaths = await glob(
-    path.join(options.directory, "**/*.template"),
-    {
-      cwd: process.cwd(),
-      fs: system_fs,
+type VersionedTemplates = { [version: string]: { [path: string]: string } }
+
+export function withOuterFS (fs: FS) {
+  return async function task (ctx: Context, options: Options) {
+    try {
+      const base = resolve(options.templates)
+      const versions = await glob("*", { cwd: base, fs, onlyDirectories: true })
+      const versionedTemplates = await getVersionedTemplates(fs, base, versions)
+
+      if (!versionedTemplates[LATEST]) {
+        throw new Error(`No directory '${LATEST}' found in ${base}`)
+      }
+
+      const latestTemplateResults = toPairs(versionedTemplates[LATEST]).map(
+        ([path, content]) => [
+          path,
+          render(content, { variables: options.variables }),
+        ] as const
+      )
+
+    } catch (e) {
+      throw e
     }
-  )
+  }
+}
 
-  const rendered = await Promise.all(
-    templatePaths.map(async templatePath => {
-      const templateData = await system_fs.promises.readFile(
-        templatePath,
-        "utf8"
-      )
+export const task = withOuterFS(fs_system)
 
-      const rendered = render(templateData, {
-        variables: options.variables,
+function semverValidate (version: string): boolean {
+  return version === LATEST || typeof semver.valid(version) === "string"
+}
+
+function semverSortAscending (versions: string[]): string[] {
+  return [...semver.sort(versions.filter(v => v !== LATEST)), LATEST]
+}
+
+function adjacentPairs <A> (fa: A[]): [A, A][] {
+  return zip(fa, tail(fa))
+}
+
+export async function getVersionedTemplates (
+  fs: FS,
+  basedir: string,
+  versions: string[],
+): Promise<VersionedTemplates> {
+  return fromPairs(
+    await Promise.all(
+      versions.map(async version => {
+        const files = await glob("**/*.template", {
+          fs,
+          cwd: join(basedir, version),
+        })
+        return [
+          version,
+          fromPairs(
+            await Promise.all(
+              files.map(async file => [
+                file,
+                await fs.promises.readFile(
+                  join(basedir, version, file),
+                  "utf8"
+                ),
+              ])
+            )
+          ),
+        ]
       })
-
-      if (E.isLeft(rendered)) {
-        throw new Error(
-          `Error rendering template: ${templatePath}` +
-            `\n\n\t${rendered.left}`
-        )
-      }
-
-      return {
-        templatePath: templatePath.replace(/\.template$/, ""),
-        rendered,
-      }
-    })
-  )
-
-  await Promise.all(
-    rendered.map(async ({ templatePath, rendered }) => {
-      const interpolatedPath = templatePath.replaceAll(
-        /{{[ ]*(.+?)[ ]*}}/g,
-        (_, capture) => {
-          if (capture in options.variables) {
-            const value = options.variables[capture]
-            if (typeof value == "string") {
-              return value
-            }
-          }
-          throw new Error("No string-valued template variable: " + capture)
-        }
-      )
-
-      const relativePath = path.relative(options.directory, interpolatedPath)
-
-      await context.fs.promises.mkdir(
-        path.dirname(path.join(context.cwd, relativePath)),
-        { recursive: true }
-      )
-
-      await context.fs.promises.writeFile(
-        path.join(context.cwd, relativePath),
-        rendered.right
-      )
-    })
+    )
   )
 }

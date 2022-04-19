@@ -1,7 +1,8 @@
 import { describe, it } from "mocha"
 import expect from "expect"
 
-import { VersionArgs, upgrade } from "./upgrade"
+import { render } from "./render"
+import { upgrade } from "./upgrade"
 
 describe(upgrade.name, () => {
 
@@ -25,29 +26,26 @@ describe(upgrade.name, () => {
   }
 }`
 
-  const prev: VersionArgs = {
-    variables: {
-      name: "my-package",
-      author: {
-        name: "Blep B. Leppington",
-        email: "b.lep@example.com",
-      },
-      workspaces: [
-        "workspace-one",
-        "workspace-two",
-      ],
-      dependencies: [
-        ["package-one", "1.0.0"],
-        ["package-two", "2.0.0"],
-      ],
+  const variables = {
+    package: { name: "my-package" },
+    author: {
+      name: "Blep B. Leppington",
+      email: "b.lep@example.com",
     },
-    template: `{
-  "name": "{{ name }}"
+    workspaces: ["workspace-one", "workspace-two"],
+    dependencies: [
+      ["package-one", "1.0.0"],
+      ["package-two", "2.0.0"],
+    ],
+  }
+
+  const prev = `{
+  "name": "{{ package.name }}"
   "description": "{{ slot: description }}",
   "author": "{{ author.name }} <{{ author.email }}>"
   "private": true,
   "scripts": {
-    {{ slot: stuff }}
+    {{ slot: scripts }}
     "test": "mocha"
   },
   "workspaces": [
@@ -61,23 +59,9 @@ describe(upgrade.name, () => {
     }},
     {{ slot: dependencies }}
   }
-}`,
-  }
+}`
 
-  const next: VersionArgs = {
-    variables: {
-      package: { name: prev.variables!.name },
-      author: {
-        name: "Blep B. Leppington",
-        email: "b.lep@example.com",
-      },
-      workspaces: ["workspace-one", "workspace-two"],
-      dependencies: [
-        ["package-one", "1.0.0"],
-        ["package-two", "2.0.0"],
-      ],
-    },
-    template: `{
+  const next = `{
   "name": "@org/{{ package.name }}"
   "description": "{{ slot: description }}",
   "author": "{{ author.name }} <{{ author.email }}>"
@@ -97,8 +81,7 @@ describe(upgrade.name, () => {
     }},
     {{ slot: dependencies }}
   }
-}`,
-  }
+}`
 
   const expected = `{
   "name": "@org/my-package"
@@ -120,12 +103,9 @@ describe(upgrade.name, () => {
   }
 }`
 
-  const mapSlotNames = (name: string) => name === "stuff" ? "scripts" : name
-
   it(`upgrades the templated content`, () => {
-    expect(upgrade({ content, prev, next, mapSlotNames })).toMatchObject({
+    expect(upgrade({ content, prev, next, variables })).toMatchObject({
       right: expected,
     })
   })
-
 })

@@ -32,7 +32,8 @@
     "fast-glob": "^3.2.11",
     "fp-ts": "^2.11.9",
     "moo": "^0.5.1",
-    "ramda": "^0.28.0"
+    "ramda": "^0.28.0",
+    "semver": "^7.3.7"
   },
   "peerDependencies": {
     "@phyla/core": "^0"

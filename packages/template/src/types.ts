@@ -1,3 +1,7 @@
+export interface Variables {
+  [key: string]: unknown;
+}
+
 export type Token = {
   type: TokenType,
   image: string
