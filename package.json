@@ -1,12 +1,12 @@
 {
-  "packageManager": "pnpm@6.31.0",
+  "packageManager": "pnpm@7.0.0",
   "private": true,
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "test": "pnpm run --recursive test",
-    "lint": "pnpm lint:prettier -- --write && pnpm lint:eslint -- --fix",
-    "lint-ci": "pnpm lint:prettier -- --check && pnpm lint:eslint -- --max-warnings=0",
+    "lint": "pnpm lint:prettier --write && pnpm lint:eslint --fix",
+    "lint-ci": "pnpm lint:prettier --check && pnpm lint:eslint --max-warnings=0",
     "lint:eslint": "eslint . --ext .ts",
     "lint:prettier": "prettier '**/[!pnpm-]*[!.d].{json,yaml,yml}' --loglevel=warn",
     "copy-docs": "cp README.md packages/core && cp LICENSE packages/core",
