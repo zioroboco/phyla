@@ -5,6 +5,9 @@
   "linked": [],
   "access": "public",
   "baseBranch": "master",
+  "ignore": ["@phyla/example-*"],
   "updateInternalDependencies": "patch",
-  "ignore": ["@phyla/example-*"]
+  "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
+    "onlyUpdatePeerDependentsWhenOutOfRange": true
+  }
 }
