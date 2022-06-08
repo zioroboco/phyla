@@ -3,12 +3,13 @@ import * as phyla from "@phyla/core"
 
 export default phyla.pipeline({
   tasks: [
-    import("@phyla/example-task-package"),
-    import("@phyla/example-task-license"),
+    import("demo-base"),
   ],
   parameters: {
-    name: "@phyla/example-project",
-    author: "Raymond Luxury-Yacht <rayly@example.com>",
-    license: "MIT",
+    name: "example-project",
+    dependencies: {
+      "@phyla/core": "workspace:*",
+      "demo-base": "workspace:*",
+    }
   },
 })

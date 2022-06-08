@@ -1,0 +1,7 @@
+{
+  "name": "{{ name }}",
+  "private": true,
+  "dependencies": {
+    {{ dependencies.map(([pkg, v]) => `"${pkg}": "${v}"`).join(",\n    ") }}
+  }
+}

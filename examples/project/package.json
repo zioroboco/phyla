@@ -1,12 +1,9 @@
 {
-  "name": "@phyla/example-project",
-  "version": "0.0.0",
-  "author": "Ray",
+  "name": "example-project",
   "private": true,
+  "thing": "leave me alone!",
   "dependencies": {
     "@phyla/core": "workspace:*",
-    "@phyla/example-task-install": "workspace:*",
-    "@phyla/example-task-license": "workspace:*",
-    "@phyla/example-task-package": "workspace:*"
+    "demo-base": "workspace:*"
   }
 }

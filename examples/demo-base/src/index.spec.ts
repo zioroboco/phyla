@@ -2,7 +2,7 @@ import * as phyla from "@phyla/core"
 import { Volume, createFsFromVolume } from "memfs"
 import { test } from "mocha"
 import expect from "expect"
-import packageTask, { PackageTaskParameters } from "./package"
+import packageTask, { PackageTaskParameters } from "./index"
 
 const cwd = "/my-project"
 
@@ -11,6 +11,10 @@ test(`the happy path`, async () => {
 
   const params: PackageTaskParameters = {
     name: "@org/test-package",
+    dependencies: {
+      "one": "1.0.0",
+      "two": "2.0.0",
+    },
   }
 
   await phyla.run(packageTask(params), {
@@ -26,8 +30,10 @@ test(`the happy path`, async () => {
 
   expect(renderedPackageJson).toMatchObject({
     name: "@org/test-package",
-    version: "FIXME",
-    author: "FIXME",
-    dependencies: {},
+    private: true,
+    dependencies: {
+      "one": "1.0.0",
+      "two": "2.0.0",
+    },
   })
 })
