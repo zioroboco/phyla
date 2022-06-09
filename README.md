@@ -166,7 +166,7 @@ WIP and experimental, but it works well.
 
 ## Where to next?
 
-There's a working example project in the [`./examples/`](https://github.com/zioroboco/phyla/tree/master/examples) directory.
+There's a working example project in the [`./examples/`](https://github.com/zioroboco/phyla/tree/main/examples) directory.
 
 ## Contributing
 
