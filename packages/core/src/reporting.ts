@@ -7,7 +7,8 @@ export const dim = (s: string) => `\x1b[2m${s}\x1b[0m`
 export function check (
   report: Report,
   meta: { name?: string, version?: string },
-  phase: "pre" | "post"
+  phase: "pre" | "post",
+  io: Pick<typeof process, "stderr" | "stdout"> = process
 ) {
   const failures = report.results.filter(r => r.outcome != Pass)
 
@@ -18,7 +19,7 @@ export function check (
           ? outcome.stack ?? outcome.message
           : String(outcome)
 
-      process.stderr.write(
+      io.stderr.write(
         [
           "\n",
           inverse(` ${phase.toUpperCase()}-TASK `),
