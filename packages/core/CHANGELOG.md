@@ -1,5 +1,11 @@
 # @phyla/core
 
+## 0.4.0
+
+### Minor Changes
+
+- [`cbcf804`](https://github.com/zioroboco/phyla/commit/cbcf804ef8a6ca129ee25ab63753fa65274b807e) - Passing stdout/stderr streams down through context, for testing the output of assertions.
+
 ## 0.3.0
 
 ### Minor Changes

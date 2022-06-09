@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./dist/install.js",
   "peerDependencies": {
-    "@phyla/core": "^0.3.0"
+    "@phyla/core": "^0.4.0"
   },
   "devDependencies": {
     "@phyla/core": "workspace:*"
