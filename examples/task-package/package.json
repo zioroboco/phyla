@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./dist/package.js",
   "peerDependencies": {
-    "@phyla/core": "^0.3.0"
+    "@phyla/core": "^0.4.0"
   },
   "scripts": {
     "test": "mocha --no-warnings --experimental-specifier-resolution=node --experimental-import-meta-resolve"
