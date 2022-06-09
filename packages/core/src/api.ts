@@ -43,9 +43,13 @@ export type Context = {
    */
   fs: typeof import("fs")
   /**
-   * Stack trace, for errors and other output.
+   * Stack trace, for inluding in errors and other output.
    */
   stack: Meta[]
+  /**
+   * Output streams for writing to the console.
+   */
+  io: Pick<typeof process, "stderr" | "stdout">
 }
 
 /**
@@ -96,7 +100,7 @@ export function task<P>(
               ctx,
             )
             const report = await assertions.run(suite)
-            reporting.check(report, definition, "pre")
+            reporting.check(report, definition, "pre", ctx.io)
           }
 
           const rv = await definition.run(ctx)
@@ -107,7 +111,7 @@ export function task<P>(
               ctx,
             )
             const report = await assertions.run(suite)
-            reporting.check(report, definition, "post")
+            reporting.check(report, definition, "post", ctx.io)
           }
 
           ctx.stack.pop()

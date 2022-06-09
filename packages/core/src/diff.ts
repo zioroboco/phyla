@@ -44,6 +44,7 @@ export async function diff(config: DiffConfig): Promise<number> {
     cwd: tmpdir,
     fs: await import("fs"),
     stack: [],
+    io: process,
   }).catch(err => {
     throw new Error(`pipeline failed: ${err}`)
   })

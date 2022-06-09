@@ -115,6 +115,7 @@ export class WriteCommand extends Command {
       cwd: this.srcdir,
       fs: await import("fs"),
       stack: [],
+      io: process,
     })
   }
 }
