@@ -3,6 +3,13 @@ name: checks
 on: push
 
 jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dprint/check@v2.0
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -20,20 +27,3 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: pnpm run build
       - run: pnpm run test
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@2270f39ef63c3edf50be34da68c039eca5e15c15
-        with:
-          version: 6.31.0
-      - uses: actions/setup-node@v2
-        with:
-          cache: pnpm
-          node-version-file: .nvmrc
-          registry-url: https://npm.pkg.github.com
-      - run: pnpm install --ignore-scripts --frozen-lockfile
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: pnpm run lint-ci
