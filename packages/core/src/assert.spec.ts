@@ -1,5 +1,5 @@
-import { describe, it } from "mocha"
 import expect from "expect"
+import { describe, it } from "mocha"
 
 import * as phyla from "./assert"
 
@@ -200,7 +200,7 @@ describe(`reporting on a suite of tests`, () => {
           descriptions: ["some tests", "with nested tests", "fails, boo"],
           outcome: expect.any(Error),
         }),
-      ])
+      ]),
     )
   })
 })

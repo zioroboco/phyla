@@ -1,5 +1,5 @@
 export type Token = {
-  type: TokenType,
+  type: TokenType
   image: string
   value: string
   line: number
@@ -34,10 +34,10 @@ export type SlotNode = {
 }
 
 export type SpreadNode = {
-  type: NodeType.Spread,
-  prefixToken?: Token,
-  spreadToken: Token,
-  suffixToken?: Token,
+  type: NodeType.Spread
+  prefixToken?: Token
+  spreadToken: Token
+  suffixToken?: Token
 }
 
 export type AST = readonly Node[]

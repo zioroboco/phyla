@@ -2,7 +2,7 @@ import * as fs from "fs"
 import * as path from "path"
 import { Meta } from "./api"
 
-function stacktrace () {
+function stacktrace() {
   const _prepareStackTrace = Error.prepareStackTrace
   Error.prepareStackTrace = (_, stack) => stack
   const stack = new Error().stack as unknown as NodeJS.CallSite[]
@@ -10,7 +10,7 @@ function stacktrace () {
   return stack
 }
 
-export function callsiteMeta (): Meta {
+export function callsiteMeta(): Meta {
   const stack = stacktrace()
   for (const frame of stack.slice(3)) {
     let file = frame.getFileName()
@@ -32,7 +32,7 @@ export function callsiteMeta (): Meta {
   return {}
 }
 
-export const findupSync = function (
+export const findupSync = function(
   current: string,
   target: string,
 ): string | null {

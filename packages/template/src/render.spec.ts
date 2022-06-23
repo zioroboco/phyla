@@ -1,10 +1,10 @@
-import { describe, it } from "mocha"
 import expect from "expect"
+import { describe, it } from "mocha"
 
 import * as E from "fp-ts/Either"
-import { NodeType, TokenType } from "./types"
 import { identity, pipe } from "fp-ts/lib/function"
 import { render, withSlotNodes } from "./render"
+import { NodeType, TokenType } from "./types"
 
 const template = `{
   "name": "{{ name }}"
@@ -57,7 +57,7 @@ describe(render.name, () => {
       }),
       E.fold(err => {
         throw new Error(err.message)
-      }, identity)
+      }, identity),
     )
 
     expect(result).toMatch(`{
@@ -89,7 +89,7 @@ describe(withSlotNodes.name, () => {
       }),
       E.fold(err => {
         throw new Error(err.message)
-      }, identity)
+      }, identity),
     )
 
     expect(result).toEqual([

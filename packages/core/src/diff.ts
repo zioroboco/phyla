@@ -1,6 +1,6 @@
-import { Chainable, run } from "./api"
 import { strict as assert } from "assert"
 import { spawn } from "child_process"
+import { Chainable, run } from "./api"
 
 export type DiffConfig = {
   srcdir: string
@@ -10,11 +10,11 @@ export type DiffConfig = {
     stdin: NodeJS.ReadableStream
     stdout: NodeJS.WritableStream
     stderr: NodeJS.WritableStream
-  },
+  }
   ci: boolean
 }
 
-export async function diff (config: DiffConfig): Promise<number> {
+export async function diff(config: DiffConfig): Promise<number> {
   const { srcdir, tmpdir } = config
 
   await new Promise((res, rej) => {
@@ -29,7 +29,7 @@ export async function diff (config: DiffConfig): Promise<number> {
         `${tmpdir}/`,
         "--exclude",
         ".git/",
-      ]
+      ],
     )
     rsync.on("error", rej)
     rsync.on("exit", code => {
@@ -59,7 +59,7 @@ export async function diff (config: DiffConfig): Promise<number> {
         tmpdir,
         ...(config.ci ? ["--exit-code"] : []),
       ],
-      { stdio: "inherit" }
+      { stdio: "inherit" },
     )
     git.on("error", rej)
     git.on("exit", code => {

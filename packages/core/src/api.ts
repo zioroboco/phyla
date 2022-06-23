@@ -1,12 +1,12 @@
 import * as E from "fp-ts/Either"
+import { pipe } from "fp-ts/function"
 import * as TE from "fp-ts/TaskEither"
+import { Union } from "ts-toolbelt"
 import * as assertions from "./assert"
 import * as reporting from "./reporting"
-import { Union } from "ts-toolbelt"
 import { callsiteMeta } from "./util"
-import { pipe } from "fp-ts/function"
 
-export function run (task: Chainable, ctx: Context) {
+export function run(task: Chainable, ctx: Context) {
   return task(TE.of(ctx))()
 }
 
@@ -64,7 +64,7 @@ export type TaskDefinition = Meta & {
  * Chainable instance of a pipeline or task.
  */
 export type Chainable = (
-  ma: TE.TaskEither<Error, Context>
+  ma: TE.TaskEither<Error, Context>,
 ) => TE.TaskEither<Error, Context>
 
 /**
@@ -78,8 +78,8 @@ export type Chainable = (
  * @returns A function returning a chainable instance of the task.
  * @typeParam P The parameters of the resulting task.
  */
-export function task<P> (
-  init: (parameters: P) => TaskDefinition
+export function task<P>(
+  init: (parameters: P) => TaskDefinition,
 ): (parameters: P) => Chainable {
   const defaultMeta: Meta = callsiteMeta()
   return parameters => {
@@ -93,7 +93,7 @@ export function task<P> (
           if (definition.pre) {
             const suite = definition.pre(
               { describe: assertions.describe, it: assertions.it },
-              ctx
+              ctx,
             )
             const report = await assertions.run(suite)
             reporting.check(report, definition, "pre")
@@ -104,7 +104,7 @@ export function task<P> (
           if (definition.post) {
             const suite = definition.post(
               { describe: assertions.describe, it: assertions.it },
-              ctx
+              ctx,
             )
             const report = await assertions.run(suite)
             reporting.check(report, definition, "post")
@@ -112,12 +112,12 @@ export function task<P> (
 
           ctx.stack.pop()
           return rv ?? ctx
-        }, toError(ctx.stack))
+        }, toError(ctx.stack)),
     )
   }
 }
 
-function toError (stack: Meta[]) {
+function toError(stack: Meta[]) {
   return (e: unknown) =>
     E.toError(`${e} (from: ${stack.map(s => s.name).join(" -> ")})`)
 }
@@ -149,17 +149,17 @@ export type PipelineDefinition<Modules, ModuleParameters> = Meta & {
   /**
    * A list of (unresolved) async {@link TaskModule} imports.
    *
-  * @example ```ts
-  * // my-pipeline.ts
-  *
-  * export default pipeline((params: {...}) => ({
-  *   tasks: [
-  *     import("some-other-task"),
-  *     import("some-other-pipeline"),
-  *   ],
-  * }))
-  * ```
-  */
+   * @example ```ts
+   * // my-pipeline.ts
+   *
+   * export default pipeline((params: {...}) => ({
+   *   tasks: [
+   *     import("some-other-task"),
+   *     import("some-other-pipeline"),
+   *   ],
+   * }))
+   * ```
+   */
   tasks: Modules
   /**
    * The union of parameters specified by this pipeline's tasks.
@@ -181,18 +181,20 @@ export type PipelineDefinition<Modules, ModuleParameters> = Meta & {
  * @returns A function returning a chainable instance of the pipeline.
  * @typeParam P The parameters of the resulting pipeline.
  */
-export function pipeline<Modules extends readonly Promise<TaskModule>[], P> (
-  init: ((parameters: P) => {
-    name?: string
-    version?: string
-    tasks: Modules
-    parameters: ParametersUnion<Modules>
-  }) | {
-    name?: string
-    version?: string
-    tasks: Modules
-    parameters: ParametersUnion<Modules>
-  }
+export function pipeline<Modules extends readonly Promise<TaskModule>[], P>(
+  init:
+    | ((parameters: P) => {
+      name?: string
+      version?: string
+      tasks: Modules
+      parameters: ParametersUnion<Modules>
+    })
+    | {
+      name?: string
+      version?: string
+      tasks: Modules
+      parameters: ParametersUnion<Modules>
+    },
 ): (parameters: P) => Promise<Chainable> {
   return async (outer: P) => {
     const definition = typeof init === "function" ? init(outer) : init
@@ -204,13 +206,14 @@ export function pipeline<Modules extends readonly Promise<TaskModule>[], P> (
     return task((inner: ParametersUnion<Modules>) => ({
       name: definition.name,
       version: definition.version,
-      // @ts-ignore: can't infer argument types from a tasks array
-      run: async ctx => pipe(TE.of(ctx), ...tasks.map(t => t(inner)))().then(
-        // @ts-ignore: expects a context, but we deliberately throw
-        E.getOrElse(e => {
-          throw e
-        })
-      ),
+      run: async ctx =>
+        // @ts-ignore: can't infer argument types from a tasks array
+        pipe(TE.of(ctx), ...tasks.map(t => t(inner)))().then(
+          // @ts-ignore: expects a context, but we deliberately throw
+          E.getOrElse(e => {
+            throw e
+          }),
+        ),
     }))(definition.parameters)
   }
 }

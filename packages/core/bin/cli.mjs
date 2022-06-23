@@ -1,8 +1,8 @@
 #!/usr/bin/env node --experimental-specifier-resolution=node --experimental-import-meta-resolve
 
-import * as commands from "../dist/commands.js"
 import { Cli } from "clipanion"
 import { createRequire } from "module"
+import * as commands from "../dist/commands.js"
 
 const packageJson = createRequire(import.meta.url)("../package.json")
 

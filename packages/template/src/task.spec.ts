@@ -1,15 +1,15 @@
+import expect from "expect"
+import { createFsFromVolume, Volume } from "memfs"
+import { before, describe, it } from "mocha"
 import * as path from "path"
 import * as url from "url"
-import { Volume, createFsFromVolume } from "memfs"
-import { before, describe, it } from "mocha"
-import expect from "expect"
 
 import { task } from "./task"
 
 describe(`applying templates`, () => {
   const directory = path.resolve(
     path.dirname(url.fileURLToPath(import.meta.url)),
-    "./fixtures/apply"
+    "./fixtures/apply",
   )
 
   describe(`rendering templates`, () => {
@@ -18,7 +18,7 @@ describe(`applying templates`, () => {
     before(async () => {
       await task(
         {
-        // @ts-ignore
+          // @ts-ignore
           fs: createFsFromVolume(vol),
           cwd: "/project",
         },
@@ -29,7 +29,7 @@ describe(`applying templates`, () => {
             purpose: "shopping",
             items: ["apples", "oranges"],
           },
-        }
+        },
       )
     })
 

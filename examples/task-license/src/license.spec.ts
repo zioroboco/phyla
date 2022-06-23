@@ -1,7 +1,7 @@
 import * as phyla from "@phyla/core"
-import { Volume, createFsFromVolume } from "memfs"
-import { test } from "mocha"
 import expect from "expect"
+import { createFsFromVolume, Volume } from "memfs"
+import { test } from "mocha"
 import licenseTask, { LicenseTaskParameters } from "./license"
 
 const cwd = "/my-project"
@@ -15,7 +15,7 @@ test(`the happy path`, async () => {
         author: "blep",
       }),
     },
-    cwd
+    cwd,
   )
 
   const params: LicenseTaskParameters = {

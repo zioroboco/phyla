@@ -30,7 +30,7 @@ const scanner = moo.compile({
   },
 })
 
-export function scan (template: string): Token[] {
+export function scan(template: string): Token[] {
   const acc: Token[] = []
   for (const token of scanner.reset(template)) {
     assert.ok(token.type, `token.type had value ${token.type}`)
@@ -51,7 +51,7 @@ export function scan (template: string): Token[] {
   return acc
 }
 
-function isExpressionToken (token: { type?: string }): boolean {
+function isExpressionToken(token: { type?: string }): boolean {
   return [
     TokenType.Expression,
     TokenType.Slot,

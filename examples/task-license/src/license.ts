@@ -1,8 +1,8 @@
-import  * as path from "path"
 import * as phyla from "@phyla/core"
-import { fileURLToPath } from "url"
 import { task as template } from "@phyla/template"
 import expect from "expect"
+import * as path from "path"
+import { fileURLToPath } from "url"
 
 const supportedLicenses = ["MIT"] as const
 
@@ -22,8 +22,8 @@ export default phyla.task((params: LicenseTaskParameters) => ({
         packageJson: JSON.parse(
           await ctx.fs.promises.readFile(
             path.join(ctx.cwd, "package.json"),
-            "utf8"
-          )
+            "utf8",
+          ),
         ),
       }))
       .assert(({ packageJson }) => [
@@ -36,7 +36,7 @@ export default phyla.task((params: LicenseTaskParameters) => ({
   run: async ctx => {
     const templateDir = path.join(
       path.dirname(fileURLToPath(import.meta.url)),
-      "../templates"
+      "../templates",
     )
 
     await template(ctx, {
@@ -48,7 +48,10 @@ export default phyla.task((params: LicenseTaskParameters) => ({
     })
 
     const packageJson = JSON.parse(
-      await ctx.fs.promises.readFile(path.join(ctx.cwd, "package.json"), "utf8")
+      await ctx.fs.promises.readFile(
+        path.join(ctx.cwd, "package.json"),
+        "utf8",
+      ),
     )
 
     packageJson.author = params.author
@@ -56,7 +59,7 @@ export default phyla.task((params: LicenseTaskParameters) => ({
 
     await ctx.fs.promises.writeFile(
       path.join(ctx.cwd, "package.json"),
-      JSON.stringify(packageJson, null, 2) + "\n"
+      JSON.stringify(packageJson, null, 2) + "\n",
     )
   },
 
@@ -65,7 +68,7 @@ export default phyla.task((params: LicenseTaskParameters) => ({
       .setup(async () => ({
         licenseFile: await ctx.fs.promises.readFile(
           path.join(ctx.cwd, "LICENSE"),
-          "utf8"
+          "utf8",
         ),
       }))
       .assert(({ licenseFile }) => [
@@ -81,8 +84,8 @@ export default phyla.task((params: LicenseTaskParameters) => ({
         packageJson: JSON.parse(
           await ctx.fs.promises.readFile(
             path.join(ctx.cwd, "package.json"),
-            "utf8"
-          )
+            "utf8",
+          ),
         ),
       }))
       .assert(({ packageJson }) => [

@@ -14,7 +14,7 @@ export type Block = Promise<Result<BlockOutcome>>
 
 type Thunk = () => void | Promise<void>
 
-export async function it (description: string, thunk: Thunk): Test {
+export async function it(description: string, thunk: Thunk): Test {
   return new Promise(async res => {
     const result = { description } as Result<TestOutcome>
     const start = Date.now()
@@ -29,7 +29,7 @@ export async function it (description: string, thunk: Thunk): Test {
   })
 }
 
-function assert <V> (description: string, setup: () => V | Promise<V>) {
+function assert<V>(description: string, setup: () => V | Promise<V>) {
   return (run: (variables: V) => Array<Test | Block>): Block => {
     return new Promise(async res => {
       const start = Date.now()
@@ -43,13 +43,13 @@ function assert <V> (description: string, setup: () => V | Promise<V>) {
   }
 }
 
-function setup (description: string) {
+function setup(description: string) {
   return <V = {}>(fn: () => V | Promise<V>) => ({
     assert: assert<V>(description, fn),
   })
 }
 
-export function describe (description: string) {
+export function describe(description: string) {
   return {
     setup: setup(description),
     assert: assert(description, () => ({})),
@@ -68,7 +68,7 @@ export type Report = {
   results: FlatResult[]
 }
 
-function flatten (results: Result[], descriptions: string[] = []): FlatResult[] {
+function flatten(results: Result[], descriptions: string[] = []): FlatResult[] {
   const rv: FlatResult[] = []
   for (const result of results) {
     if (Array.isArray(result.outcome)) {
@@ -84,7 +84,7 @@ function flatten (results: Result[], descriptions: string[] = []): FlatResult[] 
   return rv
 }
 
-export async function run (suite: Array<Block | Test>): Promise<Report> {
+export async function run(suite: Array<Block | Test>): Promise<Report> {
   const start = Date.now()
 
   const results = await Promise.all(
@@ -93,8 +93,8 @@ export async function run (suite: Array<Block | Test>): Promise<Report> {
         new Promise<Result>(async res => {
           const result = await test
           res(result)
-        })
-    )
+        }),
+    ),
   )
 
   return {

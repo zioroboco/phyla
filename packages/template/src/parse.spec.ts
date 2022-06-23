@@ -1,18 +1,10 @@
-import { describe, it } from "mocha"
 import expect from "expect"
+import { describe, it } from "mocha"
 
 import {
-  BlockNode,
-  NodeType,
-  SlotNode,
-  SpreadNode,
-  Token,
-  TokenType,
-} from "./types"
-import {
-  Input,
   either,
   empty,
+  Input,
   many,
   maybe,
   parse,
@@ -23,6 +15,14 @@ import {
   sequence,
   where,
 } from "./parse"
+import {
+  BlockNode,
+  NodeType,
+  SlotNode,
+  SpreadNode,
+  Token,
+  TokenType,
+} from "./types"
 
 describe(parseTokenType.name, () => {
   const token = { type: TokenType.StaticLine } as Token
@@ -98,7 +98,7 @@ describe(`the ${either.name} combinator`, () => {
   describe(`with multiple parsers`, () => {
     const parseExpression = either(
       parseTokenType(TokenType.Expression),
-      parseTokenType(TokenType.Spread)
+      parseTokenType(TokenType.Spread),
     )
 
     it(`parses one matching tokan`, () => {
@@ -327,7 +327,7 @@ describe(`${where.name} combinator`, () => {
       expect(result).toMatchObject({
         left: {
           message: expect.stringMatching(
-            "expected token of type StaticLine, got Expression"
+            "expected token of type StaticLine, got Expression",
           ),
           input: Input(input.tokens, 1),
         },
@@ -363,7 +363,7 @@ describe(`${where.name} combinator`, () => {
 
   describe(`when predicated on input`, () => {
     const parse = many(
-      where(input => input.index < 2, parseTokenType(TokenType.StaticLine))
+      where(input => input.index < 2, parseTokenType(TokenType.StaticLine)),
     )
 
     it(`parses only the expected tokens`, () => {
@@ -389,7 +389,7 @@ describe(`${where.name} combinator`, () => {
 
 describe(`parsing a series of block and slot nodes`, () => {
   const parse = many(
-    either<BlockNode | SlotNode>(parseBlockNode, parseSlotNode)
+    either<BlockNode | SlotNode>(parseBlockNode, parseSlotNode),
   )
 
   const input = Input([

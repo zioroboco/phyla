@@ -1,17 +1,17 @@
 import * as E from "fp-ts/Either"
-import { fromPairs, zip } from "ramda"
 import { identity, pipe } from "fp-ts/function"
+import { fromPairs, zip } from "ramda"
 
 import { ParseError } from "./parse"
+import { render, Variables, withSlotNodes } from "./render"
 import { SlotNode } from "./types"
-import { Variables, render, withSlotNodes } from "./render"
 
 export type VersionArgs = {
   template: string
   variables?: Variables
 }
 
-export function upgrade ({
+export function upgrade({
   content,
   prev,
   next,
@@ -38,7 +38,7 @@ export function upgrade ({
         ? [...acc.slice(0, -1), ...acc[acc.length - 1].split(templateChunk)]
         : content.split(templateChunk)
     },
-    []
+    [],
   ).slice(1, -1)
 
   const slotContentByName = pipe(
@@ -46,10 +46,8 @@ export function upgrade ({
     throwParseError,
     entries => entries.filter(node => typeof node !== "string"),
     entries =>
-      entries.map(entry =>
-        mapSlotNames((entry as SlotNode).token.value)
-      ),
-    names => fromPairs(zip(names, slotContentChunks))
+      entries.map(entry => mapSlotNames((entry as SlotNode).token.value)),
+    names => fromPairs(zip(names, slotContentChunks)),
   )
 
   return render(next.template, {
@@ -58,14 +56,14 @@ export function upgrade ({
   })
 }
 
-function throwParseError<T> (a: E.Either<ParseError, T>): T {
+function throwParseError<T>(a: E.Either<ParseError, T>): T {
   return pipe(
     a,
     E.fold(
       error => {
         throw new Error(`error parsing template: ${error.message}`)
       },
-      identity
-    )
+      identity,
+    ),
   )
 }

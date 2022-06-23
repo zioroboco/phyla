@@ -1,25 +1,25 @@
+import { strict as assert } from "assert"
 import * as fs from "fs"
 import * as os from "os"
 import * as path from "path"
-import { strict as assert } from "assert"
 
 import { Command, Option } from "clipanion"
 import { richFormat } from "clipanion/lib/format"
 
-import * as server from "./server"
 import { Chainable, run } from "./api"
 import { diff } from "./diff"
 import { dim } from "./reporting"
+import * as server from "./server"
 
 enum Category {
   Main = "main",
 }
 
-function getTask (dir: string, parameters = {}): Promise<Chainable> {
+function getTask(dir: string, parameters = {}): Promise<Chainable> {
   return import(path.join(dir, "phyla.mjs")).then(m => m.default(parameters))
 }
 
-function tmpdirSync (srcdir: string): string {
+function tmpdirSync(srcdir: string): string {
   const tmpdirBase = path.join(os.tmpdir(), "phyla")
   const tmpdirFull = path.join(tmpdirBase, path.basename(srcdir))
   fs.mkdirSync(tmpdirFull, { recursive: true })
@@ -39,7 +39,7 @@ export class DevCommand extends Command {
   exclude = Option.Array("--exclude", { required: false })
   verbose = Option.Boolean("--verbose", { required: false })
 
-  async execute () {
+  async execute() {
     this.srcdir = path.resolve(this.srcdir ?? ".")
 
     this.watch = this.watch ?? []
@@ -81,7 +81,7 @@ export class DiffCommand extends Command {
   srcdir = Option.String({ name: "project", required: false })
   ci = Option.Boolean("--ci", { required: false })
 
-  async execute () {
+  async execute() {
     this.srcdir = path.resolve(this.srcdir ?? ".")
     const tmpdir = tmpdirSync(this.srcdir)
 
@@ -106,7 +106,7 @@ export class WriteCommand extends Command {
 
   srcdir = Option.String({ name: "project", required: false })
 
-  async execute () {
+  async execute() {
     this.srcdir = path.resolve(this.srcdir ?? ".")
 
     const task = await getTask(this.srcdir)

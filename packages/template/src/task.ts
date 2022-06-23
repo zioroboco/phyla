@@ -1,30 +1,30 @@
-import * as E from "fp-ts/Either"
-import * as path from "path"
-import * as system_fs from "fs"
 import glob from "fast-glob"
+import * as E from "fp-ts/Either"
+import * as system_fs from "fs"
+import * as path from "path"
 
 import { Context } from "@phyla/core"
 import { render } from "./render"
 
 type Options = {
   directory: string
-  variables: { [key: string]: unknown },
+  variables: { [key: string]: unknown }
 }
 
-export async function task (context: Context, options: Options) {
+export async function task(context: Context, options: Options) {
   const templatePaths = await glob(
     path.join(options.directory, "**/*.template"),
     {
       cwd: process.cwd(),
       fs: system_fs,
-    }
+    },
   )
 
   const rendered = await Promise.all(
     templatePaths.map(async templatePath => {
       const templateData = await system_fs.promises.readFile(
         templatePath,
-        "utf8"
+        "utf8",
       )
 
       const rendered = render(templateData, {
@@ -33,8 +33,8 @@ export async function task (context: Context, options: Options) {
 
       if (E.isLeft(rendered)) {
         throw new Error(
-          `Error rendering template: ${templatePath}` +
-            `\n\n\t${rendered.left}`
+          `Error rendering template: ${templatePath}`
+            + `\n\n\t${rendered.left}`,
         )
       }
 
@@ -42,7 +42,7 @@ export async function task (context: Context, options: Options) {
         templatePath: templatePath.replace(/\.template$/, ""),
         rendered,
       }
-    })
+    }),
   )
 
   await Promise.all(
@@ -57,20 +57,20 @@ export async function task (context: Context, options: Options) {
             }
           }
           throw new Error("No string-valued template variable: " + capture)
-        }
+        },
       )
 
       const relativePath = path.relative(options.directory, interpolatedPath)
 
       await context.fs.promises.mkdir(
         path.dirname(path.join(context.cwd, relativePath)),
-        { recursive: true }
+        { recursive: true },
       )
 
       await context.fs.promises.writeFile(
         path.join(context.cwd, relativePath),
-        rendered.right
+        rendered.right,
       )
-    })
+    }),
   )
 }

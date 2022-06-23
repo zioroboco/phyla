@@ -1,11 +1,11 @@
-import * as TE from "fp-ts/TaskEither"
-import * as path from "path"
-import { describe, it } from "mocha"
-import { flow } from "fp-ts/lib/function"
-import { spy } from "sinon"
 import expect from "expect"
+import { flow } from "fp-ts/lib/function"
+import * as TE from "fp-ts/TaskEither"
+import { describe, it } from "mocha"
+import * as path from "path"
+import { spy } from "sinon"
 
-import { Context, TaskDefinition, pipeline, task } from "./api"
+import { Context, pipeline, task, TaskDefinition } from "./api"
 
 const fs = {} as typeof import("fs")
 
@@ -57,7 +57,7 @@ describe(`the ${pipeline.name} factory`, () => {
       const result = await flow(
         chainable,
         chainable,
-        chainable
+        chainable,
       )(TE.of({ cwd: "/", fs, stack: [] }))()
 
       expect(result).toMatchObject({ right: { cwd: "/blep/blep/blep" } })
@@ -79,7 +79,7 @@ describe(`the ${pipeline.name} factory`, () => {
 
       const result = await flow(
         chainable,
-        chainable
+        chainable,
       )(TE.of({ cwd: "/", fs, stack: [] }))()
 
       expect(result).toMatchObject({ right: { cwd: "/blep/blep/blep/blep" } })
@@ -145,7 +145,7 @@ describe(`the task call stack`, () => {
     await checkStack({ examine })(TE.of(context))()
 
     expect(
-      examine.calledWith({ name: "check-stack" })
+      examine.calledWith({ name: "check-stack" }),
     )
   })
 
@@ -167,10 +167,10 @@ describe(`the task call stack`, () => {
         .then(p => p())
 
       expect(
-        examine.calledWith({ name: "check-pipeline" })
+        examine.calledWith({ name: "check-pipeline" }),
       )
       expect(
-        examine.calledWith({ name: "check-stack" })
+        examine.calledWith({ name: "check-stack" }),
       )
     })
   })

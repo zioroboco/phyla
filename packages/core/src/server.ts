@@ -1,7 +1,7 @@
-import * as path from "path"
-import * as system_fs from "fs"
-import { ChildProcessWithoutNullStreams, spawn } from "child_process"
 import { strict as assert } from "assert"
+import { ChildProcessWithoutNullStreams, spawn } from "child_process"
+import * as system_fs from "fs"
+import * as path from "path"
 import { fileURLToPath } from "url"
 
 import { createMachine, createSchema, interpret } from "xstate"
@@ -79,7 +79,7 @@ export const withConfig = (config: ServerConfig) => {
                 ...[".git/", ...config.exclude].flatMap(p => ["--exclude", p]),
                 ...(log.verbose ? ["--verbose"] : []),
               ],
-              { stdio: "inherit" }
+              { stdio: "inherit" },
             )
             rsync.on("error", rej)
             rsync.on("exit", code => {
@@ -101,7 +101,7 @@ export const withConfig = (config: ServerConfig) => {
             log.debug("forking worker")
             const workerModule = path.join(
               path.dirname(fileURLToPath(import.meta.url)),
-              "../bin/worker.mjs"
+              "../bin/worker.mjs",
             )
 
             const worker = spawn(workerModule, [srcdir, tmpdir], {
@@ -119,8 +119,7 @@ export const withConfig = (config: ServerConfig) => {
               log.debug("worker finished")
               instance.send("READY")
               assert(context.timer)
-              const buildtime =
-                new Date().getTime() - context.timer.getTime()
+              const buildtime = new Date().getTime() - context.timer.getTime()
               log.info(`ready in ${(buildtime) / 1000}s`)
               log.debug(`${RESYNC_BUFFER_MILLIS / 1000}s buffer`)
             })
@@ -141,7 +140,7 @@ export const withConfig = (config: ServerConfig) => {
 
         startWatching: context => {
           let timeout: NodeJS.Timeout | undefined
-          function requestSync () {
+          function requestSync() {
             if (timeout) clearTimeout(timeout)
             timeout = setTimeout(() => {
               log.info() // erate newline on resync
@@ -155,7 +154,7 @@ export const withConfig = (config: ServerConfig) => {
             for (const dir of [srcdir, ...config.watch]) {
               log.info(`  - watching ${path.resolve(dir)}`)
               context.watchers.push(
-                system_fs.watch(path.resolve(dir), { recursive: true })
+                system_fs.watch(path.resolve(dir), { recursive: true }),
               )
             }
           }
@@ -174,7 +173,7 @@ export const withConfig = (config: ServerConfig) => {
           }
         },
       },
-    })
+    }),
   )
 
   instance.subscribe(state => {

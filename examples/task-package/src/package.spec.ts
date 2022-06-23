@@ -1,7 +1,7 @@
 import * as phyla from "@phyla/core"
-import { Volume, createFsFromVolume } from "memfs"
-import { test } from "mocha"
 import expect from "expect"
+import { createFsFromVolume, Volume } from "memfs"
+import { test } from "mocha"
 import packageTask, { PackageTaskParameters } from "./package"
 
 const cwd = "/my-project"

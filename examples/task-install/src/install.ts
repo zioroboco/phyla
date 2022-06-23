@@ -1,7 +1,7 @@
-import * as path from "path"
 import * as phyla from "@phyla/core"
-import { $, cd } from "zx"
 import expect from "expect"
+import * as path from "path"
+import { $, cd } from "zx"
 
 export default phyla.task(() => ({
   run: async ctx => {
@@ -13,7 +13,7 @@ export default phyla.task(() => ({
     it(`worked`, async () => {
       const lockfile = await fs.promises.readFile(
         path.join(cwd, "pnpm-lock.yaml"),
-        "utf8"
+        "utf8",
       )
       expect(lockfile).toMatch("install")
     }),

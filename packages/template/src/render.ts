@@ -1,17 +1,17 @@
 import * as E from "fp-ts/Either"
-import { inspect } from "util"
 import { pipe } from "fp-ts/function"
+import { inspect } from "util"
 
-import { BlockNode, NodeType, SlotNode, SpreadNode, TokenType } from "./types"
-import { ParseError, parse } from "./parse"
+import { parse, ParseError } from "./parse"
 import { scan } from "./scan"
+import { BlockNode, NodeType, SlotNode, SpreadNode, TokenType } from "./types"
 
 export type Variables = { [key: string]: unknown }
 export type Slots = { [key: string]: string } | ((key: string) => string)
 
-export function render (
+export function render(
   template: string,
-  options?: { variables?: Variables, slots?: Slots }
+  options?: { variables?: Variables; slots?: Slots },
 ): E.Either<ParseError, string> {
   return pipe(
     template,
@@ -35,13 +35,13 @@ export function render (
         }
       })
     ),
-    E.map(lines => lines.join(""))
+    E.map(lines => lines.join("")),
   )
 }
 
-export function withSlotNodes (
+export function withSlotNodes(
   template: string,
-  options?: { variables?: Variables }
+  options?: { variables?: Variables },
 ): E.Either<ParseError, Array<string | SlotNode>> {
   return pipe(
     template,
@@ -62,33 +62,32 @@ export function withSlotNodes (
     E.map(rendered =>
       rendered
         .reduce<Array<string | SlotNode>>(
-        ([head, ...rest], next) =>
-          typeof next === "string" && typeof head === "string"
-            ? [head + next, ...rest].filter(Boolean)
-            : [next, head, ...rest],
-        []
-      )
+          ([head, ...rest], next) =>
+            typeof next === "string" && typeof head === "string"
+              ? [head + next, ...rest].filter(Boolean)
+              : [next, head, ...rest],
+          [],
+        )
         .reverse()
-    )
+    ),
   )
 }
 
-function evaluateBlock (node: BlockNode, variables: Variables): string {
+function evaluateBlock(node: BlockNode, variables: Variables): string {
   return node.tokens.map(token => {
-    const evaluated =
-      token.type === TokenType.Expression
-        ? evaluate(token.value, variables)
-        : token.value
+    const evaluated = token.type === TokenType.Expression
+      ? evaluate(token.value, variables)
+      : token.value
     return evaluated
   }).join("")
 }
 
-function evaluateSpread (node: SpreadNode, variables: Variables): string {
+function evaluateSpread(node: SpreadNode, variables: Variables): string {
   const evaluated = evaluate(node.spreadToken.value, variables)
   if (!Array.isArray(evaluated)) {
     throw new Error(
-      `expected array result when evaluating ${inspect(node.spreadToken.value)}` +
-        ` but expression returned ${inspect(evaluated)}`
+      `expected array result when evaluating ${inspect(node.spreadToken.value)}`
+        + ` but expression returned ${inspect(evaluated)}`,
     )
   }
   return evaluated
@@ -102,9 +101,9 @@ function evaluateSpread (node: SpreadNode, variables: Variables): string {
     .join("")
 }
 
-function evaluate (expression: string, variables: Variables): unknown {
+function evaluate(expression: string, variables: Variables): unknown {
   const definitions = Object.keys(variables).map(
-    key => `let ${key} = ${JSON.stringify(variables[key])}`
+    key => `let ${key} = ${JSON.stringify(variables[key])}`,
   )
   return new Function([...definitions, `return ${expression}`].join(";"))()
 }

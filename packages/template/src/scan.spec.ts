@@ -1,8 +1,8 @@
-import { test } from "mocha"
 import expect from "expect"
+import { test } from "mocha"
 
-import { TokenType } from "./types"
 import { scan } from "./scan"
+import { TokenType } from "./types"
 
 test(`single line, static content`, () => {
   const input = `thing one`
@@ -178,32 +178,50 @@ test(`complex example`, () => {
   expect(tokens).toHaveLength(27)
 
   expect(tokens).toMatchObject([
-    { type: TokenType.StaticLine,   image: "{\n" },
+    { type: TokenType.StaticLine, image: "{\n" },
     { type: TokenType.StaticPrefix, image: "  \"name\": \"" },
-    { type: TokenType.Expression,   image: "{{ name }}", value: "name" },
+    { type: TokenType.Expression, image: "{{ name }}", value: "name" },
     { type: TokenType.StaticSuffix, image: "\"\n" },
     { type: TokenType.StaticPrefix, image: "  \"author\": \"" },
-    { type: TokenType.Expression,   image: "{{ author.name }}", value: "author.name" },
+    {
+      type: TokenType.Expression,
+      image: "{{ author.name }}",
+      value: "author.name",
+    },
     { type: TokenType.StaticPrefix, image: " <" },
-    { type: TokenType.Expression,   image: "{{ author.email }}", value: "author.email" },
+    {
+      type: TokenType.Expression,
+      image: "{{ author.email }}",
+      value: "author.email",
+    },
     { type: TokenType.StaticSuffix, image: ">\"\n" },
-    { type: TokenType.StaticLine,   image: "  \"private\": true,\n" },
-    { type: TokenType.StaticLine,   image: "  \"scripts\": {\n" },
+    { type: TokenType.StaticLine, image: "  \"private\": true,\n" },
+    { type: TokenType.StaticLine, image: "  \"scripts\": {\n" },
     { type: TokenType.StaticPrefix, image: "    " },
-    { type: TokenType.Slot,         image: "{{ slot: blep }}", value: "blep" },
+    { type: TokenType.Slot, image: "{{ slot: blep }}", value: "blep" },
     { type: TokenType.StaticSuffix, image: "\n" },
-    { type: TokenType.StaticLine,   image: "    \"test\": \"mocha\"\n" },
-    { type: TokenType.StaticLine,   image: "  },\n" },
-    { type: TokenType.StaticLine,   image: "  \"workspaces\": [\n" },
+    { type: TokenType.StaticLine, image: "    \"test\": \"mocha\"\n" },
+    { type: TokenType.StaticLine, image: "  },\n" },
+    { type: TokenType.StaticLine, image: "  \"workspaces\": [\n" },
     { type: TokenType.StaticPrefix, image: "    \"" },
-    { type: TokenType.Spread,       image: "{{ ...workspaces }}", value: "workspaces" },
+    {
+      type: TokenType.Spread,
+      image: "{{ ...workspaces }}",
+      value: "workspaces",
+    },
     { type: TokenType.StaticSuffix, image: "\",\n" },
-    { type: TokenType.StaticLine,   image: "  ],\n" },
-    { type: TokenType.StaticLine,   image: "  \"dependencies: {\n" },
+    { type: TokenType.StaticLine, image: "  ],\n" },
+    { type: TokenType.StaticLine, image: "  \"dependencies: {\n" },
     { type: TokenType.StaticPrefix, image: "    " },
-    { type: TokenType.Spread,       image: "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}", value: "dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })" },
+    {
+      type: TokenType.Spread,
+      image:
+        "{{\n      ...dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })\n    }}",
+      value:
+        "dependencies.map(([package, version]) => {\n        return `\"${package}\": \"${version}\"`\n      })",
+    },
     { type: TokenType.StaticSuffix, image: ",\n" },
-    { type: TokenType.StaticLine,   image: "  }\n" },
-    { type: TokenType.StaticLine,   image: "}" },
+    { type: TokenType.StaticLine, image: "  }\n" },
+    { type: TokenType.StaticLine, image: "}" },
   ])
 })

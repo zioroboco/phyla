@@ -7,10 +7,10 @@ export {
   Chainable,
   Context,
   Meta,
-  PipelineDefinition,
-  TaskDefinition,
-  TaskModule,
   pipeline,
+  PipelineDefinition,
   run,
   task,
+  TaskDefinition,
+  TaskModule,
 } from "./api"

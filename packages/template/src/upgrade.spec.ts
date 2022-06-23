@@ -1,10 +1,9 @@
-import { describe, it } from "mocha"
 import expect from "expect"
+import { describe, it } from "mocha"
 
-import { VersionArgs, upgrade } from "./upgrade"
+import { upgrade, VersionArgs } from "./upgrade"
 
 describe(upgrade.name, () => {
-
   const content = `{
   "name": "my-package"
   "description": "",
@@ -127,5 +126,4 @@ describe(upgrade.name, () => {
       right: expected,
     })
   })
-
 })

@@ -1,8 +1,8 @@
 #!/usr/bin/env node --experimental-specifier-resolution=node --experimental-import-meta-resolve
 
-import * as path from "path"
-import * as system_fs from "fs"
 import { strict as assert } from "assert"
+import * as system_fs from "fs"
+import * as path from "path"
 
 import * as phyla from "@phyla/core"
 
