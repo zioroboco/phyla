@@ -1,4 +1,4 @@
-import expect from "expect"
+import { expect } from "expect"
 import { test } from "mocha"
 
 import { scan } from "./scan"

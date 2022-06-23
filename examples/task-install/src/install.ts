@@ -1,5 +1,5 @@
 import * as phyla from "@phyla/core"
-import expect from "expect"
+import { expect } from "expect"
 import * as path from "path"
 import { $, cd } from "zx"
 

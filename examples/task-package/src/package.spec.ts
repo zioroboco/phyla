@@ -1,5 +1,5 @@
 import * as phyla from "@phyla/core"
-import expect from "expect"
+import { expect } from "expect"
 import { createFsFromVolume, Volume } from "memfs"
 import { test } from "mocha"
 import packageTask, { PackageTaskParameters } from "./package"

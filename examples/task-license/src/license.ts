@@ -1,6 +1,6 @@
 import * as phyla from "@phyla/core"
 import { task as template } from "@phyla/template"
-import expect from "expect"
+import { expect } from "expect"
 import * as path from "path"
 import { fileURLToPath } from "url"
 

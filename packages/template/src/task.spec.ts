@@ -1,4 +1,4 @@
-import expect from "expect"
+import { expect } from "expect"
 import { createFsFromVolume, Volume } from "memfs"
 import { before, describe, it } from "mocha"
 import * as path from "path"

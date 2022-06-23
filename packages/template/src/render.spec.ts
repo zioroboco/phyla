@@ -1,8 +1,8 @@
-import expect from "expect"
+import { expect } from "expect"
 import { describe, it } from "mocha"
 
 import * as E from "fp-ts/Either"
-import { identity, pipe } from "fp-ts/lib/function"
+import { identity, pipe } from "fp-ts/function"
 import { render, withSlotNodes } from "./render"
 import { NodeType, TokenType } from "./types"
 

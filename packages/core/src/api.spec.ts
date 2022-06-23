@@ -1,5 +1,5 @@
-import expect from "expect"
-import { flow } from "fp-ts/lib/function"
+import { expect } from "expect"
+import { flow } from "fp-ts/function"
 import * as TE from "fp-ts/TaskEither"
 import { describe, it } from "mocha"
 import * as path from "path"
