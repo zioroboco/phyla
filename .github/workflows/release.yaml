@@ -10,19 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@2270f39ef63c3edf50be34da68c039eca5e15c15
-        with:
-          version: 6.31.0
+      - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v2
         with:
           cache: pnpm
           node-version-file: .nvmrc
           registry-url: https://npm.pkg.github.com
-      - run: pnpm install --ignore-scripts --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: changesets/action@c3d88279fd9abe11410de073005e34863f735b1c
-        id: changesets
+      - uses: changesets/action@v1
         with:
           title: Release
           commit: Release
