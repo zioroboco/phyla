@@ -12,7 +12,7 @@ clean: install
 format: install
     pnpm dprint {{ if CI == "true" { "check" } else { "fmt" } }}
 
-test: install
+test: install build
     pnpm run --recursive test
 
 release: install build
