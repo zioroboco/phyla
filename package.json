@@ -1,5 +1,5 @@
 {
-  "packageManager": "pnpm@7.3.0",
+  "packageManager": "pnpm@7.6.0",
   "private": true,
   "scripts": {
     "just-extras": "just-extras --omit=install",
