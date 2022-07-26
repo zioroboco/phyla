@@ -2,9 +2,9 @@
   "packageManager": "pnpm@7.6.0",
   "private": true,
   "scripts": {
-    "just-extras": "just-extras --omit=install",
-    "just-check": "pnpm -s just-extras check",
-    "just-sync": "pnpm -s just-extras sync",
+    "justfile": "just-extras --omit install",
+    "check": "pnpm -s justfile check",
+    "sync": "pnpm -s justfile sync",
     "build": "just build",
     "clean": "just clean",
     "format": "just format",
