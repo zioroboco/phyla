@@ -2,18 +2,22 @@
   "packageManager": "pnpm@7.6.0",
   "private": true,
   "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
-    "lint": "dprint fmt",
-    "lint-ci": "dprint check",
-    "test": "pnpm run --recursive test",
-    "release": "pnpm build && pnpm copy-docs && changeset publish",
-    "version": "changeset version && pnpm install"
+    "justfile": "just-extras --omit install",
+    "check": "pnpm -s justfile check",
+    "sync": "pnpm -s justfile sync",
+    "build": "just build",
+    "clean": "just clean",
+    "format": "just format",
+    "release": "just release",
+    "test": "just test",
+    "version": "just version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
     "@phyla/core": "workspace:*",
     "@zioroboco/changelog-github": "^0.1.1",
+    "just-extras": "^0.3.0",
+    "just-install": "^1.0.8",
     "tsm": "^2.2.1",
     "typescript": "^4.7.4"
   }
